@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Blockchain Auto Trading Bot - 30 Pages</title>
+<style>
+  /* ===== Base styling & Reset ===== */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #031f4b; color: #e0e8f9;
+    transition: background-color 0.3s, color 0.3s;
+    min-height: 100vh;
+  }
+  body.dark-mode {
+    background: #021431; color: #a9b8d9;
+  }
+  a { color: #52a6ff; font-weight: 700; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ===== Layout ===== */
+  #container {
+    display: flex; height: 100vh; overflow: hidden;
+  }
+  nav {
+    width: 260px; background: #043a94; padding: 20px 0;
+    border-right: 1px solid #052a75; overflow-y: auto;
+  }
+  nav.dark-mode {
+    background: #022060; border-color: #031743;
+  }
+  nav ul { list-style: none; padding: 0; margin: 0; }
+  nav li { margin-bottom: 10px; }
+  nav button {
+    width: 100%; background: transparent; border: none;
+    padding: 12px 24px; font-weight: 700; font-size: 14px;
+    color: #a6c8ff; text-align: left; cursor: pointer;
+    border-left: 4px solid transparent;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  }
+  nav button:hover, nav button.active {
+    background: #052a75; border-left: 4px solid #0099ff; color: #fff;
+  }
+  nav button#logoutBtn {
+    color: #ff4d4d; font-weight: 900; border-left: none;
+    margin-top: 30px; background: transparent;
+  }
+  main {
+    flex-grow: 1; overflow-y: auto; padding: 30px 40px;
+  }
+  header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 30px;
+  }
+  header h1 {
+    margin: 0; font-weight: 900; font-size: 1.9rem; color: #59a7ff;
+  }
+
+  /* ===== Buttons ===== */
+  .btn {
+    background-color: #007bff; border: none; color: white;
+    font-weight: 700; font-size: 16px; padding: 14px 26px;
+    border-radius: 6px; cursor: pointer; transition: background-color 0.3s ease;
+    margin-top: 20px;
+  }
+  .btn:hover:not(:disabled) { background-color: #005ecb; }
+  .btn:disabled { background-color: #004a96; cursor: wait; }
+
+  /* ===== Forms ===== */
+  form {
+    max-width: 420px; margin: 0 auto;
+    background-color: #052a75; padding: 30px 28px; border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.4);
+  }
+  body.dark-mode form { background-color: #031d48; }
+  label {
+    display: block; font-weight: 700; margin-bottom: 8px; font-size: 14px;
+  }
+  input[type="email"], input[type="tel"], input[type="password"], input[type="text"] {
+    width: 100%; padding: 12px 14px; margin-bottom: 18px;
+    border: none; border-radius: 6px; font-size: 15px;
+  }
+
+  /* ===== Loading spinner ===== */
+  .spinner {
+    margin: 20px auto 0 auto;
+    border: 6px solid #e0e8f9;
+    border-top: 6px solid #007bff;
+    border-radius: 50%; width: 48px; height: 48px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ===== Sections ===== */
+  section { display: none; }
+  section.active { display: block; }
+
+  /* ===== Coins List ===== */
+  #coins-list {
+    display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px;
+  }
+  .coin-card {
+    background: #052a75; border-radius: 10px; padding: 18px; width: 160px;
+    text-align: center; font-weight: 700;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transition: background-color 0.3s;
+  }
+  .coin-card img {
+    width: 48px; height: 48px; margin-bottom: 8px;
+  }
+  body.dark-mode .coin-card { background: #031d48; }
+
+  /* ===== Market analysis text ===== */
+  .market-analysis {
+    margin-top: 20px; background: #052a75; border-radius: 10px;
+    padding: 15px 20px; font-weight: 700; font-size: 14px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
+  }
+  body.dark-mode .market-analysis { background: #031d48; }
+
+  /* ===== TradingView Widget Containers ===== */
+  .tradingview-container {
+    margin-top: 30px; border-radius: 12px; overflow: hidden; height: 480px;
+  }
+
+  /* ===== Dark mode toggle ===== */
+  #darkModeToggle {
+    background: transparent; border: 2px solid #59a7ff; color: #59a7ff;
+    border-radius: 20px; padding: 8px 18px; font-weight: 700; cursor: pointer;
+    margin: 0 24px; transition: background-color 0.3s, color 0.3s;
+  }
+  #darkModeToggle:hover {
+    background-color: #59a7ff; color: #031f4b;
+  }
+
+  /* ===== Market News ===== */
+  #news-list {
+    margin-top: 20px; max-width: 900px;
+  }
+  #news-list article {
+    background: #052a75; margin-bottom: 15px; padding: 12px 18px;
+    border-radius: 8px; box-shadow: 0 0 8px rgba(0,0,0,0.3);
+  }
+  #news-list article a {
+    color: #8cc0ff; font-weight: 700; font-size: 14px;
+  }
+  body.dark-mode #news-list article { background: #031d48; }
+
+  /* ===== Hide sidebar for auth pages ===== */
+  #sidebar.hidden { display: none; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 768px) {
+    #container { flex-direction: column; }
+    nav { width: 100%; border-right: none; border-bottom: 1px solid #052a75; }
+    main { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+<div id="container">
+  <nav id="sidebar" class="dark-mode">
+    <ul id="navList">
+      <!-- Buttons generated by script -->
+    </ul>
+    <div style="padding: 10px 24px; margin-top: 30px;">
+      <button id="darkModeToggle">Toggle Dark Mode</button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- === Authentication Pages === -->
+    <section id="signup" aria-label="Sign Up Page">
+      <h1 style="text-align:center; font-weight:900; color:#59a7ff;">Sign Up</h1>
+      <form id="signupForm" autocomplete="off">
+        <label for="signupEmail">Email or Phone:</label>
+        <input type="text" id="signupEmail" name="signupEmail" required placeholder="Enter email or phone" autocomplete="off" />
+        <label for="signupPassword">Password:</label>
+        <input type="password" id="signupPassword" name="signupPassword" required placeholder="Enter password" autocomplete="new-password" />
+        <button type="submit" class="btn">Join</button>
+      </form>
+      <div id="signupLoading" style="display:none; text-align:center;">
+        <p style="font-weight:700; margin-top: 20px;">Processing your sign up, please wait...</p>
+        <div class="spinner"></div>
+      </div>
+    </section>
+
+    <section id="signin" aria-label="Sign In Page">
+      <h1 style="text-align:center; font-weight:900; color:#59a7ff;">Sign In</h1>
+      <form id="signinForm" autocomplete="off">
+        <label for="signinEmail">Email or Phone:</label>
+        <input type="text" id="signinEmail" name="signinEmail" required placeholder="Enter email or phone" autocomplete="off" />
+        <label for="signinPassword">Password:</label>
+        <input type="password" id="signinPassword" name="signinPassword" required placeholder="Enter password" autocomplete="current-password" />
+        <button type="submit" class="btn">Sign In</button>
+      </form>
+      <div id="signinLoading" style="display:none; text-align:center;">
+        <p style="font-weight:700; margin-top: 20px;">Signing you in, please wait...</p>
+        <div class="spinner"></div>
+      </div>
+    </section>
+
+    <!-- === 30 Pages === -->
+    <section id="page1" aria-label="Dashboard" class="active">
+      <header><h1>Dashboard Overview</h1></header>
+      <p>Welcome to your Blockchain Auto Trading Bot Dashboard.</p>
+    </section>
+
+    <section id="page2" aria-label="Top Cryptocurrencies">
+      <h2>Top Cryptocurrencies</h2>
+      <div id="coins-list"><p>Loading coins...</p></div>
+    </section>
+
+    <section id="page3" aria-label="Market Analysis">
+      <h2>Market Analysis</h2>
+      <div class="market-analysis" id="marketAnalysisText">Loading market analysis...</div>
+    </section>
+
+    <section id="page4" aria-label="Live Market Charts">
+      <h2>Live Market Charts</h2>
+      <div id="tradingview-widget" class="tradingview-container"></div>
+    </section>
+
+    <section id="page5" aria-label="Market News">
+      <h2>Latest Market News</h2>
+      <div id="news-list"><p>Loading news...</p></div>
+    </section>
+
+    <section id="page6" aria-label="Coins Performance">
+      <h2>Coins Live Performance</h2>
+      <div id="performance-charts"><p>Loading performance charts...</p></div>
+    </section>
+
+    <section id="page7" aria-label="Trading Charts">
+      <h2>Live Trading Charts</h2>
+      <div id="trading-charts-container" class="tradingview-container"></div>
+    </section>
+
+    <!-- Pages 8 - 30 placeholders -->
+    <script>
+      for(let i=8; i<=30; i++){
+        document.write(`
+          <section id="page${i}" aria-label="Page ${i}">
+            <h2>Page ${i}</h2>
+            <p>This is placeholder content for page ${i}. Customize as needed.</p>
+          </section>
+        `);
+      }
+    </script>
+  </main>
+</div>
+
+<script>
+  // ===== Navigation Setup =====
+  const navList = document.getElementById('navList');
+  // Generate nav buttons for pages 1-30
+  for(let i=1; i<=30; i++){
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.textContent = i === 1 ? 'Dashboard' : `Page ${i}`;
+    btn.setAttribute('data-page', `page${i}`);
+    if(i === 1) btn.classList.add('active');
+    li.appendChild(btn);
+    navList.appendChild(li);
+  }
+  // Add logout button
+  const logoutLi = document.createElement('li');
+  const logoutBtn = document.createElement('button');
+  logoutBtn.id = 'logoutBtn';
+  logoutBtn.textContent = 'Logout';
+  logoutLi.appendChild(logoutBtn);
+  navList.appendChild(logoutLi);
+
+  // ===== Page State Management =====
+  const sidebar = document.getElementById('sidebar');
+  const pages = {};
+  for(let i=1; i<=30; i++) {
+    pages[`page${i}`] = document.getElementById(`page${i}`);
+  }
+  const signup = document.getElementById('signup');
+  const signin = document.getElementById('signin');
+
+  // Helper: Hide all pages
+  function hideAllPages() {
+    Object.values(pages).forEach(p => p.classList.remove('active'));
+    signup.classList.remove('active');
+    signin.classList.remove('active');
+  }
+
+  // Show page by name
+  function showPage(pageName) {
+    hideAllPages();
+    if (pageName === 'signup' || pageName === 'signin') {
+      signup.classList.remove('active');
+      signin.classList.remove('active');
+      sidebar.classList.add('hidden');
+      if(pageName === 'signup') signup.classList.add('active');
+      if(pageName === 'signin') signin.classList.add('active');
+    } else {
+      sidebar.classList.remove('hidden');
+      if(pages[pageName]) {
+        pages[pageName].classList.add('active');
+      } else {
+        // fallback to dashboard
+        pages['page1'].classList.add('active');
+        pageName = 'page1';
+      }
+      // highlight nav button
+      document.querySelectorAll('#navList button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.page === pageName);
+      });
+    }
+    localStorage.setItem('currentPage', pageName);
+  }
+
+  // ===== Load last page or show sign-in if not logged in =====
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  let currentPage = localStorage.getItem('currentPage');
+  if(!currentPage || (!isLoggedIn && !['signin','signup'].includes(currentPage))) {
+    currentPage = 'signin';
+  }
+  showPage(currentPage);
+
+  // ===== Navigation button clicks =====
+  document.querySelectorAll('#navList button[data-page]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      showPage(btn.dataset.page);
+    });
+  });
+
+  // Logout handler
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('currentPage');
+    showPage('signin');
+  });
+
+  // ===== Dark Mode Toggle =====
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  darkModeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    sidebar.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+  });
+  if(localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+    sidebar.classList.add('dark-mode');
+  }
+
+  // ===== Sign-up Flow =====
+  const signupForm = document.getElementById('signupForm');
+  const signinForm = document.getElementById('signinForm');
+  const signupLoading = document.getElementById('signupLoading');
+  const signinLoading = document.getElementById('signinLoading');
+
+  const SIGNUP_DELAY = 30000;
+  const SIGNIN_DELAY = 35000;
+
+  signupForm.addEventListener('submit', e => {
+    e.preventDefault();
+    signupForm.style.display = 'none';
+    signupLoading.style.display = 'block';
+    setTimeout(() => {
+      signupLoading.style.display = 'none';
+      signupForm.reset();
+      signupForm.style.display = 'block';
+      showPage('signin');
+      signinForm.signinEmail.value = signupForm.signupEmail.value;
+    }, SIGNUP_DELAY);
+  });
+
+  // ===== Sign-in Flow =====
+  signinForm.addEventListener('submit', e => {
+    e.preventDefault();
+    signinForm.style.display = 'none';
+    signinLoading.style.display = 'block';
+    setTimeout(() => {
+      signinLoading.style.display = 'none';
+      signinForm.reset();
+      signinForm.style.display = 'block';
+      localStorage.setItem('isLoggedIn', 'true');
+      showPage('page1'); // Dashboard
+      loadDashboardData();
+    }, SIGNIN_DELAY);
+  });
+
+  // ===== API Data Fetching & Display =====
+
+  async function fetchCoins() {
+    const coinsList = document.getElementById('coins-list');
+    coinsList.innerHTML = `<p>Loading coins...</p>`;
+    try {
+      const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=12&page=1&sparkline=false');
+      const coins = await res.json();
+      coinsList.innerHTML = '';
+      coins.forEach(coin => {
+        const card = document.createElement('div');
+        card.className = 'coin-card';
+        card.innerHTML = `
+          <img src="${coin.image}"
+          <img src="${coin.image}" alt="${coin.name} logo" />
+          <div>${coin.name} (${coin.symbol.toUpperCase()})</div>
+          <div>Price: $${coin.current_price.toLocaleString()}</div>
+          <div>Market Cap: $${coin.market_cap.toLocaleString()}</div>
+          <div>24h Change: <span style="color:${coin.price_change_percentage_24h >= 0 ? '#4caf50' : '#f44336'}">${coin.price_change_percentage_24h.toFixed(2)}%</span></div>
+        `;
+        coinsList.appendChild(card);
+      });
+    } catch (e) {
+      coinsList.innerHTML = '<p>Failed to load coins. Try refreshing.</p>';
+    }
+  }
+
+  async function fetchMarketAnalysis() {
+    const analysisEl = document.getElementById('marketAnalysisText');
+    analysisEl.textContent = 'Loading market analysis...';
+
+    try {
+      // For demo, fetch top coins & do simple analysis:
+      const res = await fetch('https://api.coingecko.com/api/v3/global');
+      const data = await res.json();
+      const marketCap = data.data.total_market_cap.usd;
+      const volume = data.data.total_volume.usd;
+      analysisEl.innerHTML = `
+        <p>Total Market Cap: $${marketCap.toLocaleString(undefined, {maximumFractionDigits:0})}</p>
+        <p>24h Volume: $${volume.toLocaleString(undefined, {maximumFractionDigits:0})}</p>
+        <p>Market dominance BTC: ${data.data.market_cap_percentage.btc.toFixed(2)}%</p>
+        <p>Market dominance ETH: ${data.data.market_cap_percentage.eth.toFixed(2)}%</p>
+      `;
+    } catch(e) {
+      analysisEl.textContent = 'Failed to load market analysis.';
+    }
+  }
+
+  async function fetchMarketNews() {
+    const newsList = document.getElementById('news-list');
+    newsList.innerHTML = '<p>Loading news...</p>';
+    try {
+      // CoinGecko news endpoint is limited, so use a placeholder for demo
+      // You can replace with your own news API or TradingView news widget
+      const dummyNews = [
+        {title: "Bitcoin rallies past $40,000", url: "#"},
+        {title: "Ethereum 2.0 upgrade approaches", url: "#"},
+        {title: "New DeFi protocols launching", url: "#"},
+        {title: "Crypto regulations evolving worldwide", url: "#"},
+      ];
+      newsList.innerHTML = '';
+      dummyNews.forEach(item => {
+        const article = document.createElement('article');
+        article.innerHTML = `<a href="${item.url}" target="_blank" rel="noopener">${item.title}</a>`;
+        newsList.appendChild(article);
+      });
+    } catch(e) {
+      newsList.innerHTML = '<p>Failed to load news.</p>';
+    }
+  }
+
+  function loadTradingViewWidget(containerId, symbol='COINBASE:BTCUSD') {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ''; // clear
+
+    const script = document.createElement('script');
+    script.src = "https://s3.tradingview.com/tv.js";
+    script.onload = () => {
+      new TradingView.widget({
+        container_id: containerId,
+        autosize: true,
+        symbol: symbol,
+        interval: '60',
+        timezone: 'Etc/UTC',
+        theme: document.body.classList.contains('dark-mode') ? 'dark' : 'light',
+        style: '1',
+        locale: 'en',
+        toolbar_bg: '#f1f3f6',
+        enable_publishing: false,
+        allow_symbol_change: true,
+        save_image: false,
+        studies: ['MACD@tv-basicstudies'],
+        show_popup_button: true,
+        popup_width: '1000',
+        popup_height: '650',
+      });
+    };
+    container.appendChild(script);
+  }
+
+  // Load data when dashboard or related pages are active
+  function loadDashboardData() {
+    fetchCoins();
+    fetchMarketAnalysis();
+    fetchMarketNews();
+    loadTradingViewWidget('tradingview-widget', 'COINBASE:BTCUSD');
+    loadTradingViewWidget('trading-charts-container', 'BINANCE:ETHUSDT');
+    // For performance charts (#performance), you can embed TradingView or Chart.js charts here
+    const perf = document.getElementById('performance-charts');
+    perf.innerHTML = `<p>Loading performance charts...</p>`;
+    // For demo, load BTC 7-day sparkline from CoinGecko (simplified)
+    fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7')
+      .then(res => res.json())
+      .then(data => {
+        perf.innerHTML = `<p>Bitcoin 7-day price points: ${data.prices.length}</p>`;
+        // Could add a chart library here if desired
+      })
+      .catch(() => { perf.innerHTML = '<p>Failed to load performance data.</p>'; });
+  }
+
+  // Load dashboard data if on dashboard at start
+  if(localStorage.getItem('currentPage') === 'page1' && localStorage.getItem('isLoggedIn') === 'true'){
+    loadDashboardData();
+  }
+
+  // Also reload data on page change if dashboard or related pages
+  navList.addEventListener('click', e => {
+    if(e.target.tagName === 'BUTTON') {
+      const p = e.target.dataset.page;
+      if(['page1','page2','page3','page4','page5','page6','page7'].includes(p) && localStorage.getItem('isLoggedIn') === 'true') {
+        loadDashboardData();
+      }
+    }
+  });
+
+</script>
+</body>
+</html>
