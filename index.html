@@ -124,7 +124,7 @@
       <a onclick="showPage('7')">Transfer</a>
       <a onclick="showPage('11')">Settings</a>
     </div>
-    <a onclick="showPage('1')">Log In</a>
+    <a onclick="showPage('page1')">Log In</a>
   </nav>
 </header>    
   <!-- PAGES CONTAINER -->    
@@ -186,32 +186,68 @@
     </div>  
   </section>  
 </section>  
-
 <!-- PAGE 1: LOGIN -->
-<section id="page1" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white">
-  <div class="max-w-md w-full bg-[#072146] p-8 rounded-xl shadow-lg">
-    <button onclick="showPage('page0')" class="text-sm text-yellow-400 hover:underline mb-4">← Back</button>
-    <h2 class="text-3xl font-bold mb-6 text-yellow-400">Login to Your Account</h2>
+<section id="page1" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white px-4">
+  <div class="w-full max-w-md bg-[#072146] p-8 rounded-2xl shadow-2xl">
+    
+    <!-- Back Button -->
+    <button onclick="showPage('page0')" class="text-sm text-yellow-400 hover:underline mb-6">
+      ← Back
+    </button>
+
+    <!-- Heading -->
+    <h2 class="text-3xl font-extrabold text-yellow-400 mb-6 text-center">
+      Login to Your Account
+    </h2>
+
+    <!-- Login Form -->
     <form id="loginForm" onsubmit="event.preventDefault(); handleLogin()">
-      <label class="block mb-2 font-semibold">Email or Username</label>
-      <input id="loginEmail" type="text" required placeholder="example@domain.com" class="w-full mb-4 p-3 rounded-md text-black" />
       
-      <label class="block mb-2 font-semibold">Password</label>
-      <input id="loginPassword" type="password" required placeholder="••••••••" class="w-full mb-6 p-3 rounded-md text-black" />
-      
-      <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded">Log In</button>
+      <!-- Email / Username -->
+      <div class="mb-4">
+        <label for="loginEmail" class="block font-semibold mb-1">Email or Username</label>
+        <input
+          id="loginEmail"
+          type="text"
+          required
+          placeholder="example@domain.com"
+          class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
+        />
+      </div>
+
+      <!-- Password -->
+      <div class="mb-6">
+        <label for="loginPassword" class="block font-semibold mb-1">Password</label>
+        <input
+          id="loginPassword"
+          type="password"
+          required
+          placeholder="••••••••"
+          class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded-lg transition duration-200"
+      >
+        Log In
+      </button>
     </form>
 
-    <div class="mt-6 text-center text-gray-400 text-sm">
+    <!-- Footer Links -->
+    <div class="mt-6 text-center text-sm text-gray-400">
       <p>
         Forgot Password?
-        <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page1i')">Reset</a>
+        <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('1i')">Reset</a>
       </p>
       <p class="mt-2">
         Don't have an account?
-        <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page2')">Sign Up</a>
+        <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('2')">Sign Up</a>
       </p>
     </div>
+
   </div>
 </section>
 
@@ -235,30 +271,73 @@
     <button onclick="handleReset()" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded">Submit</button>
   </div>
 </section>
-
 <!-- PAGE 2: SIGN UP -->
-<section id="page2" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white" style="display:none;">
-  <div class="max-w-md w-full bg-[#072146] p-8 rounded-xl shadow-lg">
-    <button onclick="showPage('page1')" class="text-sm text-yellow-400 hover:underline mb-4">← Back</button>
-    <h2 class="text-3xl font-bold mb-6 text-yellow-400">Create Your Account</h2>
+<section id="page2" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white px-4" style="display:none;">
+  <div class="w-full max-w-md bg-[#072146] p-8 rounded-2xl shadow-2xl">
+    
+    <!-- Back Button -->
+    <button onclick="showPage('page1')" class="text-sm text-yellow-400 hover:underline mb-6">← Back</button>
+
+    <!-- Heading -->
+    <h2 class="text-3xl font-extrabold text-yellow-400 mb-6 text-center">Create Your Account</h2>
+
+    <!-- Sign Up Form -->
     <form id="signUpForm" onsubmit="event.preventDefault(); handleSignUp()">
-      <label class="block mb-2 font-semibold">Full Name</label>
-      <input id="signFullName" type="text" required class="w-full mb-4 p-3 rounded-md text-black" placeholder="John Doe" />
 
-      <label class="block mb-2 font-semibold">Email</label>
-      <input id="signEmail" type="email" required class="w-full mb-4 p-3 rounded-md text-black" placeholder="example@domain.com" />
+      <!-- Full Name -->
+      <div class="mb-4">
+        <label for="signFullName" class="block font-semibold mb-1">Full Name</label>
+        <input
+          id="signFullName"
+          type="text"
+          required
+          class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          placeholder="John Doe"
+        />
+      </div>
 
-      <label class="block mb-2 font-semibold">Password</label>
-      <input id="signPassword" type="password" required minlength="6" class="w-full mb-6 p-3 rounded-md text-black" placeholder="••••••••" />
+      <!-- Email -->
+      <div class="mb-4">
+        <label for="signEmail" class="block font-semibold mb-1">Email</label>
+        <input
+          id="signEmail"
+          type="email"
+          required
+          class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          placeholder="example@domain.com"
+        />
+      </div>
 
-      <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded">Sign Up</button>
+      <!-- Password -->
+      <div class="mb-6">
+        <label for="signPassword" class="block font-semibold mb-1">Password</label>
+        <input
+          id="signPassword"
+          type="password"
+          required
+          minlength="6"
+          class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          placeholder="••••••••"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded-lg transition duration-200"
+      >
+        Sign Up
+      </button>
     </form>
-    <p class="mt-6 text-center text-gray-400 text-sm">
+
+    <!-- Footer -->
+    <p class="mt-6 text-center text-sm text-gray-400">
       Already have an account?
       <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page1')">Log In</a>
     </p>
+
   </div>
-</section>
+</section>>
 
 <!-- PAGE 2ii: CAPTCHA AFTER SIGNUP -->
 <section id="page2ii" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white" style="display:none;">
