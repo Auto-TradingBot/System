@@ -75,7 +75,13 @@
     nav a:hover {  
       color: #fff;  
     }  
-  
+  <!-- Add this style in your <head> or use Tailwind’s responsive classes -->
+<style>
+  @media (max-width: 640px) {
+    .fixed-action-buttons {
+      bottom: 80px; /*
+     
+    }
     /* Buttons */  
     button {  
       background-color: #ffc107;  
@@ -101,9 +107,9 @@
   <header>  
     <div class="logo" onclick="showPage('page0')">BLOCKCHAIN BOT</div>  
     <nav>  
-      <a onclick="showPage('4')">Dashboard</a>  
-      <a onclick="showPage('6')">Receive</a>  
-      <a onclick="showPage('7')">Transfer</a>  
+      <a onclick="showPage('1')">Dashboard</a>  
+      <a onclick="showPage('1')">Receive</a>  
+      <a onclick="showPage('1')">Transfer</a>  
       <a onclick="showPage('11')">Settings</a>  
       <a onclick="showPage('1')">Log In</a>  
     </nav>  
@@ -168,117 +174,191 @@
   </section>  
 </section>  
 
-<!-- PAGE 1 - LOGIN -->  
-<section id="page1" class="page">  
-  <div class="max-w-md mx-auto bg-[#072146] p-8 rounded-xl shadow-lg">  
-    <h2 class="text-3xl font-bold mb-6 text-yellow-400">Login to Your Account</h2>  
-    <form id="loginForm" onsubmit="event.preventDefault(); handleLogin()">  
-      <label class="block mb-2 font-semibold">Email or Username</label>  
-      <input id="loginEmail" type="text" required class="w-full mb-4 p-3 rounded-md text-black" placeholder="example@domain.com" />  
+<!-- PAGE 1: LOGIN -->
+<section id="page1" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white">
+  <div class="max-w-md w-full bg-[#072146] p-8 rounded-xl shadow-lg">
+    <button onclick="showPage('page0')" class="text-sm text-yellow-400 hover:underline mb-4">← Back</button>
+    <h2 class="text-3xl font-bold mb-6 text-yellow-400">Login to Your Account</h2>
+    <form id="loginForm" onsubmit="event.preventDefault(); handleLogin()">
+      <label class="block mb-2 font-semibold">Email or Username</label>
+      <input id="loginEmail" type="text" required placeholder="example@domain.com" class="w-full mb-4 p-3 rounded-md text-black" />
+      
+      <label class="block mb-2 font-semibold">Password</label>
+      <input id="loginPassword" type="password" required placeholder="••••••••" class="w-full mb-6 p-3 rounded-md text-black" />
+      
+      <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded">Log In</button>
+    </form>
 
-      <label class="block mb-2 font-semibold">Password</label>  
-      <input id="loginPassword" type="password" required class="w-full mb-6 p-3 rounded-md text-black" placeholder="••••••••" />  
+    <div class="mt-6 text-center text-gray-400 text-sm">
+      <p>
+        Forgot Password?
+        <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page1i')">Reset</a>
+      </p>
+      <p class="mt-2">
+        Don't have an account?
+        <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page2')">Sign Up</a>
+      </p>
+    </div>
+  </div>
+</section>
 
-      <button type="submit" class="w-full">Log In</button>  
-    </form>  
-    <p class="mt-6 text-center text-gray-400">  
-      Don't have an account? <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page2')">Sign Up</a>  
-    </p>  
-  </div>  
-</section>  
-   
-  <!-- CAPTCHA after signup --> 
-  <div id="page2ii" class="page" style="display:none;">
-    <h3>CAPTCHA Verification</h3>
-    <div class="h-captcha" data-sitekey="4e5a8260-9554-439c-8d58-76f04ca823c8"></div>
-  </div>  
-  <!-- CAPTCHA for reset -->  
-  <div id="page1i" class="page" style="display:none;">
-    <h3>Reset Password - CAPTCHA</h3>
-    <div class="h-captcha" data-sitekey="4e5a8260-9554-439c-8d58-76f04ca823c8"></div>
-    <button onclick="showPage('1ii')">Verify</button>
-  </div>  
-  <!-- Reset Password Form -->  
-  <div id="page1ii" class="page" style="display:none;">
-    <h3>Set New Password</h3>
-    <input type="email" id="resetEmail" placeholder="Email"><br>
-    <input type="password" id="newPassword" placeholder="New Password"><br>
-    <button onclick="handleReset()">Submit</button>
-  </div>  
+<!-- PAGE 1i: CAPTCHA FOR RESET -->
+<section id="page1i" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white" style="display:none;">
+  <div class="max-w-md w-full bg-[#072146] p-8 rounded-xl shadow-lg">
+    <button onclick="showPage('page1')" class="text-sm text-yellow-400 hover:underline mb-4">← Back</button>
+    <h3 class="text-2xl font-semibold mb-4 text-yellow-400">Reset Password - CAPTCHA</h3>
+    <div class="h-captcha mb-6" data-sitekey="4e5a8260-9554-439c-8d58-76f04ca823c8"></div>
+    <button onclick="showPage('page1ii')" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded">Verify</button>
+  </div>
+</section>
 
-<!-- PAGE 2 - SIGN UP -->  
-<section id="page2" class="page">  
-  <div class="max-w-md mx-auto bg-[#072146] p-8 rounded-xl shadow-lg">  
-    <h2 class="text-3xl font-bold mb-6 text-yellow-400">Create Your Account</h2>  
-    <form id="signUpForm" onsubmit="event.preventDefault(); handleSignUp()">  
-      <label class="block mb-2 font-semibold">Full Name</label>  
-      <input id="signFullName" type="text" required class="w-full mb-4 p-3 rounded-md text-black" placeholder="John Doe" />  
+<!-- PAGE 1ii: RESET PASSWORD FORM -->
+<section id="page1ii" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white" style="display:none;">
+  <div class="max-w-md w-full bg-[#072146] p-8 rounded-xl shadow-lg">
+    <button onclick="showPage('page1i')" class="text-sm text-yellow-400 hover:underline mb-4">← Back</button>
+    <h3 class="text-2xl font-semibold mb-6 text-yellow-400">Set New Password</h3>
+    <input type="email" id="resetEmail" required placeholder="Email" class="w-full mb-4 p-3 rounded-md text-black" />
+    <input type="password" id="newPassword" required placeholder="New Password" class="w-full mb-6 p-3 rounded-md text-black" />
+    <button onclick="handleReset()" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded">Submit</button>
+  </div>
+</section>
 
-      <label class="block mb-2 font-semibold">Email</label>  
-      <input id="signEmail" type="email" required class="w-full mb-4 p-3 rounded-md text-black" placeholder="example@domain.com" />  
+<!-- PAGE 2: SIGN UP -->
+<section id="page2" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white" style="display:none;">
+  <div class="max-w-md w-full bg-[#072146] p-8 rounded-xl shadow-lg">
+    <button onclick="showPage('page1')" class="text-sm text-yellow-400 hover:underline mb-4">← Back</button>
+    <h2 class="text-3xl font-bold mb-6 text-yellow-400">Create Your Account</h2>
+    <form id="signUpForm" onsubmit="event.preventDefault(); handleSignUp()">
+      <label class="block mb-2 font-semibold">Full Name</label>
+      <input id="signFullName" type="text" required class="w-full mb-4 p-3 rounded-md text-black" placeholder="John Doe" />
 
-      <label class="block mb-2 font-semibold">Password</label>  
-      <input id="signPassword" type="password" required minlength="6" class="w-full mb-6 p-3 rounded-md text-black" placeholder="••••••••" />  
+      <label class="block mb-2 font-semibold">Email</label>
+      <input id="signEmail" type="email" required class="w-full mb-4 p-3 rounded-md text-black" placeholder="example@domain.com" />
 
-      <button type="submit" class="w-full">Sign Up</button>  
-    </form>  
-    <p class="mt-6 text-center text-gray-400">  
-      Already have an account? <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page1')">Log In</a>  
-    </p>  
-  </div>  
+      <label class="block mb-2 font-semibold">Password</label>
+      <input id="signPassword" type="password" required minlength="6" class="w-full mb-6 p-3 rounded-md text-black" placeholder="••••••••" />
+
+      <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded">Sign Up</button>
+    </form>
+    <p class="mt-6 text-center text-gray-400 text-sm">
+      Already have an account?
+      <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page1')">Log In</a>
+    </p>
+  </div>
+</section>
+
+<!-- PAGE 2ii: CAPTCHA AFTER SIGNUP -->
+<section id="page2ii" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white" style="display:none;">
+  <div class="max-w-md w-full bg-[#072146] p-8 rounded-xl shadow-lg">
+    <button onclick="showPage('page2')" class="text-sm text-yellow-400 hover:underline mb-4">← Back</button>
+    <h3 class="text-2xl font-semibold mb-4 text-yellow-400">CAPTCHA Verification</h3>
+    <div class="h-captcha mb-6" data-sitekey="4e5a8260-9554-439c-8d58-76f04ca823c8"></div>
+    <button onclick="completeCaptcha()" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded">Verify</button>
+  </div>
 </section>  
 
 <!-- PAGE 3 - DASHBOARD -->  
 <section id="page3" class="page px-4 md:px-0">  
   <div class="max-w-6xl mx-auto bg-[#072146] rounded-xl p-8 shadow-lg flex flex-col space-y-6">  
 
-    <header class="flex justify-between items-center">  
-      <h2 class="text-3xl font-bold text-yellow-400">Dashboard</h2>  
-      <button onclick="showPage('11')" title="Settings">⚙️</button>  
-    </header>  
+      <!-- HEADER - DASHBOARD + EARNS BUTTON -->
+<header class="w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4 bg-transparent">
+  <h2 class="text-2xl sm:text-3xl font-bold text-yellow-400">Dashboard</h2>
+  
+  <!-- Earns Button -->
+  <button 
+    onclick="showPage('16')" 
+    title="Go to Earns"
+    class="bg-yellow-400 text-[#072146] font-bold px-5 py-2 rounded-full shadow hover:bg-yellow-300 transition text-sm sm:text-base"
+  >
+    Earns
+  </button>
+</header>
 
-    <!-- Wallet Info -->  
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">  
-      <div class="bg-[#0f375a] rounded-xl p-6 flex flex-col items-center shadow-md">  
-        <p class="text-yellow-400 font-semibold mb-1">USDT Balance</p>  
-        <p class="text-white text-3xl font-bold" id="usdtBalance">--</p>  
-      </div>  
-      <div class="bg-[#0f375a] rounded-xl p-6 flex flex-col items-center shadow-md">  
-        <p class="text-yellow-400 font-semibold mb-1">BNB Balance</p>  
-        <p class="text-white text-3xl font-bold" id="bnbBalance">--</p>  
-      </div>  
-      <div class="bg-[#0f375a] rounded-xl p-6 flex flex-col items-center shadow-md">  
-        <p class="text-yellow-400 font-semibold mb-1">Total Assets (USD)</p>  
-        <p class="text-white text-3xl font-bold" id="totalAssets">--</p>  
-      </div>  
-    </div>  
+    <!-- BALANCE CARDS SECTION -->
+<div class="w-full px-4 sm:px-6 lg:px-8 mt-6 mb-8">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- USDT Balance Card -->
+    <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg flex flex-col items-center text-center">
+      <p class="text-yellow-400 text-sm font-medium mb-1">USDT Balance</p>
+      <p class="text-white text-3xl font-bold" id="usdtBalance">--</p>
+    </div>
 
-    <!-- Chart -->  
-    <div class="bg-[#0f375a] rounded-xl p-6 shadow-md">  
-      <h3 class="text-yellow-400 font-semibold mb-4">Daily Profit Goal</h3>  
-      <div id="profitChart" style="height: 250px;"></div>  
-    </div>  
+    <!-- BNB Balance Card -->
+    <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg flex flex-col items-center text-center">
+      <p class="text-yellow-400 text-sm font-medium mb-1">BNB Balance</p>
+      <p class="text-white text-3xl font-bold" id="bnbBalance">--</p>
+    </div>
 
-    <!-- Actions -->  
-    <div class="flex justify-center space-x-6">  
-      <button onclick="showPage('6')" class="px-8 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition">Receive</button>  
-      <button onclick="showPage('7')" class="px-8 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition">Transfer</button>  
-    </div>  
+    <!-- Total Assets -->
+    <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg flex flex-col items-center text-center">
+      <p class="text-yellow-400 text-sm font-medium mb-1">Total Assets (USD)</p>
+      <p class="text-white text-3xl font-bold" id="totalAssets">--</p>
+    </div>
+  </div>
+</div>
+
+<!-- CHART SECTION - PROFIT GOAL + SIGNALS -->
+<div class="w-full px-4 sm:px-6 lg:px-8 mt-8 mb-10">
+  <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg">
+    <h3 class="text-yellow-400 font-semibold text-lg mb-4">Daily Profit Goal</h3>
+
+    <!-- 🔹 TradingView Chart Widget -->
+    <div id="tradingview-widget" class="w-full h-[250px] overflow-hidden rounded-lg"></div>
+  </div>
+</div>
+<!-- SETTINGS BUTTON - BOTTOM RIGHT CORNER -->
+ <button 
+  onclick="showPage('page11')" 
+  class="fixed bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg hover:bg-yellow-300 transition duration-200 z-50"
+  title="Settings"
+>
+  ⚙️
+</button>  
   </div>  
+ <!-- FIXED ACTION BUTTONS - BOTTOM CENTER -->
+<div class="fixed bottom-20 left-1/2 transform -translate-x-1/2 flex space-x-4 z-40">
+  <button 
+    onclick="showPage('6')" 
+    class="px-6 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition"
+  >
+    Receive
+  </button>
+  <button 
+    onclick="showPage('7')" 
+    class="px-6 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition"
+  >
+    Transfer
+  </button>
+</div>
 </section>  
 
-<!-- PAGE 6 - RECEIVE -->  
-<section id="page6" class="page px-4 md:px-0">  
-  <div class="max-w-4xl mx-auto bg-[#072146] rounded-xl p-8 shadow-lg flex flex-col items-center">  
-    <h2 class="text-3xl font-bold text-yellow-400 mb-6">Receive Tokens</h2>  
-    <p class="mb-6 text-white text-center max-w-md">Your wallet address to receive USDT and BNB:</p>  
-    <div class="bg-[#0f375a] p-6 rounded-lg w-full max-w-md text-center select-all cursor-pointer" id="walletAddress">  
-      0x1234...ABCD  
-    </div>  
-    <button class="mt-6" onclick="copyWalletAddress()">Copy Address</button>  
-  </div>  
-</section>  
+<!-- PAGE 6 - RECEIVE -->
+   <section id="page6" class="page px-4 md:px-0">
+  <div class="max-w-4xl mx-auto bg-[#072146] rounded-xl p-8 shadow-lg">
+    <h2 class="text-3xl font-bold text-yellow-400 mb-6 text-center">Receive Tokens</h2><input type="text" id="tokenSearch" placeholder="Search token..." class="mb-4 w-full p-2 rounded-md text-black" oninput="filterTokens()" />
 
+<div class="overflow-y-auto max-h-[400px]" id="tokenList">
+  <!-- Token rows inserted dynamically -->
+</div>
+
+  </div>
+</section>
+   <!-- PAGE 6i - Token Details -->
+   <section id="page6i" class="page hidden px-4 md:px-0">
+  <div class="max-w-4xl mx-auto bg-[#072146] rounded-xl p-8 shadow-lg">
+    <div class="flex items-center justify-between mb-4">
+      <h2 id="tokenTitle" class="text-2xl font-bold text-yellow-400"></h2>
+      <button onclick="goBack()" class="text-white">← Back</button>
+    </div>
+    <div id="priceWidget" class="mb-6"></div>
+    <div class="flex gap-4">
+      <button onclick="navigateTo('page6ii')" class="bg-green-600 px-4 py-2 rounded-md text-white">Deposit</button>
+      <button onclick="navigateTo('page7')" class="bg-blue-600 px-4 py-2 rounded-md text-white">Send</button>
+    </div>
+  </div>
+</section>
+   
 <!-- PAGE 7 - TRANSFER -->  
 <section id="page7" class="page px-4 md:px-0">  
   <div class="max-w-md mx-auto bg-[#072146] rounded-xl p-8 shadow-lg">  
@@ -975,5 +1055,133 @@ window.addEventListener("DOMContentLoaded", () => {
   renderHCaptcha("hcaptcha-container-reset");
 });
   </script>
+   <script>
+const tokens = [
+  { symbol: "BTC", name: "Bitcoin", logo: "https://cryptologos.cc/logos/bitcoin-btc-logo.png?v=026", tvTicker: "BINANCE:BTCUSDT" },
+  { symbol: "USDT", name: "Tether", logo: "https://cryptologos.cc/logos/tether-usdt-logo.png?v=026", tvTicker: "BINANCE:USDTUSDT" },
+  { symbol: "BNB", name: "Binance Coin", logo: "https://cryptologos.cc/logos/binance-coin-bnb-logo.png?v=026", tvTicker: "BINANCE:BNBUSDT" },
+  { symbol: "ETH", name: "Ethereum", logo: "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=026", tvTicker: "BINANCE:ETHUSDT" },
+  { symbol: "SOL", name: "Solana", logo: "https://cryptologos.cc/logos/solana-sol-logo.png?v=026", tvTicker: "BINANCE:SOLUSDT" },
+  { symbol: "USDC", name: "USD Coin", logo: "https://cryptologos.cc/logos/usd-coin-usdc-logo.png?v=026", tvTicker: "BINANCE:USDCUSDT" },
+  // Add more tokens here A-Z
+];
+
+function renderTokenList() {
+  const list = document.getElementById("tokenList");
+  list.innerHTML = "";
+  tokens.forEach(token => {
+    const row = document.createElement("div");
+    row.className = "flex justify-between items-center p-3 mb-2 bg-[#0f375a] rounded-lg cursor-pointer hover:bg-[#15527e]";
+    row.onclick = () => showTokenDetails(token);
+    row.innerHTML = `
+      <div class="flex items-center gap-4">
+        <img src="${token.logo}" alt="${token.name}" class="w-8 h-8"/>
+        <div class="text-white">
+          <div class="font-semibold">${token.symbol}</div>
+          <div class="text-sm text-gray-400">${token.name}</div>
+        </div>
+      </div>
+      <div id="price-${token.symbol}" class="text-green-400">--</div>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function filterTokens() {
+  const keyword = document.getElementById("tokenSearch").value.toLowerCase();
+  const allRows = document.querySelectorAll("#tokenList > div");
+  allRows.forEach(row => {
+    row.style.display = row.textContent.toLowerCase().includes(keyword) ? "flex" : "none";
+  });
+}
+
+function showTokenDetails(token) {
+  document.getElementById("tokenTitle").innerText = token.name;
+  document.getElementById("priceWidget").innerHTML = `
+    <iframe src="https://www.tradingview.com/widgetembed/?symbol=${token.tvTicker}&interval=60&theme=dark&style=1&locale=en" width="100%" height="400" frameborder="0"></iframe>
+  `;
+  navigateTo("page6i");
+}
+
+function fetchLivePrices() {
+  fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,tether,binancecoin,ethereum,solana,usd-coin&vs_currencies=usd")
+    .then(res => res.json())
+    .then(data => {
+      tokens.forEach(token => {
+        let idMap = {
+          BTC: "bitcoin",
+          USDT: "tether",
+          BNB: "binancecoin",
+          ETH: "ethereum",
+          SOL: "solana",
+          USDC: "usd-coin"
+        };
+        const price = data[idMap[token.symbol]]?.usd;
+        if (price) document.getElementById(`price-${token.symbol}`).innerText = `$${price.toFixed(2)}`;
+      });
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderTokenList();
+  fetchLivePrices();
+});
+   </script>
+   <script>
+  const pageHistory = [];
+
+  function navigateTo(pageId) {
+    const currentPage = document.querySelector('.page.active');
+    if (currentPage) {
+      pageHistory.push(currentPage.id); // Only push manually
+      currentPage.classList.remove('active');
+    }
+    document.getElementById(pageId).classList.add('active');
+  }
+
+  function goBack() {
+    if (pageHistory.length > 0) {
+      const lastPageId = pageHistory.pop();
+      document.querySelector('.page.active').classList.remove('active');
+      document.getElementById(lastPageId).classList.add('active');
+    }
+  }
+
+  // Set default on load to page0 only — no history resume
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page0').classList.add('active');
+  });
+   </script>
+   <!-- TradingView Widget Script -->
+<script type="text/javascript">
+  new TradingView.widget({
+    container_id: "tradingview-widget",
+    autosize: true,
+    symbol: "BINANCE:BTCUSDT", // you can change this to ETHUSDT or BNBUSDT
+    interval: "60",
+    timezone: "Etc/UTC",
+    theme: "dark",
+    style: "1",
+    locale: "en",
+    toolbar_bg: "#0f375a",
+    enable_publishing: false,
+    hide_legend: false,
+    save_image: false,
+    studies: [
+      "MACD@tv-basicstudies", 
+      "RSI@tv-basicstudies", 
+      "StochasticRSI@tv-basicstudies"
+    ],
+    withdateranges: true,
+    details: true,
+    hotlist: true,
+    calendar: true
+  });
+</script>
+
+<!-- Load TradingView Script -->
+<script src="https://s3.tradingview.com/tv.js"></script>
+
 </body>
 </html>
