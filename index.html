@@ -1,11 +1,20 @@
-<!DOCTYPE html>  
-<html lang="en" class="scroll-smooth" style="background:#0a2348; color:#f0f0f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">  
-<head>  
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blockchain Bot Signup</title>
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
- <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+<!DOCTYPE html><html lang="en" class="scroll-smooth" style="background:#0a2348; color:#f0f0f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blockchain Auto-Trading</title>
+  <link rel="icon" href="/icons/icon-192.png" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://unpkg.com/country-list-js/dist/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/i18next@22.4.15/dist/umd/i18next.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.5.2"></script>
+  <script src="https://unpkg.com/vanilla-picker@2"></script>
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <script defer src="./script.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
  <style>
     ::-webkit-scrollbar {  
       width: 8px;  
@@ -103,17 +112,19 @@
     }  
   </style>  </head>  
 <body class="overflow-x-hidden">  
-  <!-- HEADER -->  
-  <header>  
-    <div class="logo" onclick="showPage('page0')">BLOCKCHAIN BOT</div>  
-    <nav>  
-      <a onclick="showPage('1')">Dashboard</a>  
-      <a onclick="showPage('1')">Receive</a>  
-      <a onclick="showPage('1')">Transfer</a>  
-      <a onclick="showPage('11')">Settings</a>  
-      <a onclick="showPage('1')">Log In</a>  
-    </nav>  
-  </header>    
+<!-- HEADER -->
+<header>
+  <div class="logo" onclick="showPage('0')">BLOCKCHAIN BOT</div>
+  <nav>
+    <div id="navLinks" class="flex gap-4 hidden">
+      <a onclick="showPage('4')">Dashboard</a>
+      <a onclick="showPage('6')">Receive</a>
+      <a onclick="showPage('7')">Transfer</a>
+      <a onclick="showPage('11')">Settings</a>
+    </div>
+    <a id="loginLink" onclick="showPage('1')">Log In</a>
+  </nav>
+</header>    
   <!-- PAGES CONTAINER -->    
   <main id="app" class="max-w-7xl mx-auto px-6">  <!-- PAGE 0 - LANDING -->  
 <section id="page0" class="page active">  
@@ -378,32 +389,48 @@
   </div>  
 </section>  
 
-<!-- PAGE 11 - SETTINGS -->  
-<section id="page11" class="page px-4 md:px-0">  
-  <div class="max-w-md mx-auto bg-[#072146] rounded-xl p-8 shadow-lg">  
-    <h2 class="text-3xl font-bold text-yellow-400 mb-6">Settings</h2>  
-    <div>  
-      <label class="block mb-2 font-semibold">Preferred Currency</label>  
-      <select id="currencySelect" class="w-full p-3 rounded-md text-black mb-6">  
-        <option value="usd">USD</option>  
-        <option value="cad">CAD</option>  
-        <option value="inr">INR</option>  
-        <option value="aed">AED</option>  
-      </select>  
+<!-- PAGE 11: SETTINGS -->
+<section id="page11" class="page p-6 max-w-xl mx-auto text-white">
+  <h2 class="text-3xl font-bold mb-6" data-translate="settings">Settings</h2>
 
-      <label class="block mb-2 font-semibold">Language</label>  
-      <select id="languageSelect" class="w-full p-3 rounded-md text-black">  
-        <option value="en">English</option>  
-        <option value="fr">Français</option>  
-        <option value="es">Español</option>  
-        <option value="zh">中文</option>  
-      </select>  
-    </div>  
+  <!-- 🌐 Language Selection -->
+  <div class="mb-6">
+    <label for="languageSelect" class="block text-sm font-semibold mb-1">🌐 Language</label>
+    <select id="languageSelect" class="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white">
+      <!-- Populated by JS -->
+    </select>
+  </div>
 
-    <button class="mt-8 w-full" onclick="saveSettings()">Save Settings</button>  
-  </div>  
+  <!-- 💱 Currency Selection -->
+  <div class="mb-6">
+    <label for="currencySelect" class="block text-sm font-semibold mb-1">💱 Currency</label>
+    <select id="currencySelect" class="w-full p-2 rounded bg-gray-800 border border-gray-600 text-white">
+      <!-- Populated by JS -->
+    </select>
+  </div>
+
+  <!-- 📍 Detected Country & Currency -->
+  <p id="detectedCountry" class="text-sm text-yellow-400 font-medium mb-4">🌍 Detecting location...</p>
+
+    <!-- Actions Section -->
+    <div class="mt-10 grid gap-4">
+      <button onclick="feedback(); showPage('11i')" class="bg-[#1f2630] text-yellow-400 font-bold py-3 rounded-xl text-left px-4 hover:bg-[#28303d] transition" data-translate="kyc_verification">🛡️ KYC Verification</button>
+      <button onclick="feedback(); showPage('11ii')" class="bg-[#1f2630] text-yellow-400 font-bold py-3 rounded-xl text-left px-4 hover:bg-[#28303d] transition" data-translate="view_profile">👤 View Profile</button>
+      <button onclick="feedback(); showPage('11iii')" class="bg-[#1f2630] text-yellow-400 font-bold py-3 rounded-xl text-left px-4 hover:bg-[#28303d] transition" data-translate="connect_wallet">🔗 Connect Wallet</button>
+      <button onclick="feedback(); window.open('https://widget-page.smartsupp.com/widget/3ab3e4c3fcd21f84344cc872db2a35d9e40245a6', '_blank')" class="bg-yellow-400 text-black font-bold py-3 rounded-xl text-left px-4 hover:bg-yellow-300 transition" data-translate="live_chat">💬 Live Chat Support</button>
+      <button onclick="feedback(); disconnectWallet()" class="bg-transparent border border-yellow-400 text-yellow-400 font-bold py-3 rounded-xl hover:bg-[#1f2630] transition" data-translate="disconnect_wallet">❌ Disconnect Wallet</button>
+      <button onclick="feedback(); logout()" class="bg-transparent border border-red-500 text-red-500 font-bold py-3 rounded-xl hover:bg-red-900 transition" data-translate="logout">🚪 Logout</button>
+      <button onclick="feedback(); showPage('11iv')" class="bg-[#0b0e11] text-yellow-400 font-bold py-3 rounded-xl px-4 hover:bg-[#1e1f22] transition" data-translate="faq">🔗 FAQ</button>
+      <button onclick="feedback(); showPage('11v')" class="bg-[#0b0e11] text-yellow-400 font-bold py-3 rounded-xl px-4 hover:bg-[#1e1f22] transition" data-translate="help_support">🔗 Help & Support</button>
+    </div>
+  </div>
+ 
+  <!-- ✅ Save Button -->
+  <button class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded" data-translate="save">
+    Save
+  </button>
 </section>
-  
+
   
   <script>
   emailjs.init("n9BsaM4ZjH178UeSf");
@@ -685,7 +712,7 @@
       }).then(() => {
         emailjs.send(serviceID, autoReplyTemplateID, {
           user_email: email,
-          verification_link: 'https://yourdomain.com/page2ii' // placeholder
+          verification_link: 'https:///page2ii' // placeholder
         });
 
         document.getElementById('signUpForm').innerHTML = `
@@ -1182,6 +1209,332 @@ document.addEventListener("DOMContentLoaded", () => {
 
 <!-- Load TradingView Script -->
 <script src="https://s3.tradingview.com/tv.js"></script>
+<script>
+  // ✅ Check login state on load
+  let loggedIn = localStorage.getItem("loggedIn") === "true";
 
+  function updateNavVisibility() {
+    const navLinks = document.getElementById("navLinks");   // All protected nav links
+    const loginLink = document.getElementById("loginLink"); // Only the login link
+
+    if (loggedIn) {
+      if (navLinks) navLinks.classList.remove("hidden");
+      if (loginLink) loginLink.classList.add("hidden");
+    } else {
+      if (navLinks) navLinks.classList.add("hidden");
+      if (loginLink) loginLink.classList.remove("hidden");
+    }
+  }
+
+  // ✅ Call this after successful login
+  function handleLoginSuccess() {
+    localStorage.setItem("loggedIn", "true");
+    loggedIn = true;
+    updateNavVisibility();
+    showPage("3"); // Dashboard
+  }
+
+  // ✅ Logout function
+  function logout() {
+    localStorage.removeItem("loggedIn");
+    loggedIn = false;
+    updateNavVisibility();
+    showPage("1"); // Go to login page
+  }
+
+  // ✅ Page switching with access control
+  function showPage(pageNumber) {
+    const protectedPages = ["3", "6", "7", "11"]; // Dashboard, Receive, Transfer, Settings
+
+    if (protectedPages.includes(pageNumber) && !loggedIn) {
+      alert("Please log in to access this page.");
+      pageNumber = "1";
+    }
+
+    document.querySelectorAll(".page").forEach(page => page.style.display = "none");
+    const targetPage = document.getElementById("page" + pageNumber);
+    if (targetPage) targetPage.style.display = "block";
+  }
+
+  // ✅ Run when the DOM is ready
+  document.addEventListener("DOMContentLoaded", () => {
+    updateNavVisibility();
+    showPage(loggedIn ? "3" : "1"); // Load Dashboard or Login by default
+  });
+</script>
+   <script>
+// ✅ Login state check
+let loggedIn = localStorage.getItem("loggedIn") === "true";
+updateNavVisibility();
+
+function updateNavVisibility() {
+  const navLinks = document.getElementById("navLinks");
+  const loginLink = document.getElementById("loginLink");
+
+  if (loggedIn) {
+    navLinks?.classList.remove("hidden");
+    loginLink?.classList.add("hidden");
+  } else {
+    navLinks?.classList.add("hidden");
+    loginLink?.classList.remove("hidden");
+  }
+}
+
+// ✅ Handle login
+function handleLoginSuccess(userEmail = "user@example.com") {
+  localStorage.setItem("loggedIn", "true");
+  loggedIn = true;
+  updateNavVisibility();
+  document.getElementById("userEmail").textContent = userEmail;
+  showPage("3");
+}
+
+// ✅ Handle logout
+function logout() {
+  localStorage.removeItem("loggedIn");
+  loggedIn = false;
+  updateNavVisibility();
+  showPage("1");
+}
+
+// ✅ Page routing
+function showPage(pageNumber) {
+  const protectedPages = ["4", "6", "7", "11"]; // Dashboard, Receive, Transfer, Settings
+
+  if (protectedPages.includes(pageNumber) && !loggedIn) {
+    alert("Please log in to access this page.");
+    pageNumber = "1"; // redirect to login
+  }
+
+  document.querySelectorAll(".page").forEach(page => page.style.display = "none");
+  const targetPage = document.getElementById("page" + pageNumber);
+  if (targetPage) targetPage.style.display = "block";
+}
+
+// ✅ On load
+document.addEventListener("DOMContentLoaded", () => {
+  updateNavVisibility();
+  if (loggedIn && document.getElementById("userEmail")) {
+    document.getElementById("userEmail").textContent = "user@example.com";
+  }
+});
+</script>
+   
+<!-- ✅ Settings Page Script -->
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const langSelect = document.getElementById("languageSelect");
+  const currencySelect = document.getElementById("currencySelect");
+  const countryText = document.getElementById("detectedCountry");
+  const contentElements = document.querySelectorAll("[data-translate]");
+
+  const languages = [
+    { code: "en", label: "English" },
+    { code: "ar", label: "العربية" },
+    { code: "de", label: "Deutsch" },
+    { code: "es", label: "Español" },
+    { code: "fr", label: "Français" },
+    { code: "hi", label: "हिंदी" },
+    { code: "ja", label: "日本語" },
+    { code: "ru", label: "Русский" },
+    { code: "zh", label: "中文" },
+  ];
+
+  const currencies = [
+    "AED", "AUD", "CAD", "CHF", "CNY", "EUR", "GBP", "HKD", "INR",
+    "JPY", "KRW", "MXN", "NOK", "NZD", "RUB", "SAR", "SEK", "SGD",
+    "TRY", "USD", "ZAR"
+  ].sort();
+
+  // Populate dropdowns
+  langSelect.innerHTML = languages.map(l => `<option value="${l.code}">${l.label}</option>`).join('');
+  currencySelect.innerHTML = currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+
+  // Auto-detect location, language, currency
+  try {
+    const res = await fetch("https://ipapi.co/json/");
+    const geo = await res.json();
+    const detectedCurrency = geo.currency || "USD";
+    const detectedCountry = geo.country_name || "Unknown";
+    const browserLang = (navigator.language || "en").split("-")[0];
+
+    langSelect.value = browserLang;
+    currencySelect.value = detectedCurrency;
+    countryText.textContent = `🌍 Detected Country: ${detectedCountry} — Currency: ${detectedCurrency}`;
+    translatePage(browserLang);
+  } catch (e) {
+    console.warn("Geolocation failed:", e);
+    countryText.textContent = "❌ Location detection failed.";
+  }
+
+  // Translate function (you can plug into real API here)
+  async function translatePage(langCode) {
+    contentElements.forEach(el => {
+      const key = el.dataset.translate;
+      const translations = {
+        en: {
+          dashboard: "Dashboard",
+          settings: "Settings",
+          save: "Save",
+        },
+        es: {
+          dashboard: "Tablero",
+          settings: "Ajustes",
+          save: "Guardar",
+        },
+        fr: {
+          dashboard: "Tableau de bord",
+          settings: "Paramètres",
+          save: "Sauvegarder",
+        },
+        hi: {
+          dashboard: "डैशबोर्ड",
+          settings: "सेटिंग्स",
+          save: "सहेजें",
+        },
+        ar: {
+          dashboard: "لوحة القيادة",
+          settings: "الإعدادات",
+          save: "حفظ",
+        },
+        // Add more languages as needed
+      };
+
+      if (translations[langCode] && translations[langCode][key]) {
+        el.textContent = translations[langCode][key];
+      } else {
+        el.textContent = translations["en"][key] || key;
+      }
+    });
+  }
+
+  // Language switcher
+  langSelect.addEventListener("change", () => {
+    const newLang = langSelect.value;
+    translatePage(newLang);
+  });
+});
+</script>
+  <script>
+document.addEventListener("DOMContentLoaded", async () => {
+  const langSelect = document.getElementById("languageSelect");
+  const currencySelect = document.getElementById("currencySelect");
+  const countryText = document.getElementById("detectedCountry");
+  const contentElements = document.querySelectorAll("[data-translate]");
+
+  const languages = [
+    { code: "en", label: "English" },
+    { code: "ar", label: "العربية" },
+    { code: "de", label: "Deutsch" },
+    { code: "es", label: "Español" },
+    { code: "fr", label: "Français" },
+    { code: "hi", label: "हिंदी" },
+    { code: "ja", label: "日本語" },
+    { code: "ru", label: "Русский" },
+    { code: "zh", label: "中文" }
+  ];
+
+  const currencies = [
+    "AED", "AUD", "CAD", "CHF", "CNY", "EUR", "GBP", "HKD", "INR",
+    "JPY", "KRW", "MXN", "NOK", "NZD", "RUB", "SAR", "SEK", "SGD",
+    "TRY", "USD", "ZAR"
+  ].sort();
+
+  // Populate dropdowns
+  langSelect.innerHTML = languages.map(l => `<option value="${l.code}">${l.label}</option>`).join('');
+  currencySelect.innerHTML = currencies.map(c => `<option value="${c}">${c}</option>`).join('');
+
+  // Auto-detect location and language
+  try {
+    const res = await fetch("https://ipapi.co/json/");
+    const geo = await res.json();
+    const detectedCurrency = geo.currency || "USD";
+    const detectedCountry = geo.country_name || "Unknown";
+    const browserLang = (navigator.language || "en").split("-")[0];
+
+    langSelect.value = browserLang;
+    currencySelect.value = detectedCurrency;
+    countryText.textContent = `🌍 Detected Country: ${detectedCountry} — Currency: ${detectedCurrency}`;
+
+    translatePage(browserLang);
+  } catch (e) {
+    console.warn("Geolocation failed:", e);
+    countryText.textContent = "❌ Location detection failed.";
+  }
+
+  // Translation logic
+  async function translatePage(langCode) {
+    const dictionary = {
+      en: {
+        settings: "Settings",
+        save: "Save Settings",
+        preferred_currency: "Preferred Currency",
+        preferred_language: "Preferred Language",
+        kyc_verification: "KYC Verification",
+        view_profile: "View Profile",
+        connect_wallet: "Connect Wallet",
+        live_chat: "Live Chat Support",
+        disconnect_wallet: "Disconnect Wallet",
+        logout: "Logout",
+        faq: "FAQ",
+        help_support: "Help & Support"
+      },
+      es: {
+        settings: "Configuraciones",
+        save: "Guardar configuración",
+        preferred_currency: "Moneda preferida",
+        preferred_language: "Idioma preferido",
+        kyc_verification: "Verificación KYC",
+        view_profile: "Ver perfil",
+        connect_wallet: "Conectar billetera",
+        live_chat: "Soporte de chat en vivo",
+        disconnect_wallet: "Desconectar billetera",
+        logout: "Cerrar sesión",
+        faq: "Preguntas frecuentes",
+        help_support: "Ayuda y soporte"
+      },
+      fr: {
+        settings: "Paramètres",
+        save: "Enregistrer les paramètres",
+        preferred_currency: "Devise préférée",
+        preferred_language: "Langue préférée",
+        kyc_verification: "Vérification KYC",
+        view_profile: "Voir le profil",
+        connect_wallet: "Connecter le portefeuille",
+        live_chat: "Support Chat en direct",
+        disconnect_wallet: "Déconnecter le portefeuille",
+        logout: "Se déconnecter",
+        faq: "FAQ",
+        help_support: "Aide et assistance"
+      },
+      // Add other languages if needed
+    };
+
+    contentElements.forEach(el => {
+      const key = el.dataset.translate;
+      const fallback = dictionary.en[key] || key;
+      el.textContent = dictionary[langCode]?.[key] || fallback;
+    });
+  }
+
+  // Event listeners
+  langSelect.addEventListener("change", () => {
+    const selectedLang = langSelect.value;
+    translatePage(selectedLang);
+  });
+});
+
+// Save settings (you can expand to persist in DB/localStorage)
+function saveSettings() {
+  const language = document.getElementById("languageSelect").value;
+  const currency = document.getElementById("currencySelect").value;
+  alert(`✅ Settings saved:\nLanguage: ${language}\nCurrency: ${currency}`);
+}
+
+// Feedback placeholder
+function feedback() {
+  console.log("Setting option clicked.");
+}
+  </script>
 </body>
 </html>
