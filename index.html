@@ -128,7 +128,8 @@
   </nav>
 </header>    
   <!-- PAGES CONTAINER -->    
-  <main id="app" class="max-w-7xl mx-auto px-6">  <!-- PAGE 0 - LANDING -->  
+  <main id="app" class="max-w-7xl mx-auto px-6"> 
+    <!-- PAGE 0 - LANDING -->  
 <section id="page0" class="page active">  
   <div class="relative w-full h-[80vh] rounded-xl overflow-hidden shadow-lg mb-12">  
     <!-- Background -->  
@@ -240,11 +241,11 @@
     <div class="mt-6 text-center text-sm text-gray-400">
       <p>
         Forgot Password?
-        <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('1i')">Reset</a>
+        <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page1i')">Reset</a>
       </p>
       <p class="mt-2">
         Don't have an account?
-        <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('2')">Sign Up</a>
+        <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page2')">Sign Up</a>
       </p>
     </div>
 
@@ -817,7 +818,7 @@
 
     if (registeredUsers[email] === password) {
       alert(`Logged in as ${email}`);
-      showPage('page4');
+      showPage('page3');
       updateBalances();
     } else {
       document.getElementById('loginForm').innerHTML += `
@@ -1236,51 +1237,51 @@ document.addEventListener("DOMContentLoaded", () => {
 });
    </script>
 <script>
-  // --- Page navigation history ---
+  // === PAGE NAVIGATION WITH HISTORY ===
   const pageHistory = [];
 
   function navigateTo(pageId) {
-    const currentPage = document.querySelector('.page.active');
+    const currentPage = document.querySelector(".page.active");
     if (currentPage) {
       pageHistory.push(currentPage.id);
-      currentPage.classList.remove('active');
-      currentPage.classList.add('hidden');
+      currentPage.classList.remove("active");
+      currentPage.classList.add("hidden");
     }
+
     const targetPage = document.getElementById(pageId);
     if (targetPage) {
-      targetPage.classList.remove('hidden');
-      targetPage.classList.add('active');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      targetPage.classList.remove("hidden");
+      targetPage.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }
 
   function goBack() {
-    if (pageHistory.length > 0) {
-      const lastPageId = pageHistory.pop();
-      const currentPage = document.querySelector('.page.active');
-      if (currentPage) {
-        currentPage.classList.remove('active');
-        currentPage.classList.add('hidden');
-      }
-      const lastPage = document.getElementById(lastPageId);
-      if (lastPage) {
-        lastPage.classList.remove('hidden');
-        lastPage.classList.add('active');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+    const lastPageId = pageHistory.pop();
+    if (!lastPageId) return;
+
+    const currentPage = document.querySelector(".page.active");
+    if (currentPage) {
+      currentPage.classList.remove("active");
+      currentPage.classList.add("hidden");
+    }
+
+    const lastPage = document.getElementById(lastPageId);
+    if (lastPage) {
+      lastPage.classList.remove("hidden");
+      lastPage.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }
 
-  // --- Show page with access control ---
+  // === ACCESS CONTROL FOR PROTECTED PAGES ===
   let loggedIn = localStorage.getItem("loggedIn") === "true";
-
-  const protectedPages = ["page3", "page6", "page7", "page11"]; // IDs of protected pages
+  const protectedPages = ["page3", "page6", "page7", "page11"];
 
   function showPage(pageId) {
-    // Enforce login for protected pages
     if (protectedPages.includes(pageId) && !loggedIn) {
-      alert("Please log in to access this page.");
-      pageId = "page1"; // redirect to login page
+      alert("🔒 Please log in to access this page.");
+      pageId = "page1"; // redirect to login
     }
 
     document.querySelectorAll(".page").forEach(page => {
@@ -1296,10 +1297,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --- Update nav link visibility based on login state ---
+  // === NAVIGATION VISIBILITY BASED ON LOGIN STATE ===
   function updateNavVisibility() {
-    const navLinks = document.getElementById("navLinks");   // Protected nav container
-    const loginLink = document.getElementById("loginLink"); // Login link only
+    const navLinks = document.getElementById("navLinks");
+    const loginLink = document.getElementById("loginLink");
 
     if (loggedIn) {
       navLinks?.classList.remove("hidden");
@@ -1310,36 +1311,73 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // --- Login handler ---
+  // === AUTHENTICATION HANDLERS ===
   function handleLoginSuccess(userEmail = "user@example.com") {
     localStorage.setItem("loggedIn", "true");
     loggedIn = true;
     updateNavVisibility();
-    const emailElement = document.getElementById("userEmail");
-    if (emailElement) {
-      emailElement.textContent = userEmail;
+
+    const emailDisplay = document.getElementById("userEmail");
+    if (emailDisplay) {
+      emailDisplay.textContent = userEmail;
     }
-    showPage("page3"); // Dashboard
+
+    showPage("page3");
   }
 
-  // --- Logout handler ---
   function logout() {
     localStorage.removeItem("loggedIn");
     loggedIn = false;
     updateNavVisibility();
-    showPage("page1"); // Login page
+    showPage("page1");
   }
 
-  // --- Language and Currency selector and translation ---
-  document.addEventListener("DOMContentLoaded", async () => {
-    updateNavVisibility();
+  // === LANGUAGE AND CURRENCY DETECTION & TRANSLATION ===
+  const dictionary = {
+    en: {
+      settings: "Settings", save: "Save Settings",
+      preferred_currency: "Preferred Currency",
+      preferred_language: "Preferred Language",
+      kyc_verification: "KYC Verification",
+      view_profile: "View Profile",
+      connect_wallet: "Connect Wallet",
+      live_chat: "Live Chat Support",
+      disconnect_wallet: "Disconnect Wallet",
+      logout: "Logout",
+      faq: "FAQ", help_support: "Help & Support"
+    },
+    es: {
+      settings: "Configuraciones", save: "Guardar configuración",
+      preferred_currency: "Moneda preferida",
+      preferred_language: "Idioma preferido",
+      kyc_verification: "Verificación KYC",
+      view_profile: "Ver perfil",
+      connect_wallet: "Conectar billetera",
+      live_chat: "Soporte de chat en vivo",
+      disconnect_wallet: "Desconectar billetera",
+      logout: "Cerrar sesión",
+      faq: "Preguntas frecuentes", help_support: "Ayuda y soporte"
+    },
+    fr: {
+      settings: "Paramètres", save: "Enregistrer les paramètres",
+      preferred_currency: "Devise préférée",
+      preferred_language: "Langue préférée",
+      kyc_verification: "Vérification KYC",
+      view_profile: "Voir le profil",
+      connect_wallet: "Connecter le portefeuille",
+      live_chat: "Support Chat en direct",
+      disconnect_wallet: "Déconnecter le portefeuille",
+      logout: "Se déconnecter",
+      faq: "FAQ", help_support: "Aide et assistance"
+    }
+    // Add other languages as needed
+  };
 
+  async function detectLanguageAndCurrency() {
     const langSelect = document.getElementById("languageSelect");
     const currencySelect = document.getElementById("currencySelect");
     const countryText = document.getElementById("detectedCountry");
     const contentElements = document.querySelectorAll("[data-translate]");
-
-    if (!langSelect || !currencySelect || !countryText) return;
 
     const languages = [
       { code: "en", label: "English" },
@@ -1359,11 +1397,9 @@ document.addEventListener("DOMContentLoaded", () => {
       "TRY", "USD", "ZAR"
     ].sort();
 
-    // Populate dropdowns
     langSelect.innerHTML = languages.map(l => `<option value="${l.code}">${l.label}</option>`).join('');
     currencySelect.innerHTML = currencies.map(c => `<option value="${c}">${c}</option>`).join('');
 
-    // Auto-detect geo info
     try {
       const res = await fetch("https://ipapi.co/json/");
       const geo = await res.json();
@@ -1375,90 +1411,88 @@ document.addEventListener("DOMContentLoaded", () => {
       currencySelect.value = currencies.includes(detectedCurrency) ? detectedCurrency : "USD";
       countryText.textContent = `🌍 Detected Country: ${detectedCountry} — Currency: ${detectedCurrency}`;
 
-      translatePage(langSelect.value);
+      translatePage(langSelect.value, contentElements);
     } catch (e) {
       console.warn("Geolocation failed:", e);
       countryText.textContent = "❌ Location detection failed.";
     }
 
-    // Translation dictionary
-    const dictionary = {
-      en: {
-        settings: "Settings",
-        save: "Save Settings",
-        preferred_currency: "Preferred Currency",
-        preferred_language: "Preferred Language",
-        kyc_verification: "KYC Verification",
-        view_profile: "View Profile",
-        connect_wallet: "Connect Wallet",
-        live_chat: "Live Chat Support",
-        disconnect_wallet: "Disconnect Wallet",
-        logout: "Logout",
-        faq: "FAQ",
-        help_support: "Help & Support"
-      },
-      es: {
-        settings: "Configuraciones",
-        save: "Guardar configuración",
-        preferred_currency: "Moneda preferida",
-        preferred_language: "Idioma preferido",
-        kyc_verification: "Verificación KYC",
-        view_profile: "Ver perfil",
-        connect_wallet: "Conectar billetera",
-        live_chat: "Soporte de chat en vivo",
-        disconnect_wallet: "Desconectar billetera",
-        logout: "Cerrar sesión",
-        faq: "Preguntas frecuentes",
-        help_support: "Ayuda y soporte"
-      },
-      fr: {
-        settings: "Paramètres",
-        save: "Enregistrer les paramètres",
-        preferred_currency: "Devise préférée",
-        preferred_language: "Langue préférée",
-        kyc_verification: "Vérification KYC",
-        view_profile: "Voir le profil",
-        connect_wallet: "Connecter le portefeuille",
-        live_chat: "Support Chat en direct",
-        disconnect_wallet: "Déconnecter le portefeuille",
-        logout: "Se déconnecter",
-        faq: "FAQ",
-        help_support: "Aide et assistance"
-      },
-      // Add other languages here if needed
-    };
-
-    function translatePage(langCode) {
-      contentElements.forEach(el => {
-        const key = el.dataset.translate;
-        const fallback = dictionary.en[key] || key;
-        el.textContent = dictionary[langCode]?.[key] || fallback;
-      });
-    }
-
     langSelect.addEventListener("change", () => {
-      translatePage(langSelect.value);
+      translatePage(langSelect.value, contentElements);
     });
-  });
+  }
 
-  // --- Save Settings placeholder ---
+  function translatePage(lang, elements) {
+    const langDict = dictionary[lang] || dictionary["en"];
+    elements.forEach(el => {
+      const key = el.dataset.translate;
+      el.textContent = langDict[key] || dictionary.en[key] || key;
+    });
+  }
+
+  // === SAVE SETTINGS ===
   function saveSettings() {
     const language = document.getElementById("languageSelect")?.value || "en";
     const currency = document.getElementById("currencySelect")?.value || "USD";
     alert(`✅ Settings saved:\nLanguage: ${language}\nCurrency: ${currency}`);
   }
 
-  // --- Feedback placeholder ---
+  // === FEEDBACK PLACEHOLDER ===
   function feedback() {
-    console.log("Setting option clicked.");
+    console.log("⚙️ Settings option clicked.");
   }
 
-  // --- On DOM ready ---
+  // === DOM READY INITIALIZATION ===
   window.addEventListener("DOMContentLoaded", () => {
-    // Example: loadTokenLogos(); // Your function to load logos, define elsewhere
+    updateNavVisibility();
+    detectLanguageAndCurrency();
     showPage("page0");
   });
-</script>
+      </script>
+    <script>
+  const pageHistory = [];
+
+  function showPage(pageNumber) {
+    document.querySelectorAll('.page').forEach((page) => {
+      page.classList.add('hidden');
+      page.classList.remove('active');
+    });
+
+    const targetPage = document.getElementById(`page${pageNumber}`);
+    if (targetPage) {
+      targetPage.classList.remove('hidden');
+      targetPage.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (!pageHistory.includes(`page${pageNumber}`)) {
+        pageHistory.push(`page${pageNumber}`);
+      }
+    } else {
+      console.error(`Page with id "page${pageNumber}" not found.`);
+    }
+  }
+
+  function goBack() {
+    if (pageHistory.length > 1) {
+      pageHistory.pop(); // remove current
+      const previousPage = pageHistory[pageHistory.length - 1];
+      const previousNumber = previousPage.replace("page", "");
+      showPage(previousNumber);
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    showPage(0); // Default to Landing Page (page0)
+  });
+
+  // Optional: Add this function to handle navigation buttons
+  document.querySelectorAll('[data-goto]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const target = e.currentTarget.getAttribute('data-goto');
+      if (target) showPage(target);
+    });
+  });
+    </script>
       <!-- Page navigation script -->
   <script>
     function showPage(pageId) {
