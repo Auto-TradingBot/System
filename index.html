@@ -221,73 +221,33 @@
     </div>  
   </section>  
 </section>  
-<!-- PAGE 1: LOGIN -->
+<!-- 🔐 PAGE 1: LOGIN -->
 <section id="page1" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white px-4">
   <div class="w-full max-w-md bg-[#072146] p-8 rounded-2xl shadow-2xl">
-    
-    <!-- Back Button -->
-    <button onclick="showPage('page0')" class="text-sm text-yellow-400 hover:underline mb-6">
-      ← Back
-    </button>
+    <button onclick="showPage('page0')" class="text-sm text-yellow-400 hover:underline mb-6">← Back</button>
+    <h2 class="text-3xl font-extrabold text-yellow-400 mb-6 text-center">Login to Your Account</h2>
 
-    <!-- Heading -->
-    <h2 class="text-3xl font-extrabold text-yellow-400 mb-6 text-center">
-      Login to Your Account
-    </h2>
-
-    <!-- Login Form -->
     <form id="loginForm" onsubmit="event.preventDefault(); handleLogin()">
-      
-      <!-- Email / Username -->
       <div class="mb-4">
         <label for="loginEmail" class="block font-semibold mb-1">Email or Username</label>
-        <input
-          id="loginEmail"
-          type="text"
-          required
-          placeholder="example@domain.com"
-          class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
-        />
+        <input id="loginEmail" type="text" required placeholder="example@domain.com" class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400" />
       </div>
-
-      <!-- Password -->
       <div class="mb-6">
         <label for="loginPassword" class="block font-semibold mb-1">Password</label>
-        <input
-          id="loginPassword"
-          type="password"
-          required
-          placeholder="••••••••"
-          class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
-        />
+        <input id="loginPassword" type="password" required placeholder="••••••••" class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400" />
       </div>
-
-      <!-- Submit Button -->
-      <button
-        type="submit"
-        class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded-lg transition duration-200"
-      >
-        Log In
-      </button>
+      <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded-lg transition">Log In</button>
     </form>
 
-    <!-- Footer Links -->
     <div class="mt-6 text-center text-sm text-gray-400">
-      <p>
-        Forgot Password?
-        <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page1i')">Reset</a>
-      </p>
-      <p class="mt-2">
-        Don't have an account?
-        <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page2')">Sign Up</a>
-      </p>
+      <p>Forgot Password? <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page1i')">Reset</a></p>
+      <p class="mt-2">Don't have an account? <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page2')">Sign Up</a></p>
     </div>
-
   </div>
 </section>
 
-<!-- PAGE 1i: CAPTCHA FOR RESET -->
-<section id="page1i" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white" style="display:none;">
+<!-- 🔒 PAGE 1i: CAPTCHA FOR RESET -->
+<section id="page1i" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white hidden">
   <div class="max-w-md w-full bg-[#072146] p-8 rounded-xl shadow-lg">
     <button onclick="showPage('page1')" class="text-sm text-yellow-400 hover:underline mb-4">← Back</button>
     <h3 class="text-2xl font-semibold mb-4 text-yellow-400">Reset Password - CAPTCHA</h3>
@@ -296,8 +256,8 @@
   </div>
 </section>
 
-<!-- PAGE 1ii: RESET PASSWORD FORM -->
-<section id="page1ii" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white" style="display:none;">
+<!-- 🔐 PAGE 1ii: RESET PASSWORD FORM -->
+<section id="page1ii" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white hidden">
   <div class="max-w-md w-full bg-[#072146] p-8 rounded-xl shadow-lg">
     <button onclick="showPage('page1i')" class="text-sm text-yellow-400 hover:underline mb-4">← Back</button>
     <h3 class="text-2xl font-semibold mb-6 text-yellow-400">Set New Password</h3>
@@ -306,76 +266,38 @@
     <button onclick="handleReset()" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded">Submit</button>
   </div>
 </section>
-<!-- PAGE 2: SIGN UP -->
-<section id="page2" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white px-4" style="display:none;">
-  <div class="w-full max-w-md bg-[#072146] p-8 rounded-2xl shadow-2xl">
-    
-    <!-- Back Button -->
-    <button onclick="showPage('page1')" class="text-sm text-yellow-400 hover:underline mb-6">← Back</button>
 
-    <!-- Heading -->
+<!-- 🆕 PAGE 2: SIGN UP -->
+<section id="page2" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white px-4 hidden">
+  <div class="w-full max-w-md bg-[#072146] p-8 rounded-2xl shadow-2xl">
+    <button onclick="showPage('page1')" class="text-sm text-yellow-400 hover:underline mb-6">← Back</button>
     <h2 class="text-3xl font-extrabold text-yellow-400 mb-6 text-center">Create Your Account</h2>
 
-    <!-- Sign Up Form -->
     <form id="signUpForm" onsubmit="event.preventDefault(); handleSignUp()">
-
-      <!-- Full Name -->
       <div class="mb-4">
         <label for="signFullName" class="block font-semibold mb-1">Full Name</label>
-        <input
-          id="signFullName"
-          type="text"
-          required
-          class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
-          placeholder="John Doe"
-        />
+        <input id="signFullName" type="text" required class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="John Doe" />
       </div>
-
-      <!-- Email -->
       <div class="mb-4">
         <label for="signEmail" class="block font-semibold mb-1">Email</label>
-        <input
-          id="signEmail"
-          type="email"
-          required
-          class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
-          placeholder="example@domain.com"
-        />
+        <input id="signEmail" type="email" required class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="example@domain.com" />
       </div>
-
-      <!-- Password -->
       <div class="mb-6">
         <label for="signPassword" class="block font-semibold mb-1">Password</label>
-        <input
-          id="signPassword"
-          type="password"
-          required
-          minlength="6"
-          class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
-          placeholder="••••••••"
-        />
+        <input id="signPassword" type="password" required minlength="6" class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="••••••••" />
       </div>
-
-      <!-- Submit Button -->
-      <button
-        type="submit"
-        class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded-lg transition duration-200"
-      >
-        Sign Up
-      </button>
+      <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded-lg transition">Sign Up</button>
     </form>
 
-    <!-- Footer -->
     <p class="mt-6 text-center text-sm text-gray-400">
       Already have an account?
       <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page1')">Log In</a>
     </p>
-
   </div>
-</section>>
+</section>
 
-<!-- PAGE 2ii: CAPTCHA AFTER SIGNUP -->
-<section id="page2ii" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white" style="display:none;">
+<!-- 🔐 PAGE 2ii: CAPTCHA AFTER SIGNUP -->
+<section id="page2ii" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white hidden">
   <div class="max-w-md w-full bg-[#072146] p-8 rounded-xl shadow-lg">
     <button onclick="showPage('page2')" class="text-sm text-yellow-400 hover:underline mb-4">← Back</button>
     <h3 class="text-2xl font-semibold mb-4 text-yellow-400">CAPTCHA Verification</h3>
@@ -384,101 +306,109 @@
   </div>
 </section>  
 
-<!-- PAGE 3 - DASHBOARD -->  
-<section id="page3" class="page px-4 md:px-0">  
-  <div class="max-w-6xl mx-auto bg-[#072146] rounded-xl p-8 shadow-lg flex flex-col space-y-6">  
+<!-- PAGE 3 - DASHBOARD -->
+<section id="page3" class="page px-4 md:px-0">
+  <div class="max-w-6xl mx-auto bg-[#072146] rounded-xl p-8 shadow-lg space-y-6">
 
-      <!-- HEADER - DASHBOARD + EARNS BUTTON -->
-<header class="w-full flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4 bg-transparent">
-  <h2 class="text-2xl sm:text-3xl font-bold text-yellow-400">Dashboard</h2>
-  
-  <!-- Earns Button -->
-  <button 
-    onclick="showPage('16')" 
-    title="Go to Earns"
-    class="bg-yellow-400 text-[#072146] font-bold px-5 py-2 rounded-full shadow hover:bg-yellow-300 transition text-sm sm:text-base"
-  >
-    Earns
-  </button>
-</header>
+    <!-- HEADER -->
+    <header class="flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4 bg-transparent">
+      <h2 class="text-2xl sm:text-3xl font-bold text-yellow-400">Dashboard</h2>
+      <button 
+        onclick="showPage('16')" 
+        title="Go to Earns"
+        class="bg-yellow-400 text-[#072146] font-bold px-5 py-2 rounded-full shadow hover:bg-yellow-300 transition text-sm sm:text-base"
+      >
+        Earns
+      </button>
+    </header>
 
-    <!-- BALANCE CARDS SECTION -->
-<div class="w-full px-4 sm:px-6 lg:px-8 mt-6 mb-8">
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    <!-- USDT Balance Card -->
-    <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg flex flex-col items-center text-center">
-      <p class="text-yellow-400 text-sm font-medium mb-1">USDT Balance</p>
-      <p class="text-white text-3xl font-bold" id="usdtBalance">--</p>
+    <!-- BALANCE CARDS -->
+    <div class="w-full px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg text-center">
+          <p class="text-yellow-400 text-sm font-medium mb-1">USDT Balance</p>
+          <p class="text-white text-3xl font-bold" id="usdtBalance">--</p>
+        </div>
+        <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg text-center">
+          <p class="text-yellow-400 text-sm font-medium mb-1">BNB Balance</p>
+          <p class="text-white text-3xl font-bold" id="bnbBalance">--</p>
+        </div>
+        <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg text-center">
+          <p class="text-yellow-400 text-sm font-medium mb-1">Total Assets (USD)</p>
+          <p class="text-white text-3xl font-bold" id="totalAssets">--</p>
+        </div>
+      </div>
     </div>
 
-    <!-- BNB Balance Card -->
-    <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg flex flex-col items-center text-center">
-      <p class="text-yellow-400 text-sm font-medium mb-1">BNB Balance</p>
-      <p class="text-white text-3xl font-bold" id="bnbBalance">--</p>
+    <!-- DAILY PROFIT GOAL & CHART -->
+    <div class="w-full px-4 sm:px-6 lg:px-8">
+      <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg">
+        <h3 class="text-yellow-400 font-semibold text-lg mb-4">Daily Profit Goal</h3>
+        <div id="tradingview-widget" class="w-full h-[250px] overflow-hidden rounded-lg"></div>
+      </div>
     </div>
 
-    <!-- Total Assets -->
-    <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg flex flex-col items-center text-center">
-      <p class="text-yellow-400 text-sm font-medium mb-1">Total Assets (USD)</p>
-      <p class="text-white text-3xl font-bold" id="totalAssets">--</p>
+    <!-- FIXED ACTION BUTTONS -->
+    <div class="fixed bottom-20 left-1/2 transform -translate-x-1/2 flex space-x-4 z-40">
+      <button 
+        onclick="showPage('6')" 
+        class="px-6 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition"
+      >
+        Receive
+      </button>
+      <button 
+        onclick="showPage('7')" 
+        class="px-6 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition"
+      >
+        Transfer
+      </button>
     </div>
-  </div>
-</div>
 
-<!-- CHART SECTION - PROFIT GOAL + SIGNALS -->
-<div class="w-full px-4 sm:px-6 lg:px-8 mt-8 mb-10">
-  <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg">
-    <h3 class="text-yellow-400 font-semibold text-lg mb-4">Daily Profit Goal</h3>
-
-    <!-- 🔹 TradingView Chart Widget -->
-    <div id="tradingview-widget" class="w-full h-[250px] overflow-hidden rounded-lg"></div>
-  </div>
-</div>
-<!-- SETTINGS BUTTON - BOTTOM RIGHT CORNER -->
- <button 
-  onclick="showPage('page11')" 
-  class="fixed bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg hover:bg-yellow-300 transition duration-200 z-50"
-  title="Settings"
->
-  ⚙️
-</button>  
-  </div>  
- <!-- FIXED ACTION BUTTONS - BOTTOM CENTER -->
-<div class="fixed bottom-20 left-1/2 transform -translate-x-1/2 flex space-x-4 z-40">
-  <button 
-    onclick="showPage('6')" 
-    class="px-6 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition"
-  >
-    Receive
-  </button>
-  <button 
-    onclick="showPage('7')" 
-    class="px-6 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition"
-  >
-    Transfer
-  </button>
-</div>
-</section>  
-
-<!-- PAGE 6 - RECEIVE -->
-   <section id="page6" class="page px-4 md:px-0">
-  <div class="max-w-4xl mx-auto bg-[#072146] rounded-xl p-8 shadow-lg">
-    <h2 class="text-3xl font-bold text-yellow-400 mb-6 text-center">Receive Tokens</h2><input type="text" id="tokenSearch" placeholder="Search token..." class="mb-4 w-full p-2 rounded-md text-black" oninput="filterTokens()" />
-
-<div class="overflow-y-auto max-h-[400px]" id="tokenList">
-  <!-- Token rows inserted dynamically -->
-</div>
+    <!-- SETTINGS BUTTON -->
+    <button 
+      onclick="showPage('page11')" 
+      class="fixed bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg hover:bg-yellow-300 transition z-50"
+      title="Settings"
+    >
+      ⚙️
+    </button>
 
   </div>
 </section>
-   <!-- PAGE 6i - Token Details -->
-   <section id="page6i" class="page hidden px-4 md:px-0">
+
+<!-- PAGE 6 - RECEIVE -->
+<section id="page6" class="page px-4 md:px-0">
   <div class="max-w-4xl mx-auto bg-[#072146] rounded-xl p-8 shadow-lg">
-    <div class="flex items-center justify-between mb-4">
-      <h2 id="tokenTitle" class="text-2xl font-bold text-yellow-400"></h2>
-      <button onclick="goBack()" class="text-white">← Back</button>
+    <h2 class="text-3xl font-bold text-yellow-400 mb-6 text-center">Receive Tokens</h2>
+
+    <!-- Token Search -->
+    <input 
+      type="text" 
+      id="tokenSearch" 
+      placeholder="Search token..." 
+      class="mb-4 w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400" 
+      oninput="filterTokens()" 
+    />
+
+    <!-- Token List -->
+    <div id="tokenList" class="overflow-y-auto max-h-[400px]">
+      <!-- Token items injected dynamically -->
     </div>
+  </div>
+</section>
+
+<!-- PAGE 6i - TOKEN DETAILS -->
+<section id="page6i" class="page hidden px-4 md:px-0">
+  <div class="max-w-4xl mx-auto bg-[#072146] rounded-xl p-8 shadow-lg">
+    <div class="flex justify-between items-center mb-4">
+      <h2 id="tokenTitle" class="text-2xl font-bold text-yellow-400"></h2>
+      <button onclick="goBack()" class="text-white hover:underline">← Back</button>
+    </div>
+    
+    <!-- Price Widget -->
     <div id="priceWidget" class="mb-6"></div>
+
+    <!-- Action Buttons -->
     <div class="flex gap-4">
       <button onclick="navigateTo('page6ii')" class="bg-green-600 px-4 py-2 rounded-md text-white">Deposit</button>
       <button onclick="navigateTo('page7')" class="bg-blue-600 px-4 py-2 rounded-md text-white">Send</button>
