@@ -1,165 +1,174 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth dark" style="background:#0a2348; color:#f0f0f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blockchain Auto-Trading Bot</title>
-  <link rel="icon" href="/icons/icon-192.png" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-
-  <!-- External Libraries -->
-  <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script defer src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script defer src="https://unpkg.com/i18next@22.4.15/dist/umd/i18next.min.js"></script>
-  <script defer src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-  <script defer src="https://unpkg.com/country-list-js/dist/index.min.js"></script>
+<!DOCTYPE html>  <html lang="en" class="scroll-smooth" style="background:#0a2348; color:#f0f0f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">  <head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+  <title>Blockchain Auto-Trading</title>  
+  <link rel="icon" href="/icons/icon-192.png" />    
+  <!-- External Libraries -->    
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>    
+  <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>   
+  <script src="https://unpkg.com/country-list-js/dist/index.min.js"></script>  
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>    
+  <script src="https://unpkg.com/i18next@22.4.15/dist/umd/i18next.min.js"></script>   
+  <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.5.2"></script>   
+  <script src="https://unpkg.com/vanilla-picker@2"></script>    
+  <script src="https://s3.tradingview.com/tv.js"></script>    
+  <script defer src="./script.js"></script>    
+  <script src="https://cdn.tailwindcss.com"></script>   
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>  
   <script defer src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.5.2"></script>
-  <script defer src="https://unpkg.com/vanilla-picker@2"></script>
-  <script defer src="https://s3.tradingview.com/tv.js"></script>
-  <script defer src="./script.js"></script>
-
-  <style>
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background-color: #ffc107;
-      border-radius: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #102b56;
-    }
-
-    /* Page Styling */
-    .page {
-      display: none;
-      opacity: 0;
-      transition: opacity 0.4s ease-in-out;
-      min-height: 100vh;
-      padding-top: 80px;
-      padding-bottom: 60px;
-    }
-    .page.active {
-      display: block;
-      opacity: 1;
-    }
-
-    /* Header & Footer */
-    header, footer {
-      background-color: #072146;
-      color: #ffc107;
-      position: fixed;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      padding: 1rem 2rem;
-      font-weight: 700;
-      user-select: none;
-    }
-    header {
-      top: 0;
-      height: 60px;
-      justify-content: space-between;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    }
-    footer {
-      bottom: 0;
-      height: 50px;
-      justify-content: center;
-      font-size: 0.875rem;
-      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Logo and Navigation */
-    header .logo {
-      font-size: 1.5rem;
-      letter-spacing: 2px;
-      cursor: pointer;
-      color: #ffc107;
-    }
-    nav a {
-      color: #ffc107;
-      margin-left: 1.5rem;
-      font-weight: 600;
-      transition: color 0.2s;
-      cursor: pointer;
-    }
-    nav a:hover {
-      color: #ffffff;
-    }
-
-    /* Buttons */
-    button {
-      background-color: #ffc107;
-      color: #072146;
-      font-weight: 700;
-      padding: 0.5rem 1.5rem;
-      border-radius: 0.5rem;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      user-select: none;
-    }
-    button:hover {
-      background-color: #ffca2c;
-    }
-    button:disabled {
-      background-color: #a18a05;
-      cursor: not-allowed;
-    }
-
-    .nav-btn {
-      background: none;
-      color: #fff;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 8px;
-      width: 100%;
-      text-align: left;
-      font-weight: 500;
-      transition: background 0.2s;
-    }
-    .nav-btn:hover {
-      background: #2c2f33;
-      color: #f3ba2f;
-    }
-    .nav-btn.active {
-      color: #f0b90b;
-      font-weight: bold;
-    }
-
-    .action-btn {
-      margin-top: 30px;
-      background: #444;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      transition: 0.3s;
-    }
-    .action-btn:hover {
-      background: #666;
-    }
-    .action-btn.bg-[#f0b90b]:hover {
-      background: #e4a700;
-    }
-
-    @media (max-width: 640px) {
-      .fixed-action-buttons {
-        bottom: 80px;
-      }
-    }
-  </style>
-</head>
-
+  <style>  
+  .nav-btn {  
+    background: none;  
+    color: #fff;  
+    padding: 10px 15px;  
+    border: none;  
+    border-radius: 8px;  
+    width: 100%;  
+    text-align: left;  
+    font-weight: 500;  
+    transition: background 0.2s;  
+  }  
+  
+  .nav-btn:hover {  
+    background: #2c2f33;  
+    color: #f3ba2f;  
+  }  
+  
+  .nav-btn.active {  
+    color: #f0b90b;  
+    font-weight: bold;  
+  }  
+  
+  .action-btn {  
+    margin-top: 30px;  
+    background: #444;  
+    color: #fff;  
+    padding: 10px 20px;  
+    border: none;  
+    border-radius: 10px;  
+    font-weight: bold;  
+    transition: 0.3s;  
+  }  
+  
+  .action-btn:hover {  
+    background: #666;  
+  }  
+  
+  .action-btn.bg-[#f0b90b]:hover {  
+    background: #e4a700;  
+  }  
+</style>    <style>  
+    /* Scrollbar */  
+    ::-webkit-scrollbar {  
+      width: 8px;  
+      height: 8px;  
+    }  
+  
+    ::-webkit-scrollbar-thumb {  
+      background-color: #ffc107;  
+      border-radius: 4px;  
+    }  
+  
+    ::-webkit-scrollbar-track {  
+      background: #102b56;  
+    }  
+  
+    /* Page Transitions */  
+    .page {  
+      display: none;  
+      opacity: 0;  
+      transition: opacity 0.4s ease-in-out;  
+      min-height: 100vh;  
+      padding-top: 80px;  
+      padding-bottom: 60px;  
+    }  
+  
+    .page.active {  
+      display: block;  
+      opacity: 1;  
+    }  
+  
+    /* Header & Footer */  
+    header,  
+    footer {  
+      background-color: #072146;  
+      color: #ffc107;  
+      position: fixed;  
+      left: 0;  
+      right: 0;  
+      z-index: 1000;  
+      display: flex;  
+      align-items: center;  
+      padding: 1rem 2rem;  
+      font-weight: 700;  
+      user-select: none;  
+    }  
+  
+    header {  
+      top: 0;  
+      height: 60px;  
+      justify-content: space-between;  
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);  
+    }  
+  
+    footer {  
+      bottom: 0;  
+      height: 50px;  
+      justify-content: center;  
+      font-size: 0.875rem;  
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.5);  
+    }  
+  
+    header .logo {  
+      font-size: 1.5rem;  
+      letter-spacing: 2px;  
+      cursor: pointer;  
+      color: #ffc107;  
+    }  
+  
+    nav a {  
+      color: #ffc107;  
+      margin-left: 1.5rem;  
+      font-weight: 600;  
+      transition: color 0.2s;  
+      cursor: pointer;  
+    }  
+  
+    nav a:hover {  
+      color: #ffffff;  
+    }  
+  
+    /* Buttons */  
+    button {  
+      background-color: #ffc107;  
+      color: #072146;  
+      font-weight: 700;  
+      padding: 0.5rem 1.5rem;  
+      border-radius: 0.5rem;  
+      border: none;  
+      cursor: pointer;  
+      transition: background-color 0.3s;  
+      user-select: none;  
+    }  
+  
+    button:hover {  
+      background-color: #ffca2c;  
+    }  
+  
+    button:disabled {  
+      background-color: #a18a05;  
+      cursor: not-allowed;  
+    }  
+  
+    /* Responsive fix for fixed elements */  
+    @media (max-width: 640px) {  
+      .fixed-action-buttons {  
+        bottom: 80px;  
+      }  
+    }  
+  </style>  </head>  
 <body class="overflow-x-hidden">
 
 <!-- 🌐 MAIN APP CONTAINER -->
@@ -522,8 +531,7 @@
 </section>
 
 <!-- PAGE 6: RECEIVE ASSETS -->
-<section id="page6" class="bg-[#0b0e11] min-h-screen text-white px-4 md:px-12 py-10 space-y-10">
-
+<section id="page6" class="bg-[#0b0e11] min-h-screen text-white px-4 md:px-12 py-10 space-y-10 hidden">  
   <!-- Heading -->
   <div class="flex justify-between items-center">
     <h2 class="text-2xl md:text-3xl font-bold text-yellow-400">Receive Crypto</h2>
