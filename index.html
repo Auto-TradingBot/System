@@ -21,6 +21,49 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+
+<style>
+  .nav-btn {
+    background: none;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    text-align: left;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+
+  .nav-btn:hover {
+    background: #2c2f33;
+    color: #f3ba2f;
+  }
+
+  .nav-btn.active {
+    color: #f0b90b;
+    font-weight: bold;
+  }
+
+  .action-btn {
+    margin-top: 30px;
+    background: #444;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .action-btn:hover {
+    background: #666;
+  }
+
+  .action-btn.bg-[#f0b90b]:hover {
+    background: #e4a700;
+  }
+</style>
   <style>
     /* Scrollbar */
     ::-webkit-scrollbar {
@@ -314,17 +357,16 @@
   </div>
 </section>
 
-<!-- PAGE 3 - DASHBOARD -->
+  <!-- PAGE 3 - DASHBOARD -->
 <section id="page3" class="page hidden bg-[#0b0e11] text-white font-sans min-h-screen p-6">
   <!-- Header -->
   <header class="bg-[#131619] border-b border-gray-800 px-6 py-4 flex justify-between items-center rounded-lg">
     <h1 class="text-xl font-bold text-[#f3ba2f]">Blockchain.com</h1>
     <div class="flex items-center space-x-4">
-    <button onclick="showPage('page4')" style="background:none; color:#f0b90b; padding:10px 15px; border:none; border-radius:8px; font-weight:bold; width:100%; text-align:left;">Visit Homepage</button>  
-     <button onclick="showPage('page5')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">
-      <button onclick="showPage('page10')" class="text-[#f3ba2f] hover:underline">Support</button>
-      <button onclick="showPage('page13')" class="bg-[#f3ba2f] text-black font-bold py-2 px-4 rounded-md">Connect Wallet</button>
-      <button onclick="logoutUser()" class="bg-[#f3ba2f] text-black font-bold py-2 px-4 rounded-md">Log Out</button>
+      <button onclick="showPage('page4')" class="text-[#f0b90b] font-bold">🏠 Homepage</button>
+      <button onclick="showPage('page10')" class="text-[#f3ba2f] hover:underline">🛟 Support</button>
+      <button onclick="showPage('page13')" class="bg-[#f3ba2f] text-black font-bold py-2 px-4 rounded-md">🔗 Connect Wallet</button>
+      <button onclick="logoutUser()" class="bg-[#f3ba2f] text-black font-bold py-2 px-4 rounded-md">🚪 Log Out</button>
     </div>
   </header>
 
@@ -335,85 +377,88 @@
     <p class="mb-2"><strong>BNB Balance:</strong> <span id="bnbBalance">--</span></p>
     <p class="mb-2"><strong>USDT Balance:</strong> <span id="usdtBalance">--</span></p>
     <p class="mb-2"><strong>Total Assets (USD):</strong> <span id="totalAssets">--</span></p>
-    <button id="refreshBalancesBtn"
-      class="mt-6 bg-[#f3ba2f] hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-lg shadow-md transition"
-      title="Refresh wallet balances"
-    >
+    <button id="refreshBalancesBtn" class="mt-6 bg-[#f3ba2f] hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-lg shadow-md transition">
       🔄 Refresh Balances
     </button>
   </div>
 
   <!-- Notification -->
-  <div id="balanceNotification"
-       class="fixed top-6 right-6 bg-[#1e1e1e] border border-[#f3ba2f] text-[#f3ba2f] px-4 py-3 rounded-md shadow-lg hidden z-50">
+  <div id="balanceNotification" class="fixed top-6 right-6 bg-[#1e1e1e] border border-[#f3ba2f] text-[#f3ba2f] px-4 py-3 rounded-md shadow-lg hidden z-50">
     🔔 Wallet balances updated successfully!
-  </div> 
-  <!-- SIDEBAR + MAIN CONTENT -->  
-  <div class="flex min-h-screen">  
-    <!-- SIDEBAR -->  
-    <aside class="bg-[#131619] w-64 hidden md:flex flex-col p-6 space-y-4 border-r border-gray-800">  
-      <nav class="space-y-2">  
-        <button onclick="showPage('page4')" style="background:none; color:#f0b90b; padding:10px 15px; border:none; border-radius:8px; font-weight:bold; width:100%; text-align:left;">Dashboard</button>  
-        <button onclick="showPage('page5')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Buy/Sell</button>  
-        <button onclick="showPage('page7')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Send</button>  
-        <button onclick="showPage('page6')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Receive</button>  
-        <button onclick="showPage('page10iii')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Swap</button>  
-        <button onclick="showPage('page9')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">NFTs</button>  
-        <button onclick="showPage('page16')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Earn</button>  
-        <button onclick="showPage('page20iii')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Explorer</button>  
-        <button onclick="showPage('page11')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Settings</button>  
-      </nav>  
-    </aside>  
-    <!-- MAIN CONTENT -->  
-    <main class="flex-1 p-6 space-y-6">  
-      <!-- BALANCES -->  
-      <section class="grid grid-cols-1 md:grid-cols-3 gap-6">  
-        <div class="bg-[#1c1f24] p-6 rounded-xl shadow">  
-          <h2 class="text-sm uppercase text-gray-400">Total Portfolio</h2>  
-          <p class="text-3xl font-bold mt-2" id="portfolioTotal">$0.00</p>  
-        </div>  
-        <div class="bg-[#1c1f24] p-6 rounded-xl shadow">  
-          <h2 class="text-sm uppercase text-gray-400">BTC</h2>  
-          <p class="text-xl font-semibold mt-2" id="btcBalance">0 BTC</p>  
-        </div>  
-        <div class="bg-[#1c1f24] p-6 rounded-xl shadow">  
-          <h2 class="text-sm uppercase text-gray-400">ETH</h2>  
-          <p class="text-xl font-semibold mt-2" id="ethBalance">0 ETH</p>  
-        </div>  
-      </section>  
-      <!-- PORTFOLIO CHART -->  
-      <section class="bg-[#1c1f24] p-6 rounded-xl shadow">  
-        <h2 class="text-lg font-bold mb-4">Portfolio Chart</h2>  
-        <canvas id="portfolioChart"></canvas>  
-      </section>  
-      <!-- ACTIONS -->  
-      <section class="flex flex-wrap gap-4">  
-        <button onclick="showPage('page5')" style="margin-top:30px; background:#f0b90b; color:#000; padding:10px 20px; border:none; border-radius:10px;">Buy</button>  
-        <button onclick="showPage('page7')" style="margin-top:30px; background:#444; color:#fff; padding:10px 20px; border:none; border-radius:10px;">Send</button>  
-        <button onclick="showPage('page6')" style="margin-top:30px; background:#444; color:#fff; padding:10px 20px; border:none; border-radius:10px;">Receive</button>  
-        <button onclick="showPage('page10iii')" style="margin-top:30px; background:#444; color:#fff; padding:10px 20px; border:none; border-radius:10px;">Swap</button>  
-      </section>  
-      <!-- RECENT TRANSACTIONS -->  
-      <section class="bg-[#1c1f24] p-6 rounded-xl shadow">  
-        <h2 class="text-lg font-bold mb-4">Recent Activity</h2>  
-        <ul class="space-y-3 text-sm" id="recentTransactions"></ul>  
-      </section>  
-      <!-- ASSETS LIST -->  
-      <section class="bg-[#1c1f24] p-6 rounded-xl shadow">  
-        <h2 class="text-lg font-bold mb-4">Your Assets</h2>  
-        <table class="w-full text-left text-sm">  
-          <thead class="text-gray-400">  
-            <tr>  
-              <th class="py-2">Asset</th>  
-              <th>Balance</th>  
-              <th>Value</th>  
-            </tr>  
-          </thead>  
-          <tbody id="assetList"></tbody>  
-        </table>  
-      </section>  
-    </main>  
-  </div>  
+  </div>
+
+  <!-- SIDEBAR + MAIN CONTENT -->
+  <div class="flex flex-col md:flex-row mt-10 gap-6">
+    <!-- SIDEBAR -->
+    <aside class="bg-[#131619] w-full md:w-64 flex flex-col p-6 space-y-4 border-r border-gray-800 rounded-lg">
+      <nav class="space-y-2">
+        <button onclick="showPage('page4')" class="nav-btn active">📊 Dashboard</button>
+        <button onclick="showPage('page5')" class="nav-btn">💰 Buy/Sell</button>
+        <button onclick="showPage('page7')" class="nav-btn">📤 Send</button>
+        <button onclick="showPage('page6')" class="nav-btn">📥 Receive</button>
+        <button onclick="showPage('page10iii')" class="nav-btn">🔁 Swap</button>
+        <button onclick="showPage('page9')" class="nav-btn">🎨 NFTs</button>
+        <button onclick="showPage('page16')" class="nav-btn">📈 Earn</button>
+        <button onclick="showPage('page20iii')" class="nav-btn">🔎 Explorer</button>
+        <button onclick="showPage('page11')" class="nav-btn">⚙️ Settings</button>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 space-y-6">
+      <!-- BALANCES -->
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-[#1c1f24] p-6 rounded-xl shadow">
+          <h2 class="text-sm uppercase text-gray-400">Total Portfolio</h2>
+          <p class="text-3xl font-bold mt-2" id="portfolioTotal">$0.00</p>
+        </div>
+        <div class="bg-[#1c1f24] p-6 rounded-xl shadow">
+          <h2 class="text-sm uppercase text-gray-400">BTC</h2>
+          <p class="text-xl font-semibold mt-2" id="btcBalance">0 BTC</p>
+        </div>
+        <div class="bg-[#1c1f24] p-6 rounded-xl shadow">
+          <h2 class="text-sm uppercase text-gray-400">ETH</h2>
+          <p class="text-xl font-semibold mt-2" id="ethBalance">0 ETH</p>
+        </div>
+      </section>
+
+      <!-- PORTFOLIO CHART -->
+      <section class="bg-[#1c1f24] p-6 rounded-xl shadow">
+        <h2 class="text-lg font-bold mb-4">📉 Portfolio Chart</h2>
+        <canvas id="portfolioChart"></canvas>
+      </section>
+
+      <!-- ACTION BUTTONS -->
+      <section class="flex flex-wrap gap-4">
+        <button onclick="showPage('page5')" class="action-btn bg-[#f0b90b] text-black">Buy</button>
+        <button onclick="showPage('page7')" class="action-btn">Send</button>
+        <button onclick="showPage('page6')" class="action-btn">Receive</button>
+        <button onclick="showPage('page10iii')" class="action-btn">Swap</button>
+      </section>
+
+      <!-- RECENT ACTIVITY -->
+      <section class="bg-[#1c1f24] p-6 rounded-xl shadow">
+        <h2 class="text-lg font-bold mb-4">📜 Recent Activity</h2>
+        <ul class="space-y-3 text-sm" id="recentTransactions"></ul>
+      </section>
+
+      <!-- ASSETS LIST -->
+      <section class="bg-[#1c1f24] p-6 rounded-xl shadow">
+        <h2 class="text-lg font-bold mb-4">💼 Your Assets</h2>
+        <table class="w-full text-left text-sm">
+          <thead class="text-gray-400">
+            <tr>
+              <th class="py-2">Asset</th>
+              <th>Balance</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody id="assetList"></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+</section>
 
 <!-- === PAGE 5: BUY/SELL CRYPTO === -->
 <section id="page5" class="page hidden min-h-screen px-4 py-6 bg-[#0b0e11] text-white">
