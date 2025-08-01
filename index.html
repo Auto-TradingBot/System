@@ -18,10 +18,9 @@
   <script src="https://unpkg.com/vanilla-picker@2"></script>
   <script src="https://s3.tradingview.com/tv.js"></script>
   <script defer src="./script.js"></script>
-
-  <!-- Tailwind CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <style>
     /* Scrollbar */
     ::-webkit-scrollbar {
@@ -316,112 +315,255 @@
 </section>
 
 <!-- PAGE 3 - DASHBOARD -->
-<section id="page3" class="page px-4 md:px-0">
-  <div class="max-w-6xl mx-auto bg-[#072146] rounded-xl p-8 shadow-lg space-y-6">
+<div id="page3" style="display:none">
+<!DOCTYPE html>  
+<html lang="en" class="dark scroll-smooth">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1" />  
+  <title>Blockchain.com Portfolio Dashboard</title>  
+  <script src="https://cdn.tailwindcss.com"></script>  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>  
+</head>  
+<body class="bg-[#0b0e11] text-white font-sans">  
+  <!-- HEADER -->  
+  <header class="bg-[#131619] border-b border-gray-800 px-6 py-4 flex justify-between items-center">  
+    <h1 class="text-xl font-bold">Blockchain.com</h1>  
+    <div class="flex items-center space-x-4">  
+      <button onclick="showPage('page10')" style="background:none; color:#f0b90b; padding:6px 12px; border:none; border-radius:6px;">Support</button>  
+      <button onclick="openWalletModal()" style="background:#f0b90b; color:#000; padding:10px 20px; border:none; border-radius:10px;">Connect Wallet</button>  
+      <button style="background:#f0b90b; color:#000; padding:10px 20px; border:none; border-radius:10px;">Log Out</button>  
+    </div>  
+  </header>  
+  <!-- SIDEBAR + MAIN CONTENT -->  
+  <div class="flex min-h-screen">  
+    <!-- SIDEBAR -->  
+    <aside class="bg-[#131619] w-64 hidden md:flex flex-col p-6 space-y-4 border-r border-gray-800">  
+      <nav class="space-y-2">  
+        <button onclick="showPage('page3')" style="background:none; color:#f0b90b; padding:10px 15px; border:none; border-radius:8px; font-weight:bold; width:100%; text-align:left;">Dashboard</button>  
+        <button onclick="showPage('page5')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Buy/Sell</button>  
+        <button onclick="showPage('page7')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Send</button>  
+        <button onclick="showPage('page6')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Receive</button>  
+        <button onclick="showPage('page10iii')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Swap</button>  
+        <button onclick="showPage('page9')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">NFTs</button>  
+        <button onclick="showPage('page16')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Earn</button>  
+        <button onclick="showPage('page20iii')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Explorer</button>  
+        <button onclick="showPage('page11')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">Settings</button>  
+      </nav>  
+    </aside>  
+    <!-- MAIN CONTENT -->  
+    <main class="flex-1 p-6 space-y-6">  
+      <!-- BALANCES -->  
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-6">  
+        <div class="bg-[#1c1f24] p-6 rounded-xl shadow">  
+          <h2 class="text-sm uppercase text-gray-400">Total Portfolio</h2>  
+          <p class="text-3xl font-bold mt-2" id="portfolioTotal">$0.00</p>  
+        </div>  
+        <div class="bg-[#1c1f24] p-6 rounded-xl shadow">  
+          <h2 class="text-sm uppercase text-gray-400">BTC</h2>  
+          <p class="text-xl font-semibold mt-2" id="btcBalance">0 BTC</p>  
+        </div>  
+        <div class="bg-[#1c1f24] p-6 rounded-xl shadow">  
+          <h2 class="text-sm uppercase text-gray-400">ETH</h2>  
+          <p class="text-xl font-semibold mt-2" id="ethBalance">0 ETH</p>  
+        </div>  
+      </section>  
+      <!-- PORTFOLIO CHART -->  
+      <section class="bg-[#1c1f24] p-6 rounded-xl shadow">  
+        <h2 class="text-lg font-bold mb-4">Portfolio Chart</h2>  
+        <canvas id="portfolioChart"></canvas>  
+      </section>  
+      <!-- ACTIONS -->  
+      <section class="flex flex-wrap gap-4">  
+        <button onclick="showPage('page5')" style="margin-top:30px; background:#f0b90b; color:#000; padding:10px 20px; border:none; border-radius:10px;">Buy</button>  
+        <button onclick="showPage('page7')" style="margin-top:30px; background:#444; color:#fff; padding:10px 20px; border:none; border-radius:10px;">Send</button>  
+        <button onclick="showPage('page6')" style="margin-top:30px; background:#444; color:#fff; padding:10px 20px; border:none; border-radius:10px;">Receive</button>  
+        <button onclick="showPage('page10iii')" style="margin-top:30px; background:#444; color:#fff; padding:10px 20px; border:none; border-radius:10px;">Swap</button>  
+      </section>  
+      <!-- RECENT TRANSACTIONS -->  
+      <section class="bg-[#1c1f24] p-6 rounded-xl shadow">  
+        <h2 class="text-lg font-bold mb-4">Recent Activity</h2>  
+        <ul class="space-y-3 text-sm" id="recentTransactions"></ul>  
+      </section>  
+      <!-- ASSETS LIST -->  
+      <section class="bg-[#1c1f24] p-6 rounded-xl shadow">  
+        <h2 class="text-lg font-bold mb-4">Your Assets</h2>  
+        <table class="w-full text-left text-sm">  
+          <thead class="text-gray-400">  
+            <tr>  
+              <th class="py-2">Asset</th>  
+              <th>Balance</th>  
+              <th>Value</th>  
+            </tr>  
+          </thead>  
+          <tbody id="assetList"></tbody>  
+        </table>  
+      </section>  
+    </main>  
+  </div>  
 
-    <!-- HEADER -->
-    <header class="flex justify-between items-center px-4 sm:px-6 lg:px-8 py-4 bg-transparent">
-      <h2 class="text-2xl sm:text-3xl font-bold text-yellow-400">Dashboard</h2>
-      <button 
-        onclick="showPage('16')" 
-        title="Go to Earns"
-        class="bg-yellow-400 text-[#072146] font-bold px-5 py-2 rounded-full shadow hover:bg-yellow-300 transition text-sm sm:text-base"
-      >
-        Earns
-      </button>
-    </header>
+  <!-- MULTI-CHAIN WALLET CONNECT MODAL -->  
+  <div id="walletModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">  
+    <div class="bg-[#1c1f24] rounded-xl p-6 w-96 max-w-full relative">  
+      <h2 class="text-xl font-bold mb-4">Connect Wallet</h2>  
+      <p class="mb-4 text-gray-300">Select your wallet and blockchain network:</p>  
+      <label for="chainSelect" class="block mb-2 font-semibold">Choose Blockchain Network:</label>  
+      <select id="chainSelect" class="w-full p-2 rounded bg-[#0b0e11] border border-gray-700 mb-4 text-white">  
+        <option value="bsc">Binance Smart Chain (BSC)</option>  
+        <option value="eth">Ethereum (ETH)</option>  
+        <option value="polygon">Polygon (MATIC)</option>  
+        <option value="avalanche">Avalanche (AVAX)</option>  
+      </select>  
+      <button id="connectWalletBtn" style="background:#f0b90b; color:#000; padding:10px 20px; border:none; border-radius:10px; width:100%;">Connect Wallet</button>  
+      <button onclick="closeWalletModal()" style="position:absolute; top:10px; right:10px; font-weight:bold; color:#f0b90b; background:none; border:none; font-size:24px; cursor:pointer;">×</button>  
+    </div>  
+  </div>
+  
+<!-- === PAGE 5: BUY/SELL CRYPTO === -->
+<section id="page5" class="page hidden min-h-screen px-4 py-6 bg-[#0b0e11] text-white">
 
-    <!-- BALANCE CARDS -->
-    <div class="w-full px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg text-center">
-          <p class="text-yellow-400 text-sm font-medium mb-1">USDT Balance</p>
-          <p class="text-white text-3xl font-bold" id="usdtBalance">--</p>
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-white">Buy / Sell Crypto</h2>
+    <button onclick="showPage('4')" class="text-yellow-400 font-semibold hover:underline">← Back to Dashboard</button>
+  </div>
+
+  <!-- Container -->
+  <div class="max-w-3xl mx-auto bg-[#12161c] p-6 rounded-2xl shadow-lg space-y-6">
+
+    <!-- Buy / Sell Tabs -->
+    <div class="flex justify-between">
+      <button id="buyTab" class="tabButton active-tab w-1/2 py-3 rounded-l-xl bg-[#f0b90b] text-black font-bold">Buy</button>
+      <button id="sellTab" class="tabButton w-1/2 py-3 rounded-r-xl bg-[#1f2630] text-white font-bold hover:bg-[#2c3540]">Sell</button>
+    </div>
+
+    <!-- Form -->
+    <form id="tradeForm" class="space-y-5">
+
+      <!-- Select Asset -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Asset</label>
+        <select id="assetSelector" class="w-full p-3 rounded-lg bg-[#1f2630] border border-[#2c3540] text-white">
+          <option value="BTC">Bitcoin (BTC)</option>
+          <option value="ETH">Ethereum (ETH)</option>
+          <option value="USDT">Tether (USDT)</option>
+          <option value="BNB">Binance Coin (BNB)</option>
+        </select>
+      </div>
+
+      <!-- Amount -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Amount in USD</label>
+        <input type="number" placeholder="100.00" class="w-full p-3 rounded-lg bg-[#1f2630] border border-[#2c3540] text-white" required />
+      </div>
+
+      <!-- Payment Method -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Payment Method</label>
+        <select class="w-full p-3 rounded-lg bg-[#1f2630] border border-[#2c3540] text-white">
+          <option value="card">Debit/Credit Card</option>
+          <option value="bank">Bank Transfer</option>
+          <option value="wallet">Wallet Balance</option>
+        </select>
+      </div>
+
+      <!-- Estimated Receive -->
+      <div class="flex justify-between text-sm text-gray-400">
+        <span>Estimated Receive</span>
+        <span id="estimatedOutput">0.00000 BTC</span>
+      </div>
+
+      <!-- Confirm Button -->
+      <button type="submit" class="w-full bg-[#f0b90b] text-black py-3 rounded-xl font-bold hover:bg-yellow-400 transition">Confirm Transaction</button>
+
+    </form>
+  </div>
+
+  <!-- Transaction Info -->
+  <div class="mt-10 max-w-3xl mx-auto">
+    <h3 class="text-lg font-semibold mb-4">Recent Orders</h3>
+    <ul class="space-y-3 text-sm text-gray-300">
+      <li class="flex justify-between">
+        <span>Bought 0.005 BTC</span>
+        <span>$250.00</span>
+      </li>
+      <li class="flex justify-between">
+        <span>Sold 1.2 ETH</span>
+        <span>$3,400.00</span>
+      </li>
+    </ul>
+  </div>
+
+</section>
+
+<!-- PAGE 6: RECEIVE ASSETS -->
+<section id="page6" class="bg-[#0b0e11] min-h-screen text-white px-4 md:px-12 py-10 space-y-10">
+
+  <!-- Heading -->
+  <div class="flex justify-between items-center">
+    <h2 class="text-2xl md:text-3xl font-bold text-yellow-400">Receive Crypto</h2>
+    <button class="bg-[#1e2023] text-gray-300 hover:text-yellow-400 px-4 py-2 rounded-lg border border-gray-700">Need Help?</button>
+  </div>
+
+  <!-- Network Selector + Address Display -->
+  <div class="bg-[#131619] rounded-xl p-6 space-y-6 shadow-xl border border-gray-700">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <!-- Select Network -->
+      <div class="flex flex-col space-y-2">
+        <label for="assetSelector" class="text-sm text-gray-400">Select Asset</label>
+        <select id="assetSelector" class="bg-[#1c1f24] text-white border border-gray-600 rounded-md px-4 py-2 w-full md:w-72">
+          <option value="ETH">Ethereum (ERC20)</option>
+          <option value="BTC">Bitcoin</option>
+          <option value="BNB">BNB Smart Chain</option>
+          <option value="USDT_TRON">Tether (TRC20)</option>
+        </select>
+      </div>
+
+      <!-- Address and Copy -->
+      <div class="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-3 md:space-y-0 w-full">
+        <div class="text-yellow-400 break-all font-mono flex-1 text-sm" id="receiveAddress">
+          0xB36EDa1ffC696FFba07D4Be5cd249FE5E0118130
         </div>
-        <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg text-center">
-          <p class="text-yellow-400 text-sm font-medium mb-1">BNB Balance</p>
-          <p class="text-white text-3xl font-bold" id="bnbBalance">--</p>
-        </div>
-        <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg text-center">
-          <p class="text-yellow-400 text-sm font-medium mb-1">Total Assets (USD)</p>
-          <p class="text-white text-3xl font-bold" id="totalAssets">--</p>
-        </div>
+        <button onclick="copyToClipboard('receiveAddress')" class="bg-yellow-400 text-black font-bold px-4 py-2 rounded hover:bg-yellow-500 transition">Copy Address</button>
       </div>
     </div>
 
-    <!-- DAILY PROFIT GOAL & CHART -->
-    <div class="w-full px-4 sm:px-6 lg:px-8">
-      <div class="bg-[#0f375a] rounded-xl p-6 shadow-lg">
-        <h3 class="text-yellow-400 font-semibold text-lg mb-4">Daily Profit Goal</h3>
-        <div id="tradingview-widget" class="w-full h-[250px] overflow-hidden rounded-lg"></div>
+    <!-- QR Code -->
+    <div class="mt-6 flex justify-center" id="qrCodeContainer"></div>
+  </div>
+
+  <!-- Supported Networks -->
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="bg-[#1c1f24] p-4 rounded-lg border border-gray-700">
+      <div class="flex items-center gap-3 mb-2">
+        <img src="https://assets.coingecko.com/coins/images/279/large/ethereum.png" width="30" />
+        <h4 class="text-white font-semibold">Ethereum (ERC20)</h4>
       </div>
+      <p class="text-sm text-gray-400">Receive ETH or any ERC20 tokens on this address.</p>
     </div>
 
-    <!-- FIXED ACTION BUTTONS -->
-    <div class="fixed bottom-20 left-1/2 transform -translate-x-1/2 flex space-x-4 z-40">
-      <button 
-        onclick="showPage('6')" 
-        class="px-6 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition"
-      >
-        Receive
-      </button>
-      <button 
-        onclick="showPage('7')" 
-        class="px-6 py-3 rounded-xl bg-yellow-400 text-[#072146] font-bold shadow-lg hover:bg-yellow-500 transition"
-      >
-        Transfer
-      </button>
+    <div class="bg-[#1c1f24] p-4 rounded-lg border border-gray-700">
+      <div class="flex items-center gap-3 mb-2">
+        <img src="https://assets.coingecko.com/coins/images/825/large/binance-coin-logo.png" width="30" />
+        <h4 class="text-white font-semibold">BNB Smart Chain</h4>
+      </div>
+      <p class="text-sm text-gray-400">Use this address for BEP20 tokens like BNB, BUSD, etc.</p>
     </div>
 
-    <!-- SETTINGS BUTTON -->
-    <button 
-      onclick="showPage('page11')" 
-      class="fixed bottom-4 right-4 bg-yellow-400 text-black p-3 rounded-full shadow-lg hover:bg-yellow-300 transition z-50"
-      title="Settings"
-    >
-      ⚙️
-    </button>
-
-  </div>
-</section>
-
-<!-- PAGE 6 - RECEIVE -->
-<section id="page6" class="page px-4 md:px-0">
-  <div class="max-w-4xl mx-auto bg-[#072146] rounded-xl p-8 shadow-lg">
-    <h2 class="text-3xl font-bold text-yellow-400 mb-6 text-center">Receive Tokens</h2>
-
-    <!-- Token Search -->
-    <input 
-      type="text" 
-      id="tokenSearch" 
-      placeholder="Search token..." 
-      class="mb-4 w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400" 
-      oninput="filterTokens()" 
-    />
-
-    <!-- Token List -->
-    <div id="tokenList" class="overflow-y-auto max-h-[400px]">
-      <!-- Token items injected dynamically -->
+    <div class="bg-[#1c1f24] p-4 rounded-lg border border-gray-700">
+      <div class="flex items-center gap-3 mb-2">
+        <img src="https://assets.coingecko.com/coins/images/325/large/Tether-logo.png" width="30" />
+        <h4 class="text-white font-semibold">Tether (TRC20)</h4>
+      </div>
+      <p class="text-sm text-gray-400">TRON-based USDT deposits supported on this address.</p>
     </div>
   </div>
-</section>
 
-<!-- PAGE 6i - TOKEN DETAILS -->
-<section id="page6i" class="page hidden px-4 md:px-0">
-  <div class="max-w-4xl mx-auto bg-[#072146] rounded-xl p-8 shadow-lg">
-    <div class="flex justify-between items-center mb-4">
-      <h2 id="tokenTitle" class="text-2xl font-bold text-yellow-400"></h2>
-      <button onclick="goBack()" class="text-white hover:underline">← Back</button>
-    </div>
-    
-    <!-- Price Widget -->
-    <div id="priceWidget" class="mb-6"></div>
-
-    <!-- Action Buttons -->
-    <div class="flex gap-4">
-      <button onclick="navigateTo('page6ii')" class="bg-green-600 px-4 py-2 rounded-md text-white">Deposit</button>
-      <button onclick="navigateTo('page7')" class="bg-blue-600 px-4 py-2 rounded-md text-white">Send</button>
-    </div>
+  <!-- Chart -->
+  <div class="bg-[#131619] p-6 rounded-xl border border-gray-700">
+    <h3 class="text-lg font-bold text-white mb-4">Market Overview</h3>
+    <div id="tradingview_chart" style="height:400px;"></div>
   </div>
 </section>
    
@@ -1556,6 +1698,210 @@ document.addEventListener("DOMContentLoaded", () => {
     to { transform: rotate(360deg); }
   }
 </style>
+  <script>
+  function showPage(pageId) {
+    console.log(`Navigate to: ${pageId}`);
+    alert(`Navigate to: ${pageId}`);
+    // TODO: Replace alert with your actual SPA navigation logic
+  }
+
+  function openWalletModal() {
+    document.getElementById('walletModal').classList.remove('hidden');
+  }
+
+  function closeWalletModal() {
+    document.getElementById('walletModal').classList.add('hidden');
+  }
+
+  document.getElementById('connectWalletBtn').addEventListener('click', () => {
+    const selectedChain = document.getElementById('chainSelect').value;
+    alert(`Connecting to wallet on ${selectedChain.toUpperCase()} network...`);
+    closeWalletModal();
+    // TODO: Add real wallet connect logic with ethers.js or other libs here, using selectedChain
+  });
+
+  const assets = [
+    { name: 'Bitcoin (BTC)', symbol: 'BTC', balance: 0.453, price: 64000 },
+    { name: 'Ethereum (ETH)', symbol: 'ETH', balance: 3.2, price: 3100 },
+    { name: 'Tether (USDT)', symbol: 'USDT', balance: 1000, price: 1 },
+  ];
+
+  const assetListElem = document.getElementById('assetList');
+  const recentTransactionsElem = document.getElementById('recentTransactions');
+  const portfolioTotalElem = document.getElementById('portfolioTotal');
+  const btcBalanceElem = document.getElementById('btcBalance');
+  const ethBalanceElem = document.getElementById('ethBalance');
+
+  function updateAssets() {
+    let total = 0;
+    assetListElem.innerHTML = '';
+    assets.forEach(asset => {
+      const value = asset.balance * asset.price;
+      total += value;
+      assetListElem.innerHTML += `
+        <tr class="border-t border-gray-700">
+          <td class="py-3">${asset.name}</td>
+          <td>${asset.balance.toFixed(4)} ${asset.symbol}</td>
+          <td>$${value.toLocaleString()}</td>
+        </tr>`;
+    });
+    portfolioTotalElem.innerText = `$${total.toLocaleString()}`;
+    btcBalanceElem.innerText = `${assets[0].balance} BTC`;
+    ethBalanceElem.innerText = `${assets[1].balance} ETH`;
+  }
+
+  function updateRecentTransactions() {
+    recentTransactionsElem.innerHTML = `
+      <li class="flex justify-between">
+        <span>Received BTC</span>
+        <span class="text-green-400">+0.02 BTC</span>
+      </li>
+      <li class="flex justify-between">
+        <span>Sent ETH</span>
+        <span class="text-red-400">-1.0 ETH</span>
+      </li>
+    `;
+  }
+
+  updateAssets();
+  updateRecentTransactions();
+
+  // Portfolio chart setup
+  const ctx = document.getElementById('portfolioChart').getContext('2d');
+  const portfolioChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['Jun', 'Jul', 'Aug'],
+      datasets: [{
+        label: 'Portfolio Value',
+        data: [8000, 11000, assets.reduce((sum, a) => sum + a.balance * a.price, 0)],
+        borderColor: 'rgba(255, 215, 0, 1)',
+        backgroundColor: 'rgba(255, 215, 0, 0.2)',
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      scales: {
+        y: { beginAtZero: false }
+      }
+    }
+  });
+</script>
+
+<script>
+// Tab switch between Buy / Sell
+document.getElementById("buyTab").addEventListener("click", () => {
+  setTradeTab("buy");
+});
+document.getElementById("sellTab").addEventListener("click", () => {
+  setTradeTab("sell");
+});
+
+function setTradeTab(tab) {
+  const buyBtn = document.getElementById("buyTab");
+  const sellBtn = document.getElementById("sellTab");
+  if (tab === "buy") {
+    buyBtn.classList.add("active-tab");
+    sellBtn.classList.remove("active-tab");
+  } else {
+    sellBtn.classList.add("active-tab");
+    buyBtn.classList.remove("active-tab");
+  }
+}
+
+// Simulated estimate calculation
+const tradeForm = document.getElementById("tradeForm");
+const outputElem = document.getElementById("estimatedOutput");
+const assetSelector = document.getElementById("assetSelector");
+
+tradeForm.addEventListener("input", () => {
+  const amount = parseFloat(tradeForm.querySelector("input[type='number']").value);
+  const asset = assetSelector.value;
+  let rate = 0;
+
+  switch (asset) {
+    case "BTC": rate = 60000; break;
+    case "ETH": rate = 3500; break;
+    case "USDT": rate = 1; break;
+    case "BNB": rate = 500; break;
+  }
+
+  const result = amount / rate;
+  outputElem.innerText = `${result.toFixed(5)} ${asset}`;
+});
+
+tradeForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  alert("Transaction submitted.");
+});
+</script>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script>
+  const addresses = {
+    ETH: "0xB36EDa1ffC696FFba07D4Be5cd249FE5E0118130",
+    BTC: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+    BNB: "0xB36EDa1ffC696FFba07D4Be5cd249FE5E0118130",
+    USDT_TRON: "TSt7yoNwGYRbtMMfkSAHE6dPs1cd9rxcco"
+  };
+
+  function updateReceiveDisplay(asset) {
+    const address = addresses[asset];
+    const container = document.getElementById('receiveAddress');
+    container.innerText = address;
+    generateQRCode(address);
+  }
+
+  function generateQRCode(value) {
+    const qrContainer = document.getElementById('qrCodeContainer');
+    qrContainer.innerHTML = "";
+    QRCode.toCanvas(document.createElement('canvas'), value, { width: 140 }, function (err, canvas) {
+      if (!err) qrContainer.appendChild(canvas);
+    });
+  }
+
+  function copyToClipboard(id) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      alert(`Copied to clipboard:\n${text}`);
+    }).catch(err => {
+      alert('Failed to copy text: ' + err);
+    });
+  }
+
+  document.getElementById("assetSelector").addEventListener("change", (e) => {
+    updateReceiveDisplay(e.target.value);
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    updateReceiveDisplay("ETH");
+    loadTradingViewChart();
+  });
+
+  function loadTradingViewChart() {
+    if (!document.getElementById("tradingview_chart").innerHTML.trim()) {
+      new TradingView.widget({
+        container_id: "tradingview_chart",
+        width: "100%",
+        height: 400,
+        symbol: "COINBASE:ETHUSD",
+        interval: "D",
+        timezone: "Etc/UTC",
+        theme: "dark",
+        style: "1",
+        locale: "en",
+        toolbar_bg: "#0b0e11",
+        enable_publishing: false,
+        hide_top_toolbar: true,
+        allow_symbol_change: true,
+        save_image: false,
+      });
+    }
+  }
+</script>
+<script src="https://s3.tradingview.com/tv.js"></script>
 
 </body>
 </html>
