@@ -59,7 +59,8 @@
   .action-btn.bg-[#f0b90b]:hover {  
     background: #e4a700;  
   }  
-</style>    <style>  
+</style>   
+  <style>  
     /* Scrollbar */  
     ::-webkit-scrollbar {  
       width: 8px;  
@@ -168,7 +169,8 @@
         bottom: 80px;  
       }  
     }  
-  </style>  </head>  
+  </style>  
+</head>  
 <body class="overflow-x-hidden">
 
 <!-- 🌐 MAIN APP CONTAINER -->
@@ -2650,35 +2652,5 @@ window.addEventListener("load", () => {
       }
     }
   </script>
-  <script>
-  // Show one page at a time and store current page
-  function showPage(pageId) {
-    // Hide all pages
-    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-
-    // Show the requested page
-    const page = document.getElementById(pageId);
-    if (page) {
-      page.style.display = 'block';
-      localStorage.setItem('currentPage', pageId);
-      // Push to history for back button use
-      history.pushState({ page: pageId }, "", `#${pageId}`);
-    }
-  }
-
-  // Restore the last visited page on refresh
-  window.addEventListener('load', () => {
-    const savedPage = localStorage.getItem('currentPage') || 'page4'; // default to homepage
-    showPage(savedPage);
-  });
-
-  // Enable back/forward browser buttons
-  window.addEventListener('popstate', (event) => {
-    if (event.state && event.state.page) {
-      showPage(event.state.page);
-    }
-  });
-  </script>
-
 </body>
 </html>
