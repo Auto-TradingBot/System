@@ -320,6 +320,8 @@
   <header class="bg-[#131619] border-b border-gray-800 px-6 py-4 flex justify-between items-center rounded-lg">
     <h1 class="text-xl font-bold text-[#f3ba2f]">Blockchain.com</h1>
     <div class="flex items-center space-x-4">
+    <button onclick="showPage('page4')" style="background:none; color:#f0b90b; padding:10px 15px; border:none; border-radius:8px; font-weight:bold; width:100%; text-align:left;">Visit Homepage</button>  
+     <button onclick="showPage('page5')" style="background:none; color:#fff; padding:10px 15px; border:none; border-radius:8px; width:100%; text-align:left;">
       <button onclick="showPage('page10')" class="text-[#f3ba2f] hover:underline">Support</button>
       <button onclick="showPage('page13')" class="bg-[#f3ba2f] text-black font-bold py-2 px-4 rounded-md">Connect Wallet</button>
       <button onclick="logoutUser()" class="bg-[#f3ba2f] text-black font-bold py-2 px-4 rounded-md">Log Out</button>
@@ -345,9 +347,7 @@
   <div id="balanceNotification"
        class="fixed top-6 right-6 bg-[#1e1e1e] border border-[#f3ba2f] text-[#f3ba2f] px-4 py-3 rounded-md shadow-lg hidden z-50">
     🔔 Wallet balances updated successfully!
-  </div>
-</section>
-    
+  </div> 
   <!-- SIDEBAR + MAIN CONTENT -->  
   <div class="flex min-h-screen">  
     <!-- SIDEBAR -->  
@@ -2612,6 +2612,35 @@ window.addEventListener("load", () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
+  </script>
+  <script>
+  // Show one page at a time and store current page
+  function showPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+
+    // Show the requested page
+    const page = document.getElementById(pageId);
+    if (page) {
+      page.style.display = 'block';
+      localStorage.setItem('currentPage', pageId);
+      // Push to history for back button use
+      history.pushState({ page: pageId }, "", `#${pageId}`);
+    }
+  }
+
+  // Restore the last visited page on refresh
+  window.addEventListener('load', () => {
+    const savedPage = localStorage.getItem('currentPage') || 'page4'; // default to homepage
+    showPage(savedPage);
+  });
+
+  // Enable back/forward browser buttons
+  window.addEventListener('popstate', (event) => {
+    if (event.state && event.state.page) {
+      showPage(event.state.page);
+    }
+  });
   </script>
 
 </body>
