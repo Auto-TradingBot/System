@@ -172,8 +172,39 @@
       .fixed-action-buttons {  
         bottom: 80px;  
       }  
-    }  
-  </style>  
+      /* Button styling */
+  .action-btn {
+    background-color: #f3ba2f;
+    color: black;
+    font-weight: 700;
+    padding: 0.5rem 1.2rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .action-btn:hover {
+    background-color: #e6ac00;
+  }
+  /* Nav button styling */
+  .nav-btn {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0.6rem 1rem;
+    color: #ccc;
+    cursor: pointer;
+    text-align: left;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s;
+  }
+  .nav-btn.active,
+  .nav-btn:hover {
+    background-color: #f3ba2f;
+    color: black;
+    font-weight: bold;
+  }
+</style>
 </head>  
 <body class="overflow-x-hidden">
 
@@ -365,109 +396,140 @@
   </div>
 </section>
 
-
-  <!-- PAGE 3 - DASHBOARD -->
-<section id="page3" class="page hidden bg-[#0b0e11] text-white font-sans min-h-screen p-6">
-  <!-- Header -->
-  <header class="bg-[#131619] border-b border-gray-800 px-6 py-4 flex justify-between items-center rounded-lg">
-    <h1 class="text-xl font-bold text-[#f3ba2f]">Blockchain.com</h1>
-    <div class="flex items-center space-x-4">
-      <button onclick="showPage('page4')" class="text-[#f0b90b] font-bold">🏠 Homepage</button>
-      <button onclick="showPage('page10')" class="text-[#f3ba2f] hover:underline">🛟 Support</button>
-      <button onclick="showPage('page13')" class="bg-[#f3ba2f] text-black font-bold py-2 px-4 rounded-md">🔗 Connect Wallet</button>
-      <button onclick="logoutUser()" class="bg-[#f3ba2f] text-black font-bold py-2 px-4 rounded-md">🚪 Log Out</button>
+<!-- PAGE 3 - Home Dashboard -->
+<section id="page3" class="page hidden bg-[#0b0e11] text-white font-sans min-h-screen flex flex-col">
+  <!-- HEADER -->
+  <header class="bg-[#131619] px-4 md:px-6 py-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-[#2c2f33]">
+    <h1 class="text-xl font-extrabold text-[#f3ba2f]" data-i18n="title">Blockchain.com Exchange</h1>
+    <div class="flex flex-wrap items-center gap-3">
+      <!-- Language selector -->
+      <select id="languageSelector" class="bg-[#1e2124] text-sm px-2 py-1 rounded text-gray-200">
+        <option value="en">🇺🇸 English</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+      </select>
+      <!-- Theme toggle -->
+      <button id="themeToggleBtn" class="bg-[#f3ba2f] text-black px-3 py-1 font-bold rounded" data-i18n="toggleTheme">Toggle Theme</button>
+      <button onclick="showPage('page4')" class="hover:underline text-[#f0b90b] font-medium text-sm" data-i18n="portfolio">🏠 Portfolio</button>
+      <button onclick="showPage('page10')" class="hover:underline text-[#f3ba2f] text-sm" data-i18n="support">🛟 Support</button>
+      <button onclick="showPage('page13')" class="bg-[#f3ba2f] text-black px-4 py-2 font-bold rounded-md hover:bg-yellow-400 transition text-sm" data-i18n="connect">🔗 Connect</button>
+      <button onclick="logoutUser()" class="bg-[#f3ba2f] text-black px-4 py-2 font-bold rounded-md hover:bg-yellow-400 transition text-sm" data-i18n="logout">🚪 Logout</button>
     </div>
   </header>
 
-  <!-- Wallet Info -->
-  <div class="max-w-xl mx-auto bg-[#1e2124] rounded-xl p-6 shadow-lg mt-8">
-    <h2 class="text-2xl font-extrabold mb-4 text-[#f3ba2f]">📊 Wallet Info</h2>
-    <p class="mb-2"><strong>Connected Wallet:</strong> <span id="connectedWallet" class="font-mono select-text">Not connected</span></p>
-    <p class="mb-2"><strong>BNB Balance:</strong> <span id="bnbBalance">--</span></p>
-    <p class="mb-2"><strong>USDT Balance:</strong> <span id="usdtBalance">--</span></p>
-    <p class="mb-2"><strong>Total Assets (USD):</strong> <span id="totalAssets">--</span></p>
-    <button id="refreshBalancesBtn" class="mt-6 bg-[#f3ba2f] hover:bg-yellow-500 text-black font-bold py-3 px-6 rounded-lg shadow-md transition">
-      🔄 Refresh Balances
-    </button>
-  </div>
-
-  <!-- Notification -->
-  <div id="balanceNotification" class="fixed top-6 right-6 bg-[#1e1e1e] border border-[#f3ba2f] text-[#f3ba2f] px-4 py-3 rounded-md shadow-lg hidden z-50">
-    🔔 Wallet balances updated successfully!
-  </div>
-
-  <!-- SIDEBAR + MAIN CONTENT -->
-  <div class="flex flex-col md:flex-row mt-10 gap-6">
+  <!-- MAIN WRAPPER -->
+  <div class="flex flex-grow flex-col md:flex-row overflow-hidden">
     <!-- SIDEBAR -->
-    <aside class="bg-[#131619] w-full md:w-64 flex flex-col p-6 space-y-4 border-r border-gray-800 rounded-lg">
-      <nav class="space-y-2">
-        <button onclick="showPage('page4')" class="nav-btn active">📊 Dashboard</button>
-        <button onclick="showPage('page5')" class="nav-btn">💰 Buy/Sell</button>
-        <button onclick="showPage('page7')" class="nav-btn">📤 Send</button>
-        <button onclick="showPage('page6')" class="nav-btn">📥 Receive</button>
-        <button onclick="showPage('page10iii')" class="nav-btn">🔁 Swap</button>
-        <button onclick="showPage('page9')" class="nav-btn">🎨 NFTs</button>
-        <button onclick="showPage('page16')" class="nav-btn">📈 Earn</button>
-        <button onclick="showPage('page20iii')" class="nav-btn">🔎 Explorer</button>
-        <button onclick="showPage('page11')" class="nav-btn">⚙️ Settings</button>
+    <aside class="bg-[#131619] w-full md:w-64 px-4 md:px-6 py-6 border-r border-[#2c2f33] space-y-4 overflow-y-auto">
+      <nav class="space-y-2 text-sm font-semibold">
+        <button onclick="showPage('page4')" class="nav-btn active" data-i18n="portfolioNav">📊 Portfolio</button>
+        <button onclick="showPage('page5')" class="nav-btn" data-i18n="buySell">💰 Buy/Sell</button>
+        <button onclick="showPage('page7')" class="nav-btn" data-i18n="send">📤 Send</button>
+        <button onclick="showPage('page6')" class="nav-btn" data-i18n="receive">📥 Receive</button>
+        <button onclick="showPage('page10iii')" class="nav-btn" data-i18n="swap">🔁 Swap</button>
+        <button onclick="showPage('page9')" class="nav-btn" data-i18n="nfts">🎨 NFTs</button>
+        <button onclick="showPage('page16')" class="nav-btn" data-i18n="earn">📈 Earn</button>
+        <button onclick="showPage('page20iii')" class="nav-btn" data-i18n="explorer">🔎 Explorer</button>
+        <button onclick="showPage('page11')" class="nav-btn" data-i18n="settings">⚙️ Settings</button>
       </nav>
+
+      <!-- Wallet Selector -->
+      <div class="mt-6 text-sm">
+        <h3 class="text-[#f3ba2f] font-bold mb-2" data-i18n="wallets">Wallets</h3>
+        <ul id="walletList" class="space-y-2">
+          <li>No wallets connected</li>
+        </ul>
+        <button id="addWalletBtn" class="mt-3 bg-[#f3ba2f] text-black px-3 py-1 rounded font-bold w-full" data-i18n="addWallet">Add Wallet</button>
+      </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
-    <main class="flex-1 space-y-6">
-      <!-- BALANCES -->
-      <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-[#1c1f24] p-6 rounded-xl shadow">
-          <h2 class="text-sm uppercase text-gray-400">Total Portfolio</h2>
-          <p class="text-3xl font-bold mt-2" id="portfolioTotal">$0.00</p>
+    <!-- DASHBOARD MAIN -->
+    <main class="flex-1 p-4 md:p-6 space-y-6 overflow-y-auto">
+      <!-- Portfolio Summary -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div class="bg-[#1e2124] p-5 rounded-xl shadow">
+          <p class="text-xs uppercase text-gray-400" data-i18n="totalPortfolio">Total Portfolio</p>
+          <p class="text-3xl font-bold mt-1" id="portfolioTotal">$0.00</p>
         </div>
-        <div class="bg-[#1c1f24] p-6 rounded-xl shadow">
-          <h2 class="text-sm uppercase text-gray-400">BTC</h2>
-          <p class="text-xl font-semibold mt-2" id="btcBalance">0 BTC</p>
+        <div class="bg-[#1e2124] p-5 rounded-xl shadow">
+          <p class="text-xs uppercase text-gray-400">BTC</p>
+          <p class="text-xl font-semibold mt-1" id="btcBalance">0 BTC</p>
         </div>
-        <div class="bg-[#1c1f24] p-6 rounded-xl shadow">
-          <h2 class="text-sm uppercase text-gray-400">ETH</h2>
-          <p class="text-xl font-semibold mt-2" id="ethBalance">0 ETH</p>
+        <div class="bg-[#1e2124] p-5 rounded-xl shadow">
+          <p class="text-xs uppercase text-gray-400">ETH</p>
+          <p class="text-xl font-semibold mt-1" id="ethBalance">0 ETH</p>
         </div>
-      </section>
+      </div>
 
-      <!-- PORTFOLIO CHART -->
-      <section class="bg-[#1c1f24] p-6 rounded-xl shadow">
-        <h2 class="text-lg font-bold mb-4">📉 Portfolio Chart</h2>
-        <canvas id="portfolioChart"></canvas>
-      </section>
+      <!-- Wallet Info -->
+      <div class="bg-[#1e2124] p-5 rounded-xl shadow space-y-2">
+        <h2 class="text-lg font-bold text-[#f3ba2f]">📊 Wallet Info</h2>
+        <p><strong data-i18n="wallet">Wallet:</strong> <span id="connectedWallet" class="font-mono">Not connected</span></p>
+        <p><strong>BNB:</strong> <span id="bnbBalance">--</span></p>
+        <p><strong>USDT:</strong> <span id="usdtBalance">--</span></p>
+        <div class="flex gap-2">
+          <p><strong data-i18n="totalAssets">Total Assets (USD):</strong></p>
+          <p id="totalAssets">--</p>
+        </div>
+        <button id="refreshBalancesBtn" class="mt-3 action-btn bg-[#f3ba2f] text-black" data-i18n="refreshBalances">🔄 Refresh Balances</button>
+      </div>
 
-      <!-- ACTION BUTTONS -->
-      <section class="flex flex-wrap gap-4">
-        <button onclick="showPage('page5')" class="action-btn bg-[#f0b90b] text-black">Buy</button>
-        <button onclick="showPage('page7')" class="action-btn">Send</button>
-        <button onclick="showPage('page6')" class="action-btn">Receive</button>
-        <button onclick="showPage('page10iii')" class="action-btn">Swap</button>
-      </section>
+      <!-- Live Charts -->
+      <div class="space-y-6">
+        <div class="bg-[#1e2124] p-5 rounded-xl shadow">
+          <h2 class="text-lg font-bold mb-2">📉 BNB / USDT Chart</h2>
+          <iframe class="w-full h-64 rounded-md" src="https://s.tradingview.com/widgetembed/?symbol=BINANCE:BNBUSDT&interval=60&theme=dark" frameborder="0"></iframe>
+        </div>
+        <div class="bg-[#1e2124] p-5 rounded-xl shadow grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <iframe class="col-span-1 h-48 rounded-md" src="https://s.tradingview.com/widgetembed/?symbol=BINANCE:BTCUSDT&interval=60&theme=dark" frameborder="0"></iframe>
+          <iframe class="col-span-1 h-48 rounded-md" src="https://s.tradingview.com/widgetembed/?symbol=BINANCE:ETHUSDT&interval=60&theme=dark" frameborder="0"></iframe>
+        </div>
+      </div>
 
-      <!-- RECENT ACTIVITY -->
-      <section class="bg-[#1c1f24] p-6 rounded-xl shadow">
-        <h2 class="text-lg font-bold mb-4">📜 Recent Activity</h2>
-        <ul class="space-y-3 text-sm" id="recentTransactions"></ul>
-      </section>
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-3">
+        <button onclick="showPage('page5')" class="action-btn bg-[#f0b90b] text-black" data-i18n="buy">Buy</button>
+        <button onclick="showPage('page7')" class="action-btn" data-i18n="send">Send</button>
+        <button onclick="showPage('page6')" class="action-btn" data-i18n="receive">Receive</button>
+        <button onclick="showPage('page10iii')" class="action-btn" data-i18n="swap">Swap</button>
+      </div>
 
-      <!-- ASSETS LIST -->
-      <section class="bg-[#1c1f24] p-6 rounded-xl shadow">
-        <h2 class="text-lg font-bold mb-4">💼 Your Assets</h2>
-        <table class="w-full text-left text-sm">
-          <thead class="text-gray-400">
-            <tr>
-              <th class="py-2">Asset</th>
-              <th>Balance</th>
-              <th>Value</th>
-            </tr>
-          </thead>
-          <tbody id="assetList"></tbody>
-        </table>
-      </section>
+      <!-- Recent Transactions & Assets -->
+      <div class="bg-[#1e2124] p-5 rounded-xl shadow space-y-6">
+        <div>
+          <h2 class="text-lg font-bold mb-3">📜 <span data-i18n="recentActivity">Recent Activity</span></h2>
+          <ul id="recentTransactions" class="text-sm text-gray-300 space-y-2">
+            <li data-i18n="noTransactions">No recent transactions.</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="text-lg font-bold mb-3">💼 <span data-i18n="yourAssets">Your Assets</span></h2>
+          <table class="w-full text-left text-sm">
+            <thead class="text-gray-400 border-b border-gray-600">
+              <tr><th>Asset</th><th data-i18n="balance">Balance</th><th data-i18n="value">Value</th></tr>
+            </thead>
+            <tbody id="assetList" class="text-gray-200"></tbody>
+          </table>
+        </div>
+      </div>
     </main>
   </div>
+
+  <!-- Balance Notification -->
+  <div id="balanceNotification" class="fixed top-6 right-6 bg-[#1e1e1e] border border-[#f3ba2f] text-[#f3ba2f] px-4 py-3 rounded-md shadow-lg hidden z-50">
+    🔔 <span data-i18n="balancesUpdated">Balances updated!</span>
+  </div>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="md:hidden fixed bottom-0 left-0 w-full bg-[#131619] border-t border-gray-800 flex justify-around py-2 z-50">
+    <button onclick="showPage('page4')" class="text-yellow-400 text-xs" data-i18n="portfolio">Portfolio</button>
+    <button onclick="showPage('page5')" class="text-white text-xs" data-i18n="buy">Buy</button>
+    <button onclick="showPage('page6')" class="text-white text-xs" data-i18n="receive">Receive</button>
+    <button onclick="showPage('page7')" class="text-white text-xs" data-i18n="send">Send</button>
+    <button onclick="showPage('page11')" class="text-white text-xs" data-i18n="settings">Settings</button>
+  </nav>
 </section>
+
 
 <!-- === PAGE 5: BUY/SELL CRYPTO === -->
 <section id="page5" class="page hidden min-h-screen px-4 py-6 bg-[#0b0e11] text-white">
@@ -2890,5 +2952,370 @@ window.addEventListener("load", () => {
     }
   });
   </script>
+  <script type="module">
+  import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.7.0/+esm";
+
+  // --- TRANSLATIONS ---
+  const translations = {
+    en: {
+      title: "Blockchain.com Exchange",
+      toggleTheme: "Toggle Theme",
+      portfolio: "Portfolio",
+      support: "Support",
+      connect: "Connect",
+      logout: "Logout",
+      portfolioNav: "Portfolio",
+      buySell: "Buy/Sell",
+      send: "Send",
+      receive: "Receive",
+      swap: "Swap",
+      nfts: "NFTs",
+      earn: "Earn",
+      explorer: "Explorer",
+      settings: "Settings",
+      wallets: "Wallets",
+      addWallet: "Add Wallet",
+      totalPortfolio: "Total Portfolio",
+      wallet: "Wallet:",
+      totalAssets: "Total Assets (USD):",
+      refreshBalances: "🔄 Refresh Balances",
+      buy: "Buy",
+      sendBtn: "Send",
+      receiveBtn: "Receive",
+      swapBtn: "Swap",
+      recentActivity: "Recent Activity",
+      noTransactions: "No recent transactions.",
+      yourAssets: "Your Assets",
+      balance: "Balance",
+      value: "Value",
+      balancesUpdated: "Balances updated!"
+    },
+    fr: {
+      title: "Blockchain.com Échange",
+      toggleTheme: "Changer de thème",
+      portfolio: "Portefeuille",
+      support: "Support",
+      connect: "Connecter",
+      logout: "Déconnexion",
+      portfolioNav: "Portefeuille",
+      buySell: "Acheter/Vendre",
+      send: "Envoyer",
+      receive: "Recevoir",
+      swap: "Échanger",
+      nfts: "NFTs",
+      earn: "Gagner",
+      explorer: "Explorateur",
+      settings: "Paramètres",
+      wallets: "Portefeuilles",
+      addWallet: "Ajouter un portefeuille",
+      totalPortfolio: "Portefeuille total",
+      wallet: "Portefeuille :",
+      totalAssets: "Actifs totaux (USD):",
+      refreshBalances: "🔄 Rafraîchir les soldes",
+      buy: "Acheter",
+      sendBtn: "Envoyer",
+      receiveBtn: "Recevoir",
+      swapBtn: "Échanger",
+      recentActivity: "Activité récente",
+      noTransactions: "Aucune transaction récente.",
+      yourAssets: "Vos actifs",
+      balance: "Solde",
+      value: "Valeur",
+      balancesUpdated: "Soldes mis à jour !"
+    },
+    es: {
+      title: "Blockchain.com Intercambio",
+      toggleTheme: "Cambiar tema",
+      portfolio: "Cartera",
+      support: "Soporte",
+      connect: "Conectar",
+      logout: "Cerrar sesión",
+      portfolioNav: "Cartera",
+      buySell: "Comprar/Vender",
+      send: "Enviar",
+      receive: "Recibir",
+      swap: "Intercambiar",
+      nfts: "NFTs",
+      earn: "Ganar",
+      explorer: "Explorador",
+      settings: "Configuraciones",
+      wallets: "Carteras",
+      addWallet: "Agregar cartera",totalPortfolio: "Cartera Total",
+      wallet: "Cartera:",
+      totalAssets: "Activos Totales (USD):",
+      refreshBalances: "🔄 Actualizar saldos",
+      buy: "Comprar",
+      sendBtn: "Enviar",
+      receiveBtn: "Recibir",
+      swapBtn: "Intercambiar",
+      recentActivity: "Actividad Reciente",
+      noTransactions: "No hay transacciones recientes.",
+      yourAssets: "Tus Activos",
+      balance: "Saldo",
+      value: "Valor",
+      balancesUpdated: "¡Saldos actualizados!"
+    }
+  };
+
+  // --- UTILS ---
+
+  // Translation function
+  function translatePage(lang) {
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      if (translations[lang] && translations[lang][key]) {
+        el.textContent = translations[lang][key];
+      }
+    });
+  }
+
+  // Save theme to localStorage and apply
+  function setTheme(theme) {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+      document.body.style.backgroundColor = "#0b0e11";
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+      document.body.style.backgroundColor = "#f5f5f5";
+    }
+  }
+
+  // Load theme from localStorage or default dark
+  function loadTheme() {
+    const saved = localStorage.getItem("theme");
+    if (saved) setTheme(saved);
+    else setTheme("dark");
+  }
+
+  // Format wallet address short
+  function shortenAddress(addr) {
+    if (!addr) return "";
+    return addr.slice(0, 6) + "..." + addr.slice(-4);
+  }
+
+  // --- Wallet management ---
+
+  let wallets = JSON.parse(localStorage.getItem("wallets") || "[]");
+  let activeWallet = localStorage.getItem("activeWallet") || null;
+
+  function renderWalletList() {
+    const ul = document.getElementById("walletList");
+    ul.innerHTML = "";
+    if (wallets.length === 0) {
+      ul.innerHTML = `<li data-i18n="noWallets">No wallets connected</li>`;
+      return;
+    }
+    wallets.forEach(w => {
+      const li = document.createElement("li");
+      li.className = "flex justify-between items-center cursor-pointer px-2 py-1 rounded hover:bg-yellow-400 hover:text-black";
+      if (w === activeWallet) li.classList.add("bg-yellow-400", "text-black", "font-bold");
+      li.textContent = shortenAddress(w);
+      li.title = w;
+      li.onclick = () => {
+        activeWallet = w;
+        localStorage.setItem("activeWallet", activeWallet);
+        renderWalletList();
+        refreshBalances();
+      };
+      ul.appendChild(li);
+    });
+  }
+
+  // Add new wallet prompt
+  document.getElementById("addWalletBtn").addEventListener("click", () => {
+    const newWallet = prompt("Enter wallet address (BSC/Ethereum):");
+    if (newWallet && ethers.isAddress(newWallet.trim())) {
+      if (!wallets.includes(newWallet.trim())) {
+        wallets.push(newWallet.trim());
+        localStorage.setItem("wallets", JSON.stringify(wallets));
+        activeWallet = newWallet.trim();
+        localStorage.setItem("activeWallet", activeWallet);
+        renderWalletList();
+        refreshBalances();
+      } else {
+        alert("Wallet already added.");
+      }
+    } else {
+      alert("Invalid wallet address.");
+    }
+  });
+
+  // --- Fetch prices from CoinGecko ---
+  async function fetchPrices() {
+    try {
+      const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=binancecoin,bitcoin,ethereum,tether&vs_currencies=usd");
+      if (!res.ok) throw new Error("Failed to fetch prices");
+      const data = await res.json();
+      return {
+        bnb: data.binancecoin.usd,
+        btc: data.bitcoin.usd,
+        eth: data.ethereum.usd,
+        usdt: data.tether.usd
+      };
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
+  // --- Refresh balances ---
+  async function refreshBalances() {
+    const wallet = activeWallet;
+    if (!wallet) return;
+
+    document.getElementById("connectedWallet").textContent = shortenAddress(wallet);
+
+    const provider = new ethers.JsonRpcProvider("https://bsc-dataseed1.binance.org");
+
+    try {
+      // Fetch balances from blockchain
+      const bnbBalanceBigInt = await provider.getBalance(wallet);
+      const bnbBalance = Number(ethers.formatEther(bnbBalanceBigInt));
+
+      const usdtContract = new ethers.Contract(
+        "0x55d398326f99059fF775485246999027B3197955",
+        ["function balanceOf(address) view returns (uint256)"],
+        provider
+      );
+      const usdtBalanceRaw = await usdtContract.balanceOf(wallet);
+      const usdtBalance = Number(ethers.formatUnits(usdtBalanceRaw, 18));
+
+      // For BTC and ETH, simulate 0 for now or fetch from other API if needed
+      // Here set dummy zero balances
+      const btcBalance = 0;
+      const ethBalance = 0;
+
+      // Update UI balances
+      document.getElementById("bnbBalance").textContent = bnbBalance.toFixed(4) + " BNB";
+      document.getElementById("usdtBalance").textContent = usdtBalance.toFixed(2) + " USDT";
+      document.getElementById("btcBalance").textContent = btcBalance + " BTC";
+      document.getElementById("ethBalance").textContent = ethBalance + " ETH";
+
+      // Fetch prices
+      const prices = await fetchPrices();
+      if (!prices) return;
+
+      // Calculate portfolio total USD value
+      const portfolioValue =
+        bnbBalance * prices.bnb +
+        usdtBalance * prices.usdt +
+        btcBalance * prices.btc +
+        ethBalance * prices.eth;
+
+      document.getElementById("portfolioTotal").textContent = "$" + portfolioValue.toFixed(2);
+      document.getElementById("totalAssets").textContent = "$" + portfolioValue.toFixed(2);
+
+      // Update Assets Table
+      const assetList = document.getElementById("assetList");
+      assetList.innerHTML = "";
+      const assets = [
+        { symbol: "BNB", balance: bnbBalance, price: prices.bnb },
+        { symbol: "USDT", balance: usdtBalance, price: prices.usdt },
+        { symbol: "BTC", balance: btcBalance, price: prices.btc },
+        { symbol: "ETH", balance: ethBalance, price: prices.eth }
+      ];
+      assets.forEach(({ symbol, balance, price }) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${symbol}</td>
+          <td>${balance.toFixed(symbol === "BTC" || symbol === "ETH" ? 6 : 4)}</td>
+          <td>$${(balance * price).toFixed(2)}</td>
+        `;
+        assetList.appendChild(row);
+      });
+
+      // Show notification
+      const notif = document.getElementById("balanceNotification");
+      notif.classList.remove("hidden");
+      setTimeout(() => notif.classList.add("hidden"), 3000);
+
+      // Also update Recent Transactions (dummy)
+      updateRecentTransactions();
+
+    } catch (error) {
+      console.error("Error fetching balances:", error);
+    }
+  }
+
+  // --- Recent transactions dummy update ---
+  function updateRecentTransactions() {
+    const ul = document.getElementById("recentTransactions");
+    ul.innerHTML = "";
+
+    // Simulate 3 recent txns
+    const txns = [
+      { date: "2025-08-01", asset: "BNB", amount: "+0.5", status: "Completed" },
+      { date: "2025-07-31", asset: "USDT", amount: "-100", status: "Completed" },
+      { date: "2025-07-30", asset: "BTC", amount: "+0.01", status: "Pending" }
+    ];
+
+    txns.forEach(tx => {
+      const li = document.createElement("li");
+      li.className = "flex justify-between border-b border-gray-700 pb-1";
+      li.innerHTML = `
+        <span>${tx.date}</span>
+        <span>${tx.asset}</span>
+        <span>${tx.amount}</span>
+        <span class="font-semibold ${tx.status === "Completed" ? "text-green-400" : "text-yellow-400"}">${tx.status}</span>
+      `;
+      ul.appendChild(li);
+    });
+  }
+
+  // --- Theme toggle ---
+  document.getElementById("themeToggleBtn").addEventListener("click", () => {
+    const current = localStorage.getItem("theme") || "dark";
+    setTheme(current === "dark" ? "light" : "dark");
+  });
+
+  // --- Language selector ---
+  document.getElementById("languageSelector").addEventListener("change", e => {
+    const lang = e.target.value;
+    localStorage.setItem("lang", lang);
+    translatePage(lang);
+  });
+
+  // --- Logout function placeholder ---
+  function logoutUser() {
+    alert("Logging out...");
+    // Clear storage/session, redirect etc.
+    localStorage.removeItem("wallets");
+    localStorage.removeItem("activeWallet");
+    // For demo just reload
+    location.reload();
+  }
+
+  // --- Show page function placeholder ---
+  function showPage(pageId) {
+    // Simplified single page demo: just alert for now
+    alert("Navigate to: " + pageId);
+  }
+
+  // --- Initialization ---
+  window.addEventListener("load", () => {
+    loadTheme();
+
+    const lang = localStorage.getItem("lang") || "en";
+    document.getElementById("languageSelector").value = lang;
+    translatePage(lang);
+
+    renderWalletList();
+
+    if (activeWallet) {
+      refreshBalances();
+    }
+  });
+
+  // Expose functions globally for buttons
+  window.showPage = showPage;
+  window.logoutUser = logoutUser;
+  window.refreshBalances = refreshBalances;
+
+  // Add event listener for refresh balances button
+  document.getElementById("refreshBalancesBtn").addEventListener("click", refreshBalances);
+
+</script>
 </body>
 </html>
