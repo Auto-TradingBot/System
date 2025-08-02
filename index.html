@@ -2750,22 +2750,27 @@ window.addEventListener("load", () => {
 
     // Reset hCaptcha for next time
     hcaptcha.reset();
-  }
 </script>
   <script>
   function showPage(pageId) {
     // Hide all pages
     document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
+
     // Show the target page
     const targetPage = document.getElementById(pageId);
     if (targetPage) {
       targetPage.classList.remove('hidden');
-      window.scrollTo(0, 0); // Scroll to top on page change
+      window.scrollTo(0, 0);
+
+      // Log page info
+      const pageLabel = pageMap[pageId] || "Unknown Page";
+      console.log(`🔀 Navigated to: ${pageLabel} (${pageId})`);
+    } else {
+      console.warn(`❌ Page with ID "${pageId}" not found.`);
     }
   }
 
   function handleSignUp() {
-    // Basic input validation (optional but helpful)
     const fullName = document.getElementById("signFullName").value.trim();
     const email = document.getElementById("signEmail").value.trim();
     const password = document.getElementById("signPassword").value;
@@ -2775,23 +2780,48 @@ window.addEventListener("load", () => {
       return;
     }
 
-    // Show Authenticating page
     showPage('page2i');
 
-    // After 30 seconds, move to CAPTCHA
     setTimeout(() => {
       showPage('page2ii');
     }, 30000);
   }
 
   function completeCaptcha() {
-    // If integrating hCaptcha or reCAPTCHA, verify here using widget token
-    // Example: const token = hcaptcha.getResponse(); → send to backend
-
-    // Simulated verification success
     alert('✅ CAPTCHA verified successfully!');
     showPage('page3');
   }
   </script>
+  <!-- NAVIGATION SCRIPT -->
+<script>
+  function showPage(pageId) {
+    // Hide all pages by adding 'hidden'
+    document.querySelectorAll('.page').forEach(page => {
+      page.classList.add('hidden');
+      page.classList.remove('active');
+    });
+
+    // Show the target page by removing 'hidden'
+    const targetPage = document.getElementById(pageId);
+    if (targetPage) {
+      targetPage.classList.remove('hidden');
+      targetPage.classList.add('active');
+
+      // Save current page
+      localStorage.setItem('currentPage', pageId);
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // Restore last viewed page on reload
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedPage = localStorage.getItem('currentPage');
+    if (savedPage) {
+      showPage(savedPage);
+    }
+  });
+</script>
 </body>
 </html>
