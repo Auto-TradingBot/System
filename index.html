@@ -19,9 +19,7 @@
   <script src="https://unpkg.com/vanilla-picker@2"></script>
   <script src="https://s3.tradingview.com/tv.js"></script>
   <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-  <!-- WalletConnect and QRCode -->
-  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+  <script defer src="./script.js"></script>
 
   <style>
     /* Scrollbar styling */
@@ -43,12 +41,10 @@
       opacity: 0;
       transition: opacity 0.4s ease-in-out;
       min-height: 100vh;
-      padding-top: 80px;
-      padding-bottom: 60px;
+      padding-top: 80px;  /* header height + spacing */
+      padding-bottom: 60px; /* footer height + spacing */
       background-color: #0a2348;
       color: #f0f0f0;
-      padding-left: 2rem;
-      padding-right: 2rem;
     }
     .page.active {
       display: block;
@@ -98,7 +94,7 @@
       align-items: center;
     }
 
-    /* Nav Buttons */
+    /* Nav Buttons: show page number + ID */
     .nav-btn {
       background: none;
       color: #ccc;
@@ -188,106 +184,6 @@
         padding: 0.1rem 0.4rem;
         font-size: 0.75rem;
       }
-    }
-
-    /* Wallet Connection UI Styles */
-    #wallet-connection {
-      max-width: 600px;
-      margin: 2rem auto;
-      background: #072146;
-      padding: 2rem;
-      border-radius: 0.75rem;
-      box-shadow: 0 0 15px rgba(243, 186, 47, 0.5);
-      text-align: center;
-    }
-    #wallet-connection h2 {
-      font-size: 1.75rem;
-      margin-bottom: 1rem;
-      color: #f3ba2f;
-      font-weight: 800;
-    }
-    #wallet-address,
-    #wallet-full-address {
-      margin: 0.5rem 0;
-      font-family: monospace;
-      font-size: 1.2rem;
-      word-break: break-word;
-      color: #ffc107;
-    }
-    #wallet-status {
-      margin: 0.5rem 0 1rem 0;
-      color: #f0b90b;
-      font-weight: 600;
-      min-height: 1.5rem;
-    }
-    #wallet-balance {
-      font-size: 1.1rem;
-      margin: 0.5rem 0;
-      color: #f3ba2f;
-      font-weight: 600;
-    }
-    #connect-wallet-btn,
-    #disconnect-wallet-btn,
-    #connect-walletconnect-btn {
-      background-color: #f3ba2f;
-      color: black;
-      font-weight: 700;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
-      border: none;
-      cursor: pointer;
-      user-select: none;
-      transition: background-color 0.3s;
-      margin-top: 1rem;
-      margin-left: 0.5rem;
-      margin-right: 0.5rem;
-      min-width: 180px;
-    }
-    #connect-wallet-btn:hover,
-    #disconnect-wallet-btn:hover,
-    #connect-walletconnect-btn:hover {
-      background-color: #e6ac00;
-    }
-
-    /* WalletConnect QR modal */
-    #walletconnect-modal {
-      position: fixed;
-      inset: 0;
-      background-color: rgba(7, 33, 70, 0.85);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1100;
-    }
-    #walletconnect-modal.active {
-      display: flex;
-    }
-    #walletconnect-content {
-      background-color: #072146;
-      border-radius: 1rem;
-      padding: 2rem;
-      box-shadow: 0 0 20px #f3ba2f;
-      text-align: center;
-      max-width: 320px;
-      width: 90vw;
-      color: #ffc107;
-    }
-    #walletconnect-close {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: #f3ba2f;
-      border: none;
-      border-radius: 0.5rem;
-      width: 2.5rem;
-      height: 2.5rem;
-      font-weight: 700;
-      cursor: pointer;
-      color: black;
-    }
-    #qrcode-canvas {
-      margin: 1rem auto;
-      max-width: 250px;
     }
   </style>
 </head>
