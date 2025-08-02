@@ -28,133 +28,34 @@
   <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
   <script defer src="./script.js"></script>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: #0d0d2b;
-      color: #e0e7ff;
-    }
-
-    header {
-      background: #0d0f1a;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1rem;
-      height: 56px;
-      border-bottom: 1px solid #1f2a48;
-    }
-
-    header .logo {
-      color: #00bcd4;
-      font-size: 1.3rem;
-      font-weight: 700;
-    }
-
-    header nav {
-      display: flex;
-      gap: 1.5rem;
-    }
-
-    header nav a {
-      color: #a0aec0;
-      font-weight: 500;
-      text-decoration: none;
-    }
-
-    header nav a:hover {
-      color: #ffffff;
-    }
-
-    .layout {
-      display: flex;
-      min-height: calc(100vh - 56px);
-    }
-
-    .sidebar {
-      width: 240px;
-      background: #12162e;
-      padding: 1.5rem 1rem;
-      border-right: 1px solid #1f2a48;
-    }
-
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .sidebar li {
-      margin-bottom: 1.25rem;
-    }
-
-    .sidebar li a {
-      display: block;
-      padding: 0.75rem 1rem;
-      color: #cbd5e0;
-      font-weight: 600;
-      border-radius: 0.5rem;
-      transition: background 0.2s;
-    }
-
-    .sidebar li a:hover,
-    .sidebar li a.active {
-      background: #1a1e33;
-      color: #ffffff;
-    }
-
-    .main {
-      flex: 1;
-      padding: 2rem;
-    }
-
-    .card {
-      background: #1a1e33;
-      padding: 1.5rem;
-      border-radius: 0.75rem;
-      margin-bottom: 2rem;
-    }
-
-    .card h2 {
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
-
-    .btn {
-      background: #00bcd4;
-      color: white;
-      font-weight: 600;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .btn:hover {
-      background: #00acc1;
-    }
-
-    .secondary-btn {
-      background: #374151;
-      color: white;
-    }
-
-    .secondary-btn:hover {
-      background: #4b5563;
-    }
-
-    .wallet-balance {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-
-    #tv-chart {
-      height: 400px;
-      width: 100%;
-      border-radius: 12px;
-    }
+ <style>
+    body { margin:0; font-family:'Inter',sans-serif; background:#0d0d2b; color:#e0e7ff; }
+    header { background:#0d0f1a; display:flex; align-items:center; justify-between; padding:0 1rem; height:56px; border-bottom:1px solid #1f2a48; }
+    .logo { color:#00bcd4; font-size:1.35rem; font-weight:700; }
+    nav.main-nav { display:flex; gap:1.5rem; }
+    nav.main-nav a { color:#9fa6b2; font-weight:500; text-decoration:none; }
+    nav.main-nav a.active, nav.main-nav a:hover { color:#e0e7ff; font-weight:600; }
+    .layout { display:flex; height:calc(100vh - 56px); overflow:hidden; }
+    .sidebar { width:240px; background:#12162e; padding:1rem; border-right:1px solid #1f2a48; }
+    .sidebar ul { list-style:none; padding:0; }
+    .sidebar li { margin-bottom:1rem; }
+    .sidebar li a { display:block; color:#ccc; font-weight:600; padding:0.5rem; border-radius:0.5rem; text-decoration:none; }
+    .sidebar li a.active, .sidebar li a:hover { background:#1a1e33; color:#e0e7ff; }
+    main { flex:1; overflow-y:auto; padding:1.5rem; }
+    .section { margin-bottom:2rem; display:none; }
+    .section.active { display:block; }
+    .card { background:#1a1e33; padding:1.5rem; border-radius:0.75rem; }
+    h2 { font-weight:700; margin-bottom:1rem; }
+    .btn { background:#00bcd4; color:white; font-weight:600; padding:0.75rem 1.5rem; border:none; border-radius:0.5rem; cursor:pointer; transition:background .2s; }
+    .btn:hover { background:#00acc1; }
+    .btn-secondary { background:#374151; }
+    .btn-secondary:hover { background:#4b5563; }
+    #tv-chart { width:100%; height:400px; border-radius:12px; }
+    .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    input, select { width:100%; padding:0.75rem; background:#0d0f1a; border:1px solid #1f2a48; border-radius:0.5rem; color:#e0e7ff; }
+    .top-bar { display:flex; align-items:center; justify-between; margin-bottom:1rem; }
+    .back-btn { background:transparent; color:#00bcd4; font-size:1rem; font-weight:600; border:none; cursor:pointer; }
+    .back-btn:hover { color:#00acc1; }
   </style>
 </head>
 <body class="overflow-x-hidden">
@@ -178,14 +79,6 @@
         <a class="hover:text-yellow-400 transition" onclick="showPage('7')">Transfer</a>
         <a class="hover:text-yellow-400 transition" onclick="showPage('11')">Settings</a>
       </div>
-
-      <!-- 🔐 Login Button -->
-      <a onclick="showPage('page1')" class="text-yellow-400 hover:text-yellow-300 transition cursor-pointer">
-        Log In
-      </a>
-    </nav>
-  </header>
-
   <!-- 📄 PAGES CONTAINER -->
   <section id="page0" class="page active">
     <div class="relative w-full h-[80vh] rounded-xl overflow-hidden shadow-lg mb-12">
@@ -361,10 +254,10 @@
       </select>
       <!-- Theme toggle -->
       <button id="themeToggleBtn" class="bg-[#f3ba2f] text-black px-3 py-1 font-bold rounded" data-i18n="toggleTheme">Toggle Theme</button>
-      <button onclick="showPage('page4')" class="hover:underline text-[#f0b90b] font-medium text-sm" data-i18n="portfolio">🏠 Portfolio</button>
-      <button onclick="showPage('page10')" class="hover:underline text-[#f3ba2f] text-sm" data-i18n="support">🛟 Support</button>
-      <button onclick="showPage('page13')" class="bg-[#f3ba2f] text-black px-4 py-2 font-bold rounded-md hover:bg-yellow-400 transition text-sm" data-i18n="connect">🔗 Connect</button>
-      <button onclick="logoutUser()" class="bg-[#f3ba2f] text-black px-4 py-2 font-bold rounded-md hover:bg-yellow-400 transition text-sm" data-i18n="logout">🚪 Logout</button>
+      <button onclick="showPage('page4')" class="hover:underline text-[#f0b90b] font-medium text-sm" data-i18n="portfolio">Portfolio</button>
+      <button onclick="showPage('page10')" class="hover:underline text-[#f3ba2f] text-sm" data-i18n="support">Support</button>
+      <button onclick="showPage('page13')" class="bg-[#f3ba2f] text-black px-4 py-2 font-bold rounded-md hover:bg-yellow-400 transition text-sm" data-i18n="connect">Connect</button>
+      <button onclick="logoutUser()" class="bg-[#f3ba2f] text-black px-4 py-2 font-bold rounded-md hover:bg-yellow-400 transition text-sm" data-i18n="logout">Logout</button>
     </div>
   </header>
 
@@ -373,15 +266,15 @@
     <!-- SIDEBAR -->
     <aside class="bg-[#131619] w-full md:w-64 px-4 md:px-6 py-6 border-r border-[#2c2f33] space-y-4 overflow-y-auto">
       <nav class="space-y-2 text-sm font-semibold">
-        <button onclick="showPage('page4')" class="nav-btn active" data-i18n="portfolioNav">📊 Portfolio</button>
-        <button onclick="showPage('page5')" class="nav-btn" data-i18n="buySell">💰 Buy/Sell</button>
-        <button onclick="showPage('page7')" class="nav-btn" data-i18n="send">📤 Send</button>
-        <button onclick="showPage('page6')" class="nav-btn" data-i18n="receive">📥 Receive</button>
-        <button onclick="showPage('page10iii')" class="nav-btn" data-i18n="swap">🔁 Swap</button>
-        <button onclick="showPage('page9')" class="nav-btn" data-i18n="nfts">🎨 NFTs</button>
-        <button onclick="showPage('page16')" class="nav-btn" data-i18n="earn">📈 Earn</button>
-        <button onclick="showPage('page20iii')" class="nav-btn" data-i18n="explorer">🔎 Explorer</button>
-        <button onclick="showPage('page11')" class="nav-btn" data-i18n="settings">⚙️ Settings</button>
+        <button onclick="showPage('page4')" class="nav-btn active" data-i18n="portfolioNav">Portfolio</button>
+        <button onclick="showPage('page5')" class="nav-btn" data-i18n="buySell">Buy/Sell</button>
+        <button onclick="showPage('page7')" class="nav-btn" data-i18n="send">Send</button>
+        <button onclick="showPage('page6')" class="nav-btn" data-i18n="receive">Receive</button>
+        <button onclick="showPage('page10iii')" class="nav-btn" data-i18n="swap">Swap</button>
+        <button onclick="showPage('page9')" class="nav-btn" data-i18n="nfts">NFTs</button>
+        <button onclick="showPage('page16')" class="nav-btn" data-i18n="earn">Earn</button>
+        <button onclick="showPage('page20iii')" class="nav-btn" data-i18n="explorer">Explorer</button>
+        <button onclick="showPage('page11')" class="nav-btn" data-i18n="settings">Settings</button>
       </nav>
 
       <!-- Wallet Selector -->
@@ -428,7 +321,7 @@
       <!-- Live Charts -->
       <div class="space-y-6">
         <div class="bg-[#1e2124] p-5 rounded-xl shadow">
-          <h2 class="text-lg font-bold mb-2">📉 BNB / USDT Chart</h2>
+          <h2 class="text-lg font-bold mb-2">BNB / USDT Chart</h2>
           <iframe class="w-full h-64 rounded-md" src="https://s.tradingview.com/widgetembed/?symbol=BINANCE:BNBUSDT&interval=60&theme=dark" frameborder="0"></iframe>
         </div>
         <div class="bg-[#1e2124] p-5 rounded-xl shadow grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -538,7 +431,7 @@
 
       <!-- Confirm Button -->
       <button type="submit" class="w-full bg-[#f0b90b] text-black py-3 rounded-xl font-bold hover:bg-yellow-400 transition">Confirm Transaction</button>
-
+     <button onclick="goToPreviousPage()" class="text-sm text-yellow-400 hover:underline mb-6">← Back</button>
     </form>
   </div>
 
@@ -556,7 +449,7 @@
       </li>
     </ul> 
   </div>
-
+<button onclick="goToPreviousPage()" class="text-sm text-yellow-400 hover:underline mb-6">← Back</button>
 </section>
 
 <!-- PAGE 6: RECEIVE ASSETS -->
@@ -626,6 +519,7 @@
     <h3 class="text-lg font-bold text-white mb-4">Market Overview</h3>
     <div id="tradingview_chart" style="height:400px;"></div>
   </div>
+  <button onclick="goToPreviousPage()" class="text-sm text-yellow-400 hover:underline mb-6">← Back</button>
 </section>
 
   <!-- === PAGE 4: HOMEPAGE === -->
@@ -693,6 +587,7 @@
 
   <!-- 9. TOAST NOTIFICATION -->
   <div id="toast" class="fixed bottom-4 right-4 bg-[#1e2329] text-white px-6 py-3 rounded-md shadow-lg hidden z-50"></div>
+ <button onclick="goToPreviousPage()" class="text-sm text-yellow-400 hover:underline mb-6">← Back</button>
 </section>
    
 <!-- PAGE 7 - TRANSFER -->  
@@ -712,6 +607,7 @@
       <button type="submit" class="w-full">Send</button>  
     </form>  
   </div>  
+  <button onclick="goToPreviousPage()" class="text-sm text-yellow-400 hover:underline mb-6">← Back</button>
 </section>  
 
 <!-- PAGE 11: SETTINGS -->
@@ -753,7 +649,8 @@
   <!-- ✅ Save Button -->
   <button class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded" data-translate="save">
     Save
-  </button>
+ </button>
+  <button onclick="goToPreviousPage()" class="text-sm text-yellow-400 hover:underline mb-6">← Back</button>
 </section>
 <!-- ✅ PAGE 13 - CONNECT WALLET -->
 <section id="page13" class="page px-4 py-8 min-h-screen bg-[#0b0e11] text-white">
@@ -2978,8 +2875,6 @@ window.addEventListener("load", () => {
     }
   };
 
-  // --- UTILS ---
-
   // Translation function
   function translatePage(lang) {
     document.querySelectorAll("[data-i18n]").forEach(el => {
@@ -3184,7 +3079,6 @@ window.addEventListener("load", () => {
       ul.appendChild(li);
     });
   }
-
   // --- Theme toggle ---
   document.getElementById("themeToggleBtn").addEventListener("click", () => {
     const current = localStorage.getItem("theme") || "dark";
@@ -3206,7 +3100,9 @@ window.addEventListener("load", () => {
     localStorage.removeItem("activeWallet");
     // For demo just reload
     location.reload();
+  });
 </script>
+  
   <script>
   function showPage(pageId) {
     // Hide all pages by adding 'hidden'
@@ -3236,6 +3132,38 @@ window.addEventListener("load", () => {
       showPage(savedPage);
     }
   });
+  </script>
+  
+  <script>
+  let pageHistory = [];
+
+  function showPage(pageId) {
+    const currentPage = document.querySelector('.page.active');
+    if (currentPage) {
+      pageHistory.push(currentPage.id); // Save current page to history
+      currentPage.classList.remove('active');
+    }
+
+    const nextPage = document.getElementById(pageId);
+    if (nextPage) {
+      nextPage.classList.add('active');
+    }
+  }
+
+  function goToPreviousPage() {
+    const currentPage = document.querySelector('.page.active');
+    if (currentPage) {
+      currentPage.classList.remove('active');
+    }
+
+    const previousPageId = pageHistory.pop(); // Get last visited page
+    if (previousPageId) {
+      const previousPage = document.getElementById(previousPageId);
+      if (previousPage) {
+        previousPage.classList.add('active');
+      }
+    }
+  }
   </script>
 </body>
 </html>
