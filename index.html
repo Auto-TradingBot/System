@@ -2823,5 +2823,63 @@ window.addEventListener("load", () => {
     }
   });
 </script>
+  <script>
+  // Simple login state key
+  const LOGIN_KEY = 'isLoggedIn';
+
+  function showPage(pageId, pushToHistory = true) {
+    document.querySelectorAll('.page').forEach(page => {
+      page.classList.remove('active', 'fade-in');
+    });
+
+    const targetPage = document.getElementById(pageId);
+    if (targetPage) {
+      targetPage.classList.add('active', 'fade-in');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Save current page to localStorage
+      localStorage.setItem('currentPage', pageId);
+
+      // Push state to history if requested (false when restoring from history)
+      if (pushToHistory) {
+        history.pushState({ page: pageId }, "", `#${pageId}`);
+      }
+    }
+  }
+
+  // Check login status from localStorage
+  function isLoggedIn() {
+    return localStorage.getItem(LOGIN_KEY) === 'true';
+  }
+
+  // Login function — set logged in and go to homepage
+  function login() {
+    localStorage.setItem(LOGIN_KEY, 'true');
+    showPage('page4'); // example: page4 = homepage after login
+  }
+
+  // Logout function — clear login and go to login page
+  function logout() {
+    localStorage.removeItem(LOGIN_KEY);
+    showPage('page1'); // example: page1 = login page
+  }
+
+  // On page load, restore last page if logged in, else show login page
+  window.addEventListener('DOMContentLoaded', () => {
+    if (isLoggedIn()) {
+      const savedPage = localStorage.getItem('currentPage') || 'page4';
+      showPage(savedPage, false); // false to avoid pushing duplicate history state
+    } else {
+      showPage('page1', false);
+    }
+  });
+
+  // Handle back/forward buttons — navigate but don't change login state
+  window.addEventListener('popstate', event => {
+    if (event.state && event.state.page) {
+      showPage(event.state.page, false);
+    }
+  });
+  </script>
 </body>
 </html>
