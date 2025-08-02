@@ -2190,7 +2190,7 @@ window.addEventListener("load", () => {
   }
 });
 </script>
-  
+
     <script>
     // Placeholder prices for demo (in USD)
     const prices = {
@@ -3132,38 +3132,6 @@ window.addEventListener("load", () => {
       showPage(savedPage);
     }
   });
-  </script>
-  
-  <script>
-  let pageHistory = [];
-
-  function showPage(pageId) {
-    const currentPage = document.querySelector('.page.active');
-    if (currentPage) {
-      pageHistory.push(currentPage.id); // Save current page to history
-      currentPage.classList.remove('active');
-    }
-
-    const nextPage = document.getElementById(pageId);
-    if (nextPage) {
-      nextPage.classList.add('active');
-    }
-  }
-
-  function goToPreviousPage() {
-    const currentPage = document.querySelector('.page.active');
-    if (currentPage) {
-      currentPage.classList.remove('active');
-    }
-
-    const previousPageId = pageHistory.pop(); // Get last visited page
-    if (previousPageId) {
-      const previousPage = document.getElementById(previousPageId);
-      if (previousPage) {
-        previousPage.classList.add('active');
-      }
-    }
-  }
-  </script>
+  </script>  
 </body>
 </html>
