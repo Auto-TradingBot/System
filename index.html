@@ -4,52 +4,160 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <meta name="theme-color" content="#0d0d2b"/>
-  <title>Blockchain.com</title>
+  <title>Blockchain.com Exchange</title>
   <link rel="icon" href="/icons/icon-192.png" type="image/png"/>
   <link rel="manifest" href="/manifest.json"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- External Libraries -->
   <script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
   <script src="https://s3.tradingview.com/tv.js"></script>
-  <!-- External Libraries -->      
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>    
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>      
-  <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>     
-  <script src="https://unpkg.com/country-list-js/dist/index.min.js"></script>    
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>      
-  <script src="https://unpkg.com/i18next@22.4.15/dist/umd/i18next.min.js"></script>     
-  <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.5.2"></script>     
-  <script src="https://unpkg.com/vanilla-picker@2"></script>      
-  <script src="https://s3.tradingview.com/tv.js"></script>      
-  <script defer src="./script.js"></script>      
-  <script src="https://cdn.tailwindcss.com"></script>  
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>  
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>  
-  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://unpkg.com/country-list-js/dist/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/i18next@22.4.15/dist/umd/i18next.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.5.2"></script>
+  <script src="https://unpkg.com/vanilla-picker@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+  <script defer src="./script.js"></script>
+
   <style>
-  <style>
-    body { margin:0; font-family:'Inter',sans-serif; background:#0d0d2b; color:#e0e7ff; }
-    header { background:#0d0f1a; display:flex; align-items:center; padding:0 1rem; height:56px; }
-    header .logo { color:#00bcd4; font-size:1.25rem; font-weight:600; }
-    header nav { margin-left:2rem; display:flex; gap:1.5rem; }
-    header nav a { color:#9fa6b2; text-decoration:none; font-weight:500; }
-    header nav a:hover { color:#e0e7ff; }
-    .layout { display:flex; height:calc(100vh - 56px); }
-    .sidebar { width:220px; background:#12162e; padding:1rem; border-right:1px solid #1f2a48; }
-    .sidebar ul { list-style:none; padding:0; }
-    .sidebar li { margin-bottom:1.25rem; }
-    .sidebar li a { color:#ccc; text-decoration:none; font-weight:500; }
-    .sidebar li a.active, .sidebar li a:hover { color:#e0e7ff; }
-    .main { flex:1; display:flex; flex-direction:column; }
-    .chart-container { flex:1; position:relative; }
-    #tv-chart { position:absolute; top:0; bottom:0; left:0; right:0; }
-    .wallet { background:#1a1e33; padding:1rem; border-top:1px solid #1f2a48; }
-    .wallet button { background:#00bcd4; padding:0.75rem 1.5rem; border:none; border-radius:4px; font-weight:600; color:white; cursor:pointer; }
-    .wallet button:hover { background:#00acc1; }
-    .wallet p { margin-top:0.75rem; word-break:break-all; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: #0d0d2b;
+      color: #e0e7ff;
+    }
+
+    header {
+      background: #0d0f1a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      height: 56px;
+      border-bottom: 1px solid #1f2a48;
+    }
+
+    header .logo {
+      color: #00bcd4;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    header nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    header nav a {
+      color: #a0aec0;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    header nav a:hover {
+      color: #ffffff;
+    }
+
+    .layout {
+      display: flex;
+      min-height: calc(100vh - 56px);
+    }
+
+    .sidebar {
+      width: 240px;
+      background: #12162e;
+      padding: 1.5rem 1rem;
+      border-right: 1px solid #1f2a48;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar li {
+      margin-bottom: 1.25rem;
+    }
+
+    .sidebar li a {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: #cbd5e0;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      transition: background 0.2s;
+    }
+
+    .sidebar li a:hover,
+    .sidebar li a.active {
+      background: #1a1e33;
+      color: #ffffff;
+    }
+
+    .main {
+      flex: 1;
+      padding: 2rem;
+    }
+
+    .card {
+      background: #1a1e33;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .card h2 {
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .btn {
+      background: #00bcd4;
+      color: white;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: #00acc1;
+    }
+
+    .secondary-btn {
+      background: #374151;
+      color: white;
+    }
+
+    .secondary-btn:hover {
+      background: #4b5563;
+    }
+
+    .wallet-balance {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    #tv-chart {
+      height: 400px;
+      width: 100%;
+      border-radius: 12px;
+    }
   </style>
 </head>
-<body>
+<body class="overflow-x-hidden">
 
 <!-- 🌐 MAIN APP CONTAINER -->
 <main id="app" class="max-w-7xl mx-auto px-6">
