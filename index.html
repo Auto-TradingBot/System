@@ -3098,37 +3098,6 @@ window.addEventListener("load", () => {
     localStorage.removeItem("activeWallet");
     // For demo just reload
     location.reload();
-  }
-
-  // --- Show page function placeholder ---
-  function showPage(pageId) {
-    // Simplified single page demo: just alert for now
-    alert("Navigate to: " + pageId);
-  }
-
-  // --- Initialization ---
-  window.addEventListener("load", () => {
-    loadTheme();
-
-    const lang = localStorage.getItem("lang") || "en";
-    document.getElementById("languageSelector").value = lang;
-    translatePage(lang);
-
-    renderWalletList();
-
-    if (activeWallet) {
-      refreshBalances();
-    }
-  });
-
-  // Expose functions globally for buttons
-  window.showPage = showPage;
-  window.logoutUser = logoutUser;
-  window.refreshBalances = refreshBalances;
-
-  // Add event listener for refresh balances button
-  document.getElementById("refreshBalancesBtn").addEventListener("click", refreshBalances);
-
 </script>
   <script>
   function showPage(pageId) {
