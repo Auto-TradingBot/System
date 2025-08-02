@@ -1,211 +1,296 @@
-<!DOCTYPE html>  <html lang="en" class="scroll-smooth" style="background:#0a2348; color:#f0f0f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">  <head>  
-  <meta charset="UTF-8" />  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
-  <title>Blockchain Auto-Trading</title>  
-  <link rel="icon" href="/icons/icon-192.png" />    
-  <!-- External Libraries -->    
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>    
-  <script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"></script>   
-  <script src="https://unpkg.com/country-list-js/dist/index.min.js"></script>  
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>    
-  <script src="https://unpkg.com/i18next@22.4.15/dist/umd/i18next.min.js"></script>   
-  <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.5.2"></script>   
-  <script src="https://unpkg.com/vanilla-picker@2"></script>    
-  <script src="https://s3.tradingview.com/tv.js"></script>    
-  <script defer src="./script.js"></script>    
-  <script src="https://cdn.tailwindcss.com"></script>   
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>  
-  <script defer src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.5.2"></script>
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" style="background:#0a2348; color:#f0f0f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blockchain Auto-Trading</title>
+  <link rel="icon" href="/icons/icon-192.png" />
+
+  <!-- External Libraries -->
   <script src="https://cdn.tailwindcss.com"></script>
- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
- <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="https://unpkg.com/country-list-js/dist/index.min.js"></script>
+  <script src="https://unpkg.com/i18next@22.4.15/dist/umd/i18next.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.5.2"></script>
+  <script src="https://unpkg.com/vanilla-picker@2"></script>
+  <script src="https://s3.tradingview.com/tv.js"></script>
   <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-  <style>  
-  .nav-btn {  
-    background: none;  
-    color: #fff;  
-    padding: 10px 15px;  
-    border: none;  
-    border-radius: 8px;  
-    width: 100%;  
-    text-align: left;  
-    font-weight: 500;  
-    transition: background 0.2s;  
-  }  
-  
-  .nav-btn:hover {  
-    background: #2c2f33;  
-    color: #f3ba2f;  
-  }  
-  
-  .nav-btn.active {  
-    color: #f0b90b;  
-    font-weight: bold;  
-  }  
-  
-  .action-btn {  
-    margin-top: 30px;  
-    background: #444;  
-    color: #fff;  
-    padding: 10px 20px;  
-    border: none;  
-    border-radius: 10px;  
-    font-weight: bold;  
-    transition: 0.3s;  
-  }  
-  
-  .action-btn:hover {  
-    background: #666;  
-  }  
-  
-  .action-btn.bg-[#f0b90b]:hover {  
-    background: #e4a700;  
-  }  
-</style>   
-  <style>  
-    /* Scrollbar */  
-    ::-webkit-scrollbar {  
-      width: 8px;  
-      height: 8px;  
-    }  
-  
-    ::-webkit-scrollbar-thumb {  
-      background-color: #ffc107;  
-      border-radius: 4px;  
-    }  
-  
-    ::-webkit-scrollbar-track {  
-      background: #102b56;  
-    }  
-  
-    /* Page Transitions */  
-    .page {  
-      display: none;  
-      opacity: 0;  
-      transition: opacity 0.4s ease-in-out;  
-      min-height: 100vh;  
-      padding-top: 80px;  
-      padding-bottom: 60px;  
-    }  
-  
-    .page.active {  
-      display: block;  
-      opacity: 1;  
-    }  
-  
-    /* Header & Footer */  
-    header,  
-    footer {  
-      background-color: #072146;  
-      color: #ffc107;  
-      position: fixed;  
-      left: 0;  
-      right: 0;  
-      z-index: 1000;  
-      display: flex;  
-      align-items: center;  
-      padding: 1rem 2rem;  
-      font-weight: 700;  
-      user-select: none;  
-    }  
-  
-    header {  
-      top: 0;  
-      height: 60px;  
-      justify-content: space-between;  
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);  
-    }  
-  
-    footer {  
-      bottom: 0;  
-      height: 50px;  
-      justify-content: center;  
-      font-size: 0.875rem;  
-      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.5);  
-    }  
-  
-    header .logo {  
-      font-size: 1.5rem;  
-      letter-spacing: 2px;  
-      cursor: pointer;  
-      color: #ffc107;  
-    }  
-  
-    nav a {  
-      color: #ffc107;  
-      margin-left: 1.5rem;  
-      font-weight: 600;  
-      transition: color 0.2s;  
-      cursor: pointer;  
-    }  
-  
-    nav a:hover {  
-      color: #ffffff;  
-    }  
-  
-    /* Buttons */  
-    button {  
-      background-color: #ffc107;  
-      color: #072146;  
-      font-weight: 700;  
-      padding: 0.5rem 1.5rem;  
-      border-radius: 0.5rem;  
-      border: none;  
-      cursor: pointer;  
-      transition: background-color 0.3s;  
-      user-select: none;  
-    }  
-  
-    button:hover {  
-      background-color: #ffca2c;  
-    }  
-  
-    button:disabled {  
-      background-color: #a18a05;  
-      cursor: not-allowed;  
-    }  
-  
-    /* Responsive fix for fixed elements */  
-    @media (max-width: 640px) {  
-      .fixed-action-buttons {  
-        bottom: 80px;  
-      }  
-      /* Button styling */
-  .action-btn {
-    background-color: #f3ba2f;
-    color: black;
-    font-weight: 700;
-    padding: 0.5rem 1.2rem;
-    border-radius: 0.375rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  .action-btn:hover {
-    background-color: #e6ac00;
-  }
-  /* Nav button styling */
-  .nav-btn {
-    display: block;
-    width: 100%;
-    background: none;
-    border: none;
-    padding: 0.6rem 1rem;
-    color: #ccc;
-    cursor: pointer;
-    text-align: left;
-    border-radius: 0.375rem;
-    transition: background-color 0.2s;
-  }
-  .nav-btn.active,
-  .nav-btn:hover {
-    background-color: #f3ba2f;
-    color: black;
-    font-weight: bold;
-  }
-</style>
-</head>  
+  <!-- WalletConnect and QRCode -->
+  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+
+  <style>
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #ffc107;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #102b56;
+    }
+
+    /* Page Transitions */
+    .page {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.4s ease-in-out;
+      min-height: 100vh;
+      padding-top: 80px;
+      padding-bottom: 60px;
+      background-color: #0a2348;
+      color: #f0f0f0;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+    .page.active {
+      display: block;
+      opacity: 1;
+    }
+
+    /* Header & Footer */
+    header, footer {
+      background-color: #072146;
+      color: #ffc107;
+      position: fixed;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      padding: 1rem 2rem;
+      font-weight: 700;
+      user-select: none;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+    header {
+      top: 0;
+      height: 60px;
+      justify-content: space-between;
+    }
+    footer {
+      bottom: 0;
+      height: 50px;
+      justify-content: center;
+      font-size: 0.875rem;
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    header .logo {
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      cursor: pointer;
+      color: #ffc107;
+      user-select: none;
+    }
+
+    /* Navigation Container */
+    nav {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    /* Nav Buttons */
+    .nav-btn {
+      background: none;
+      color: #ccc;
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 0.375rem;
+      width: auto;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      min-width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background-color 0.2s, color 0.2s;
+      user-select: none;
+    }
+    .nav-btn .page-number {
+      font-weight: 700;
+      color: #f3ba2f;
+      background: #102b56;
+      border-radius: 0.375rem;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+    .nav-btn .page-id {
+      user-select: none;
+    }
+    .nav-btn.active,
+    .nav-btn:hover {
+      background-color: #f3ba2f;
+      color: black;
+      font-weight: 700;
+    }
+
+    /* Action Buttons */
+    .action-btn {
+      margin-top: 30px;
+      background-color: #f3ba2f;
+      color: black;
+      font-weight: 700;
+      padding: 0.5rem 1.2rem;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      user-select: none;
+      border: none;
+      display: inline-block;
+    }
+    .action-btn:hover {
+      background-color: #e6ac00;
+    }
+
+    /* Buttons */
+    button {
+      background-color: #ffc107;
+      color: #072146;
+      font-weight: 700;
+      padding: 0.5rem 1.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      user-select: none;
+    }
+    button:hover {
+      background-color: #ffca2c;
+    }
+    button:disabled {
+      background-color: #a18a05;
+      cursor: not-allowed;
+    }
+
+    /* Responsive fix for fixed elements */
+    @media (max-width: 640px) {
+      .fixed-action-buttons {
+        bottom: 80px;
+      }
+      .nav-btn {
+        min-width: 70px;
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+      }
+      .nav-btn .page-number {
+        padding: 0.1rem 0.4rem;
+        font-size: 0.75rem;
+      }
+    }
+
+    /* Wallet Connection UI Styles */
+    #wallet-connection {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: #072146;
+      padding: 2rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 0 15px rgba(243, 186, 47, 0.5);
+      text-align: center;
+    }
+    #wallet-connection h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+      color: #f3ba2f;
+      font-weight: 800;
+    }
+    #wallet-address,
+    #wallet-full-address {
+      margin: 0.5rem 0;
+      font-family: monospace;
+      font-size: 1.2rem;
+      word-break: break-word;
+      color: #ffc107;
+    }
+    #wallet-status {
+      margin: 0.5rem 0 1rem 0;
+      color: #f0b90b;
+      font-weight: 600;
+      min-height: 1.5rem;
+    }
+    #wallet-balance {
+      font-size: 1.1rem;
+      margin: 0.5rem 0;
+      color: #f3ba2f;
+      font-weight: 600;
+    }
+    #connect-wallet-btn,
+    #disconnect-wallet-btn,
+    #connect-walletconnect-btn {
+      background-color: #f3ba2f;
+      color: black;
+      font-weight: 700;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+      margin-top: 1rem;
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+      min-width: 180px;
+    }
+    #connect-wallet-btn:hover,
+    #disconnect-wallet-btn:hover,
+    #connect-walletconnect-btn:hover {
+      background-color: #e6ac00;
+    }
+
+    /* WalletConnect QR modal */
+    #walletconnect-modal {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(7, 33, 70, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1100;
+    }
+    #walletconnect-modal.active {
+      display: flex;
+    }
+    #walletconnect-content {
+      background-color: #072146;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 0 20px #f3ba2f;
+      text-align: center;
+      max-width: 320px;
+      width: 90vw;
+      color: #ffc107;
+    }
+    #walletconnect-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #f3ba2f;
+      border: none;
+      border-radius: 0.5rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: black;
+    }
+    #qrcode-canvas {
+      margin: 1rem auto;
+      max-width: 250px;
+    }
+  </style>
+</head>
 <body class="overflow-x-hidden">
 
 <!-- 🌐 MAIN APP CONTAINER -->
