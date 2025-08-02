@@ -352,9 +352,10 @@
     <button onclick="showPage('page2')" class="text-sm text-yellow-400 hover:underline mb-4">← Back</button>
     <h3 class="text-2xl font-semibold mb-4 text-yellow-400">CAPTCHA Verification</h3>
     <div class="h-captcha mb-6" data-sitekey="4e5a8260-9554-439c-8d58-76f04ca823c8"></div>
-    <button onclick="completeCaptcha()" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded">Verify</button>
+    <button id="captchaVerifyBtn" onclick="completeCaptcha()" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded">Verify</button>
   </div>
 </section>
+
 
   <!-- PAGE 3 - DASHBOARD -->
 <section id="page3" class="page hidden bg-[#0b0e11] text-white font-sans min-h-screen p-6">
@@ -1031,7 +1032,7 @@
   </div>
 </section>
 
-  
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
   <!-- SCRIPTS -->    
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>  
   <script>  
@@ -2751,5 +2752,46 @@ window.addEventListener("load", () => {
     hcaptcha.reset();
   }
 </script>
+  <script>
+  function showPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
+    // Show the target page
+    const targetPage = document.getElementById(pageId);
+    if (targetPage) {
+      targetPage.classList.remove('hidden');
+      window.scrollTo(0, 0); // Scroll to top on page change
+    }
+  }
+
+  function handleSignUp() {
+    // Basic input validation (optional but helpful)
+    const fullName = document.getElementById("signFullName").value.trim();
+    const email = document.getElementById("signEmail").value.trim();
+    const password = document.getElementById("signPassword").value;
+
+    if (!fullName || !email || password.length < 6) {
+      alert("Please fill in all fields correctly.");
+      return;
+    }
+
+    // Show Authenticating page
+    showPage('page2i');
+
+    // After 30 seconds, move to CAPTCHA
+    setTimeout(() => {
+      showPage('page2ii');
+    }, 30000);
+  }
+
+  function completeCaptcha() {
+    // If integrating hCaptcha or reCAPTCHA, verify here using widget token
+    // Example: const token = hcaptcha.getResponse(); → send to backend
+
+    // Simulated verification success
+    alert('✅ CAPTCHA verified successfully!');
+    showPage('page3');
+  }
+  </script>
 </body>
 </html>
