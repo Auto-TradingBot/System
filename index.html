@@ -2890,35 +2890,5 @@ window.addEventListener("load", () => {
     }
   });
   </script>
-  <script >
-    function showPage(pageId) {
-  document.querySelectorAll('.page').forEach(page => {
-    page.classList.add('hidden');
-  });
-  const targetPage = document.getElementById(pageId);
-  if (targetPage) targetPage.classList.remove('hidden');
-}
-
-function handleLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value.trim();
-
-  // Replace with your actual validation
-  const validEmail = 'user@example.com';
-  const validPassword = 'password123';
-
-  if (email === validEmail && password === validPassword) {
-    // Show loading page 1iii
-    showPage('page1iii');
-
-    // After 30 seconds, show dashboard page3
-    setTimeout(() => {
-      showPage('page3');
-    }, 30000);
-  } else {
-    alert('Incorrect email or password.');
-  }
-}
-</script>
 </body>
 </html>
