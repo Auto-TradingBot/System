@@ -3591,6 +3591,34 @@ window.addEventListener("load", () => {
     }
   });
   </script>
+  <script>
+  // Function to show a page by ID and hide all others
+  function showPage(pageId) {
+    const allPages = document.querySelectorAll('.page');
+    allPages.forEach(page => {
+      page.classList.add('hidden');
+    });
+
+    const targetPage = document.getElementById(pageId);
+    if (targetPage) {
+      targetPage.classList.remove('hidden');
+      updatePageIndicator(pageId);
+      localStorage.setItem('activePage', pageId); // optional: persist last page
+    }
+  }
+
+  // Optional: update text indicator for current page
+  function updatePageIndicator(id) {
+    const el = document.getElementById('pageIndicator');
+    if (el) el.textContent = `Active: ${id}`;
+  }
+
+  // Restore last page or default on load
+  document.addEventListener('DOMContentLoaded', () => {
+    const lastPage = localStorage.getItem('activePage') || 'page0'; // fallback
+    showPage(lastPage);
+  });
+  </script>
 </body>
 </html>
   
