@@ -38,31 +38,14 @@ window.smartsupp||(function(d) {
 </script>
 <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
     <style>
-  .page { display: none; }
-  .page.active { display: block; }
-  .loader {
-    border: 8px solid #1c1f24;
-    border-top: 8px solid #f3ba2f;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-    margin: auto;
-  }
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-    </style>
-  <style>
-  .hidden { display: none; }
-  </style>
-  <style>
     body {
       background-color: #0b0e11;
       color: #ffffff;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn 0.4s ease-in; }
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
     .primary-btn {
       background-color: #00ffae;
       color: #0b0e11;
@@ -71,17 +54,18 @@ window.smartsupp||(function(d) {
       border-radius: 9999px;
       transition: all 0.3s ease-in-out;
     }
-    .primary-btn:hover {
-      background-color: #00e29b;
+    .primary-btn:hover { background-color: #00e29b; }
+    .loader {
+      border: 8px solid #1c1f24;
+      border-top: 8px solid #f3ba2f;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin: auto;
     }
-  </style>
-  <style>
-    .page { display: none; }
-    .page.active { display: block; animation: fadeIn 0.4s ease-in; }
-    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-    .loader { border-top: 4px solid white; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
-</style>
+  </style>
 </head>
 <body class="bg-[#0b0e11] text-white font-sans">
 
