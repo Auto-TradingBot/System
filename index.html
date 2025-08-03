@@ -181,29 +181,46 @@ window.smartsupp||(function(d) {
       </script>
     </div>
   </section>
-</section>
-  
 <!-- 🔐 PAGE 1: LOGIN -->
-<section id="page1" class="page min-h-screen flex items-center justify-center bg-[#0a1f3d] text-white px-4 hidden">
-  <div class="w-full max-w-md bg-[#072146] p-8 rounded-2xl shadow-2xl">
-    <button onclick="showPage('page0')" class="text-sm text-yellow-400 hover:underline mb-6">← Back</button>
-    <h2 class="text-3xl font-extrabold text-yellow-400 mb-6 text-center">Login to Your Account</h2>
+<section id="page1" class="page min-h-screen flex items-center justify-center bg-[#0a0f12] text-white px-4 hidden">
+  <div class="w-full max-w-md bg-[#14181c] p-8 rounded-xl shadow-2xl">
 
-    <form id="loginForm" onsubmit="event.preventDefault(); handleLogin()">
-      <div class="mb-4">
-        <label for="loginEmail" class="block font-semibold mb-1">Email or Username</label>
-        <input id="loginEmail" type="text" required placeholder="example@domain.com" class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+    <!-- Header -->
+    <div class="mb-6">
+      <h2 class="text-2xl font-bold text-center text-white">Sign in to Blockchain Exchange</h2>
+      <p class="text-center text-sm text-gray-400 mt-1">Secure access to your crypto portfolio</p>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" onsubmit="event.preventDefault(); handleLogin()" class="space-y-5">
+      <div>
+        <label for="loginEmail" class="block text-sm font-semibold mb-1 text-gray-300">Email or Username</label>
+        <input id="loginEmail" type="text" required placeholder="you@example.com"
+          class="w-full px-4 py-3 rounded-md bg-[#1a1f24] border border-[#2c3138] text-white focus:outline-none focus:ring-2 focus:ring-[#1a9cff]" />
       </div>
-      <div class="mb-6">
-        <label for="loginPassword" class="block font-semibold mb-1">Password</label>
-        <input id="loginPassword" type="password" required placeholder="••••••••" class="w-full p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+
+      <div>
+        <label for="loginPassword" class="block text-sm font-semibold mb-1 text-gray-300">Password</label>
+        <input id="loginPassword" type="password" required placeholder="••••••••"
+          class="w-full px-4 py-3 rounded-md bg-[#1a1f24] border border-[#2c3138] text-white focus:outline-none focus:ring-2 focus:ring-[#1a9cff]" />
       </div>
-      <button type="submit" class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 rounded-lg transition">Log In</button>
+
+      <button type="submit"
+        class="w-full bg-[#1a9cff] hover:bg-[#1687d9] text-black font-bold py-3 rounded-md transition">
+        Log In
+      </button>
     </form>
 
+    <!-- Links -->
     <div class="mt-6 text-center text-sm text-gray-400">
-      <p>Forgot Password? <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page1i')">Reset</a></p>
-      <p class="mt-2">Don't have an account? <a href="#" class="text-yellow-400 hover:underline" onclick="showPage('page2')">Sign Up</a></p>
+      <p>
+        Forgot password?
+        <a href="#" class="text-[#1a9cff] hover:underline" onclick="showPage('page1i')">Reset here</a>
+      </p>
+      <p class="mt-2">
+        Don't have an account?
+        <a href="#" class="text-[#1a9cff] hover:underline" onclick="showPage('page2')">Sign up now</a>
+      </p>
     </div>
   </div>
 </section>
@@ -3371,6 +3388,85 @@ window.addEventListener("load", () => {
 
     // Auto-load on start
     loadPrices();
+</script>
+  <script>
+  function showPage(pageId) {
+    document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+    document.getElementById(pageId).classList.remove("hidden");
+  }
+
+  function handleLogin() {
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+
+    // Example: You can replace this logic with your real backend login or EmailJS check
+    const storedEmail = localStorage.getItem("signupEmail");
+    const storedPassword = localStorage.getItem("signupPassword");
+
+    if (email === storedEmail && password === storedPassword) {
+      showPage('page1iii'); // Show loading page
+
+      setTimeout(() => {
+        showPage('page3'); // Go to homepage/dashboard after 30s
+      }, 30000);
+    } else {
+      alert("Incorrect email or password.");
+    }
+  }
+  </script>
+  <!-- Include this at the end of your body -->
+<script>
+  // Simulate user registration data (in real case, you’d fetch from backend or localStorage)
+  let registeredUsers = JSON.parse(localStorage.getItem('registeredUsers')) || [];
+
+  // Handle Signup (Page 2)
+  function handleSignup() {
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const password = document.getElementById('signupPassword').value.trim();
+
+    if (!name || !email || !password) {
+      alert("All fields are required.");
+      return;
+    }
+
+    // Store user
+    registeredUsers.push({ name, email, password });
+    localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+
+    alert("Account created. Please log in.");
+    showPage('page1'); // Redirect to login
+  }
+
+  // Handle Login (Page 1)
+  function handleLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
+
+    const user = registeredUsers.find(u => u.email === email && u.password === password);
+
+    if (!user) {
+      alert("Invalid credentials.");
+      return;
+    }
+
+    showPage('page1iii'); // Show loading page
+    setTimeout(() => {
+      showPage('page3'); // Redirect to dashboard after 30 seconds
+    }, 30000);
+  }
+
+  // Simple showPage function
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+    const page = document.getElementById(pageId);
+    if (page) page.classList.remove('hidden');
+  }
+
+  // Auto-load login page if app starts
+  window.onload = () => {
+    showPage('page1');
+  }
 </script>
 </body>
 </html>
