@@ -23,13 +23,23 @@
     const autoReplyTemplateID = "template_r0zg4zj";  
   </script>  
 <script defer src="./script.js"></script>
-  <style>
-    .page { display: none; }
-    .page.active { display: block; animation: fadeIn 0.4s ease-in; }
-    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-    .loader { border-top: 4px solid white; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-</style>
+    <style>
+  .page { display: none; }
+  .page.active { display: block; }
+  .loader {
+    border: 8px solid #1c1f24;
+    border-top: 8px solid #f3ba2f;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+    </style>
 </head>
 <body class="bg-[#0b0e11] text-white font-sans">
 
