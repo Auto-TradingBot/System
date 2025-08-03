@@ -37,6 +37,23 @@ window.smartsupp||(function(d) {
 })(document);
 </script>
 <noscript> Powered by <a href=“https://www.smartsupp.com” target=“_blank”>Smartsupp</a></noscript>
+    <style>
+  .page { display: none; }
+  .page.active { display: block; }
+  .loader {
+    border: 8px solid #1c1f24;
+    border-top: 8px solid #f3ba2f;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+    </style>
   <style>
     body {
       background-color: #0b0e11;
@@ -54,6 +71,10 @@ window.smartsupp||(function(d) {
     .primary-btn:hover {
       background-color: #00e29b;
     }
+  </style>
+  <style>
+  .page { display: none; }
+  .page.active { display: block; }
   </style>
   <style>
     .page { display: none; }
@@ -3302,23 +3323,7 @@ window.addEventListener("load", () => {
     showPage('page1');
   }
 </script>
-  <style>
-  .page { display: none; }
-  .page.active { display: block; }
-  .loader {
-    border: 8px solid #1c1f24;
-    border-top: 8px solid #f3ba2f;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-    margin: auto;
-  }
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-</style>
+
   <script>
   // Load TradingView Ticker Widget
   function loadTradingViewTicker() {
@@ -3468,6 +3473,27 @@ window.addEventListener("load", () => {
     showPage('page1');
   }
 </script>
+  <script>
+  function showPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+    // Show target page
+    const page = document.getElementById(pageId);
+    if (page) {
+      page.classList.add('active');
+    }
+
+    // Optionally store page for reload persistence
+    localStorage.setItem('activePage', pageId);
+  }
+
+  // Restore last visited page on reload
+  document.addEventListener('DOMContentLoaded', () => {
+    const lastPage = localStorage.getItem('activePage') || 'page0';
+    showPage(lastPage);
+  });
+  </script>
 </body>
 </html>
   
