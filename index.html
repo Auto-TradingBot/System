@@ -40,6 +40,37 @@
     100% { transform: rotate(360deg); }
   }
     </style>
+  <style>
+  .hidden { display: none; }
+  </style>
+  <style>
+    body {
+      background-color: #0b0e11;
+      color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .primary-btn {
+      background-color: #00ffae;
+      color: #0b0e11;
+      font-weight: bold;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      transition: all 0.3s ease-in-out;
+    }
+    .primary-btn:hover {
+      background-color: #00e29b;
+    }
+  </style>
+  <style>
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn 0.4s ease-in; }
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    .loader { border-top: 4px solid white; border-radius: 50%; width: 48px; height: 48px; animation: spin 1s linear infinite; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
+</head>
+<body class="bg-[#0b0e11] text-white font-sans">
+
 </head>
 <body class="bg-[#0b0e11] text-white font-sans">
 
